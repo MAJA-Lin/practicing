@@ -1,19 +1,19 @@
 <?php
 
-
 	/*
 	*	Defination of server, name, user and pw;
-	*		Change the user of database in the future.
 	*/
     $db_server = "localhost";
-    //or ip address
     $db_name = "message_board";
-    //$db_user = "tester";
-    //$db_pw = "test5566";
-
+    $db_user = "tester";
+    $db_pw = "test5566";
+    /*
+    *   Don't use root account to access MySQL
+    */
+    /*
     $db_user = "root";
     $db_pw = "working2015";
-
+    */
 
     /*
     *	OO style - To prevent SQL injection
@@ -27,31 +27,10 @@
 	    exit();
 	}
 
-
-	/*
-	*	Original version of connection to the database
-	*		Due to the difficult preventation of sql injection,
-	*			leave it.
-	*/
-	/*
-    $link = mysqli_connect($db_server, $db_user, $db_pw, $db_name) or die("Error, connection failed. " . mysqli_error($link));
-    mysqli_set_charset($link,"utf8");
-	*/
-
-
     /*
-    $sql= "SELECT * FROM message";
-
-    $result = mysqli_query($link, $sql);
-
-    while(($row = @mysqli_fetch_array($result))) {
-            $rows[] = $row;
-    }
-    var_dump($rows);
-    */
-
-
-    /*
+        *   Use PDO to access db
+        *
+        *
 
         try {
             $dbh = new PDO('mysql:host=localhost;dbname=message_board', 'root', 'working2015');

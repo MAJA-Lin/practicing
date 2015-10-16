@@ -10,12 +10,8 @@
     $sql = "UPDATE message SET msg = ? WHERE time = ?";
     $result = $mysqli->prepare($sql);
 
-    $result->bind_param("ss", $var1, $var2);
+    $result->bind_param("ss", $new_msg, $time);
 
-    $var1 = $new_msg;
-    $var2 = $time;
-
-    //$result->execute();
     if ($result->execute()) {
     	echo ("<script>window.alert('Message has been updated!')
                     location.href='index.php';</script>");

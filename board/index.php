@@ -1,6 +1,6 @@
 <?php
         include_once("connection.php");
-        include_once("msg_func.php");	//Big trouble! Can't use sub function to do SQL query.
+        include_once("msg_func.php");	//Can't use sub function to do SQL query.
 
 ?>
 <!DOCTYPE html>
@@ -37,36 +37,8 @@
 					}
 
 				    /* free result set */
-				    $result->close();
+				    $mysqli->close();
 				}
-
-            	/*
-            	*Original version of showing the message
-            	*
-            	*/
-            	/*
-                $result = mysqli_query($link, $sql);
-                while(($row = @mysqli_fetch_array($result, MYSQL_ASSOC))) {
-                    $rows[] = $row;
-
-                    print("<br>Name: ".$rows[$i]['name']);
-                    print("<br>Time: ".$rows[$i]['time']);
-                    print("<br>Message: ".$rows[$i]['msg']);
-                    //Use hidden form again to perform updating
-                    printf("<form action=\"msg_update.php\"><input type=\"hidden\" name=\"time\" value=\"".$rows[$i]['time']."\">");
-                    printf("<input type=\"hidden\" name=\"name\" value=\"".$rows[$i]['name']."\">");
-                    printf("<input type=\"text\" name=\"new_msg\" placeholder=\"edit message here\" size=\"50\">");
-                    printf("<input type=\"submit\" name=\"button\" value=\"Update\"></form>");
-
-                    //Use hidden form to perform deleting
-                    printf("<form action=\"msg_del.php\"><input type=\"hidden\" name=\"time\" value=\"".$rows[$i]['time']."\">");
-                    printf("<input type=\"submit\" name=\"button\" value=\"Delete\"></form>");
-                    print("------------------------------------------------------------------<br>");
-                    $i++;
-                }
-                */
-
-
             ?>
         </div>
         <div>

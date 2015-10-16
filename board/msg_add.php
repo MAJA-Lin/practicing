@@ -9,23 +9,15 @@
     $time = date("Y-m-d H:i:s");
     $result->bind_param("sss", $name, $msg, $time);
 
-    $result->execute();
-    $result->close();
 
-    /*
-    if(mysqli_query($link, $sql)){
-                    echo ("<script>window.alert('Message has been added!')
+    if ($result->execute()) {
+        echo ("<script>window.alert('Message has been updated!')
                     location.href='index.php';</script>");
-                    exit();
-            }
-    else {
-            echo "Error ". mysqli_error($link);
+        $mysqli->close();
+        exit();
     }
-    */
-
-    echo ("<script>window.alert('Message has been added!')
-                    location.href='index.php';</script>");
-                    exit();
-
+    else {
+        echo "Error ". $result->error();
+    }
 
 ?>

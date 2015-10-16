@@ -25,21 +25,5 @@
     else {
     	echo "Error ". $result->error();
     }
-    /*
-    if(mysqli_query($link, $sql)){
-                    echo ("<script>window.alert('Message has been updated!')
-                    location.href='index.php';</script>");
-                    exit();
-            }
-    else {
-            echo "Error ". mysqli_error($link);
-    }
-	*/
-	/*
-    $result->close();
-    echo ("<script>window.alert('Message has been updated!')
-                    location.href='index.php';</script>");
-    exit();
-    */
 
 ?>

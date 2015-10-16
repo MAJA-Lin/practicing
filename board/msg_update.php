@@ -6,7 +6,7 @@
     $time = $_GET['time'];
 
 
-    //SQL injection
+    //Prevent SQL injection
     $sql = "UPDATE message SET msg = ? WHERE time = ?";
     $result = $mysqli->prepare($sql);
 
@@ -15,8 +15,17 @@
     $var1 = $new_msg;
     $var2 = $time;
 
-    $result->execute();
-
+    //$result->execute();
+    if ($result->execute()) {
+    	echo ("<script>window.alert('Message has been updated!')
+                    location.href='index.php';</script>");
+    	$result->close();
+    	exit();
+    }
+    else {
+    	echo "Error ". $result->error();
+    }
+    /*
     if(mysqli_query($link, $sql)){
                     echo ("<script>window.alert('Message has been updated!')
                     location.href='index.php';</script>");
@@ -25,7 +34,12 @@
     else {
             echo "Error ". mysqli_error($link);
     }
-
+	*/
+	/*
     $result->close();
+    echo ("<script>window.alert('Message has been updated!')
+                    location.href='index.php';</script>");
+    exit();
+    */
 
 ?>

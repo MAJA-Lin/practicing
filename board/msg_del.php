@@ -5,7 +5,15 @@
     $time = $_GET['time'];
     $sql = "DELETE FROM message WHERE `time` = '$time'";
 
-
+    if ($mysqli->query($sql)){
+        echo ("<script>window.alert('Message has been deleted!')
+                    location.href='index.php';</script>");
+        exit();
+    }
+    else {
+            echo "Error ". mysqli_error($link);
+    }
+    /*
     if(mysqli_query($link, $sql)){
                     echo ("<script>window.alert('Message has been deleted!')
                     location.href='index.php';</script>");
@@ -14,6 +22,6 @@
     else {
             echo "Error ". mysqli_error($link);
     }
-
+    */
 
 ?>

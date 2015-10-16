@@ -11,24 +11,63 @@
 </head>
 <body>
         <div>
-                <?php
+            <?php
+            	$i = 0;
+            	$sql= "SELECT * FROM message";
+            	/*
+            	*	OO
+            	*/
+            	if ($result = $mysqli->query($sql)) {
+				    while ($row = $result->fetch_array(MYSQL_ASSOC)) {
+				        $rows[] = $row;
+				        print("<br>Name: ".$rows[$i]['name']);
+	                    print("<br>Time: ".$rows[$i]['time']);
+	                    print("<br>Message: ".$rows[$i]['msg']);
+	                    //Use hidden form again to perform updating
+	                    printf("<form action=\"msg_update.php\"><input type=\"hidden\" name=\"time\" value=\"".$rows[$i]['time']."\">");
+	                    printf("<input type=\"hidden\" name=\"name\" value=\"".$rows[$i]['name']."\">");
+	                    printf("<input type=\"text\" name=\"new_msg\" placeholder=\"edit message here\" size=\"50\">");
+	                    printf("<input type=\"submit\" name=\"button\" value=\"Update\"></form>");
 
-                    $sql= "SELECT * FROM message";
+	                    //Use hidden form to perform deleting
+	                    printf("<form action=\"msg_del.php\"><input type=\"hidden\" name=\"time\" value=\"".$rows[$i]['time']."\">");
+	                    printf("<input type=\"submit\" name=\"button\" value=\"Delete\"></form>");
+	                    print("------------------------------------------------------------------<br>");
+	                    $i++;
+					}
 
-                    $result = mysqli_query($link, $sql);
-                    $i = 0;
-                    while(($row = @mysqli_fetch_array($result, MYSQL_ASSOC))) {
-                        $rows[] = $row;
+				    /* free result set */
+				    $result->close();
+				}
 
-                        print("Message: ".$rows[$i]['msg']);
-                        print("<br>Name: ".$rows[$i]['name']);
-                        print("<br>Time: ".$rows[$i]['time']);
-                        print("<br>------------------------------------------------------------------<br>");
-                        $i++;
-                    }
-                    //var_dump($rows);
+            	/*
+            	*Original version of showing the message
+            	*
+            	*/
+            	/*
+                $result = mysqli_query($link, $sql);
+                while(($row = @mysqli_fetch_array($result, MYSQL_ASSOC))) {
+                    $rows[] = $row;
 
-                ?>
+                    print("<br>Name: ".$rows[$i]['name']);
+                    print("<br>Time: ".$rows[$i]['time']);
+                    print("<br>Message: ".$rows[$i]['msg']);
+                    //Use hidden form again to perform updating
+                    printf("<form action=\"msg_update.php\"><input type=\"hidden\" name=\"time\" value=\"".$rows[$i]['time']."\">");
+                    printf("<input type=\"hidden\" name=\"name\" value=\"".$rows[$i]['name']."\">");
+                    printf("<input type=\"text\" name=\"new_msg\" placeholder=\"edit message here\" size=\"50\">");
+                    printf("<input type=\"submit\" name=\"button\" value=\"Update\"></form>");
+
+                    //Use hidden form to perform deleting
+                    printf("<form action=\"msg_del.php\"><input type=\"hidden\" name=\"time\" value=\"".$rows[$i]['time']."\">");
+                    printf("<input type=\"submit\" name=\"button\" value=\"Delete\"></form>");
+                    print("------------------------------------------------------------------<br>");
+                    $i++;
+                }
+                */
+
+
+            ?>
         </div>
         <div>
                 <form action="msg_add.php" method="get">
@@ -39,12 +78,6 @@
                     <input type="submit" name="button" value="submit" /><br>
                 </form>
                 <br>---------------------------------------------------------<br>
-                <form action="msg_del.php" method="get">
-                	<br>
-                	<h2><strong>Delete the message</strong></h2>
-                	Name: <input type="varchar" name="name" placeholder="Name" /><br>
-                	<input type="submit" name="button" value="submit" /><br>
-                </form>
         </div>
 </body>
 </html>

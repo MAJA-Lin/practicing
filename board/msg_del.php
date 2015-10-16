@@ -1,8 +1,9 @@
 <?php
     include_once "connection.php";
 
-    $name = $_GET['name'];
-    $sql = "DELETE FROM message WHERE `name` = '$name'";
+    //$name = $_GET['name'];
+    $time = $_GET['time'];
+    $sql = "DELETE FROM message WHERE `time` = '$time'";
 
 
     if(mysqli_query($link, $sql)){

@@ -84,44 +84,19 @@
 
             if($page > 0){
                 $last = $page - 2;
-                echo "<a href=\"?page=$last\">Last 10 Records</a> |";
-                echo "<a href=\"?page=$page\">Next 10 Records</a>";
+                echo "<a href=\"?page=$last\">Last 5 Records</a> |";
+                echo "<a href=\"?page=$page\">Next 5 Records</a>";
             }
 
             else if( $page == 0 ){
-                echo "<a href=\"?page=$page\">Next 10 Records</a>";
+                echo "<a href=\"?page=$page\">Next 5 Records</a>";
             }
 
              else if( $left_data < $limit ){
                 $last = $page - 2;
-                echo "<a href=\"?page=$last\">Last 10 Records</a>";
+                echo "<a href=\"?page=$last\">Last 5 Records</a>";
             }
-        	/*
-        	*	OO
-        	*
-        	if ($result = $mysqli->query($sql)) {
-			    while ($row = $result->fetch_array(MYSQL_ASSOC)) {
-			        $rows[] = $row;
-			        print("<br>Name: ".$rows[$i]['name']);
-                    print("<br>Time: ".$rows[$i]['time']);
-                    print("<br>Message: ".$rows[$i]['msg']);
-                    //Use hidden form again to perform updating
-                    printf("<form action=\"msg_update.php\"><input type=\"hidden\" name=\"time\" value=\"".$rows[$i]['time']."\">");
-                    printf("<input type=\"hidden\" name=\"name\" value=\"".$rows[$i]['name']."\">");
-                    printf("<input type=\"text\" name=\"new_msg\" placeholder=\"edit message here\" size=\"50\">");
-                    printf("<input type=\"submit\" name=\"button\" value=\"Update\"></form>");
 
-                    //Use hidden form to perform deleting
-                    printf("<form action=\"msg_del.php\"><input type=\"hidden\" name=\"time\" value=\"".$rows[$i]['time']."\">");
-                    printf("<input type=\"submit\" name=\"button\" value=\"Delete\"></form>");
-                    print("------------------------------------------------------------------<br>");
-                    $i++;
-				}
-
-
-			    $mysqli->close();
-			}
-            */
             $mysqli->close();
         ?>
     </div>

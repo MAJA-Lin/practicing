@@ -1,8 +1,4 @@
 <?php
-	include_once("connection.php");
-
-
-
 	function msg_show() {
 		/*
 		$sql= "SELECT * FROM message";

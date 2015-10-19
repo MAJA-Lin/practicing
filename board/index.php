@@ -1,7 +1,5 @@
 <?php
         include_once("connection.php");
-        include_once("msg_func.php");	//Can't use sub function to do SQL query.
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

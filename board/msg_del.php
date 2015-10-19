@@ -1,7 +1,6 @@
 <?php
     include_once "connection.php";
 
-    //$name = $_GET['name'];
     $time = $_GET['time'];
     $sql = "DELETE FROM message WHERE time = '$time'";
 

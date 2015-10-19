@@ -15,7 +15,7 @@
     if ($result->execute()) {
     	echo ("<script>window.alert('Message has been updated!')
                     location.href='index.php';</script>");
-    	$result->close();
+    	$mysqli->close();
     	exit();
     }
     else {

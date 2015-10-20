@@ -15,7 +15,7 @@
         $result->close();
         exit();
     } else {
-        echo "Error ". $result->error();
+        echo "Error ". $result->error;
     }
 
 ?>

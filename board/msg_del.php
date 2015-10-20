@@ -10,6 +10,6 @@
         $result->close();
         exit();
     } else {
-        echo "Error ". mysqli_error($link);
+        echo "Error ". mysqli->error;
     }
 ?>

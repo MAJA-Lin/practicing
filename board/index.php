@@ -26,7 +26,7 @@
             $sql= "SELECT count(sn) FROM message";
             $result = $mysqli->query($sql);
             if (!$result) {
-                die('Failed to get data: ' . $mysqli->error());
+                die('Failed to get data: ' . $mysqli->error);
             }
             $row = $result->fetch_array(MYSQL_NUM);
             $count = $row[0];

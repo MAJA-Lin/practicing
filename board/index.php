@@ -63,7 +63,7 @@
                 die("Failed to get data " . $mysqli->error);
             }
 
-            if ($page > 0) {
+            if ($page > 0 && !($left_data < $limit)) {
                 $last = $page - 2;
                 echo "<a href=\"?page=$last\">Last page</a> |";
                 echo "<a href=\"?page=$page\">Next page</a>";

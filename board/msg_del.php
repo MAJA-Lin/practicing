@@ -10,6 +10,6 @@
         $result->close();
         exit();
     } else {
-        echo "Error ". mysqli->error;
+        echo "Error ". $mysqli->error;
     }
 ?>

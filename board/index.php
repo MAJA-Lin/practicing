@@ -1,11 +1,11 @@
 <?php
-        include_once("connection.php");
+    include_once("connection.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <meta charset="UTF-8">
-        <title>Index</title>
+    <meta charset="UTF-8">
+    <title>Index</title>
 </head>
 <body>
     <div>
@@ -20,11 +20,10 @@
     </div>
     <div>
         <?php
-        	$i = 0;
+            $i = 0;
             $limit = 5;
-
             /* Get total number of records */
-        	$sql= "SELECT count(time) FROM message";
+            $sql= "SELECT count(time) FROM message";
             $result = $mysqli->query($sql);
             if (! $result){
                 die('Failed to get data: ' . $mysqli->error());
@@ -74,11 +73,6 @@
             else {
                 die("Failed to get data " . $mysqli->error);
             }
-
-            /*
-            *   Using statements to see which page it is
-            *
-            */
 
             if($page > 0){
                 $last = $page - 2;

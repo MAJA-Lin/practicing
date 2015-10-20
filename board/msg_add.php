@@ -9,7 +9,6 @@
     $time = date("Y-m-d H:i:s");
     $result->bind_param("sss", $name, $msg, $time);
 
-
     if ($result->execute()) {
         echo ("<script>window.alert('Message has been updated!')
                     location.href='index.php';</script>");

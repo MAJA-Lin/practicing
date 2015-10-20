@@ -12,10 +12,9 @@
     if ($result->execute()) {
         echo ("<script>window.alert('Message has been updated!')
                     location.href='index.php';</script>");
-        $mysqli->close();
+        $result->close();
         exit();
-    }
-    else {
+    } else {
         echo "Error ". $result->error();
     }
 

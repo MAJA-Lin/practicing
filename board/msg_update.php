@@ -5,11 +5,8 @@
     $new_msg = $_GET['new_msg'];
     $time = $_GET['time'];
 
-
-    //Prevent SQL injection
     $sql = "UPDATE message SET msg = ? WHERE time = ?";
     $result = $mysqli->prepare($sql);
-
     $result->bind_param("ss", $new_msg, $time);
 
     if ($result->execute()) {
@@ -17,8 +14,7 @@
                     location.href='index.php';</script>");
     	$mysqli->close();
     	exit();
-    }
-    else {
+    } else {
     	echo "Error ". $result->error();
     }
 

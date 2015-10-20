@@ -76,13 +76,13 @@
                 $last = $page - 2;
                 echo "<a href=\"?page=$last\">Last 5 Records</a> |";
                 echo "<a href=\"?page=$page\">Next 5 Records</a>";
-            } elseif ($page == 0 ){
+            } elseif ($page == 0) {
                 echo "<a href=\"?page=$page\">Next 5 Records</a>";
             } elseif ($left_data < $limit) {
                 $last = $page - 2;
                 echo "<a href=\"?page=$last\">Last 5 Records</a>";
             }
-            $mysqli->close();
+            $result->close();
         ?>
     </div>
 </body>

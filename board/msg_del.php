@@ -4,16 +4,12 @@
     $time = $_GET['time'];
     $sql = "DELETE FROM message WHERE time = '$time'";
 
-    if ($mysqli->query($sql)) {
+    if (($result = $mysqli->query($sql))) {
         echo ("<script>window.alert('Message has been deleted!')
                     location.href='index.php';</script>");
-        /* free result set */
-        $mysqli->close();
+        $result->close();
         exit();
-    }
-    else {
+    } else {
         echo "Error ". mysqli_error($link);
     }
-
-
 ?>

@@ -33,13 +33,13 @@
 
             if (isset($_GET{'page'})) {
                 $page = $_GET{'page'} + 1;
-                $offset = $limit * $page ;
+                $offset = $limit * ($page - 1);
             } else {
-                $page = 0;
+                $page = 1;
                 $offset = 0;
             }
 
-            $left_data = $count - ($page * $limit);
+            $left_data = $count - (($page - 1) * $limit);
             $sql = "SELECT * FROM message LIMIT $offset, $limit";
 
             if ($result = $mysqli->query($sql)) {
@@ -63,11 +63,11 @@
                 die("Failed to get data " . $mysqli->error);
             }
 
-            if ($page > 0 && !($left_data < $limit)) {
+            if ($page > 1 && !($left_data < $limit)) {
                 $last = $page - 2;
                 echo "<a href=\"?page=$last\">Last page</a> |";
                 echo "<a href=\"?page=$page\">Next page</a>";
-            } elseif ($page == 0) {
+            } elseif ($page == 1) {
                 echo "<a href=\"?page=$page\">Next page</a>";
             } elseif ($left_data < $limit) {
                 $last = $page - 2;

@@ -25,7 +25,7 @@
             /* Get total number of records */
             $sql= "SELECT count(time) FROM message";
             $result = $mysqli->query($sql);
-            if (! $result){
+            if (!$result) {
                 die('Failed to get data: ' . $mysqli->error());
             }
             $row = $result->fetch_array(MYSQL_NUM);
@@ -38,20 +38,19 @@
             *       e.g. SELECT * FROM tbl LIMIT 5,10;  # Retrieve rows 6-15
             *       offset is just like 5
             */
-            if( isset($_GET{'page'})){
+            if (isset($_GET{'page'})) {
                 $page = $_GET{'page'} + 1;
                 $offset = $limit * $page ;
-            }
-             else{
+            } else {
                 $page = 0;
                 $offset = 0;
             }
 
             /*  left_data => count how many data left */
             $left_data = $count - ($page * $limit);
-            $sql = "SELECT name, time, msg FROM message LIMIT $offset, $limit ";
+            $sql = "SELECT name, time, msg FROM message LIMIT $offset, $limit";
 
-            if ($result = $mysqli->query($sql)){
+            if ($result = $mysqli->query($sql)) {
                 while ($row = $result->fetch_array(MYSQL_ASSOC)) {
                     $rows[] = $row;
                     print("<br>Name: ".$rows[$i]['name']);
@@ -69,29 +68,22 @@
                     print("------------------------------------------------------------------<br>");
                     $i++;
                 }
-            }
-            else {
+            } else {
                 die("Failed to get data " . $mysqli->error);
             }
 
-            if($page > 0){
+            if ($page > 0) {
                 $last = $page - 2;
                 echo "<a href=\"?page=$last\">Last 5 Records</a> |";
                 echo "<a href=\"?page=$page\">Next 5 Records</a>";
-            }
-
-            else if( $page == 0 ){
+            } elseif ($page == 0 ){
                 echo "<a href=\"?page=$page\">Next 5 Records</a>";
-            }
-
-             else if( $left_data < $limit ){
+            } elseif ($left_data < $limit) {
                 $last = $page - 2;
                 echo "<a href=\"?page=$last\">Last 5 Records</a>";
             }
-
             $mysqli->close();
         ?>
     </div>
-
 </body>
 </html>

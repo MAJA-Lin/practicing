@@ -3,7 +3,7 @@
 
     $search = $_GET['search'];
     $i = 0;
-    $sql = "SELECT * FROM message WHERE msg LIKE BINARY N'%$search%'";
+    $sql = "SELECT * FROM message WHERE msg LIKE N'%$search%'";
     if (($result = $mysqli->query($sql))) {
         while ($row = $result->fetch_array(MYSQL_ASSOC)) {
             $rows[] = $row;
@@ -22,7 +22,7 @@
                 $i++;
         }
     } else {
-        die('Failed to get data: ' . $mysqli->error());
+        die('Failed to get data: ' . $mysqli->error);
     }
     print("<a href=\"index.php\"><h3>Back to index<h3></a>");
 ?>

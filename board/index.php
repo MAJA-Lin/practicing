@@ -21,9 +21,9 @@
     <div>
         <?php
             $i = 0;
-            $limit = 5;
+            $limit = 10;
             /* Get total number of records */
-            $sql= "SELECT count(time) FROM message";
+            $sql= "SELECT count(sn) FROM message";
             $result = $mysqli->query($sql);
             if (!$result) {
                 die('Failed to get data: ' . $mysqli->error());
@@ -40,7 +40,7 @@
             }
 
             $left_data = $count - ($page * $limit);
-            $sql = "SELECT name, time, msg FROM message LIMIT $offset, $limit";
+            $sql = "SELECT * FROM message LIMIT $offset, $limit";
 
             if ($result = $mysqli->query($sql)) {
                 while ($row = $result->fetch_array(MYSQL_ASSOC)) {
@@ -49,12 +49,12 @@
                     print("<br>Time: ".$rows[$i]['time']);
                     print("<br>Message: ".$rows[$i]['msg']);
 
-                    printf("<form action=\"msg_update.php\"><input type=\"hidden\" name=\"time\" value=\"".$rows[$i]['time']."\">");
+                    printf("<form action=\"msg_update.php\"><input type=\"hidden\" name=\"sn\" value=\"".$rows[$i]['sn']."\">");
                     printf("<input type=\"hidden\" name=\"name\" value=\"".$rows[$i]['name']."\">");
                     printf("<input type=\"text\" name=\"new_msg\" placeholder=\"edit message here\" size=\"50\">");
                     printf("<input type=\"submit\" name=\"button\" value=\"Update\"></form>");
 
-                    printf("<form action=\"msg_del.php\"><input type=\"hidden\" name=\"time\" value=\"".$rows[$i]['time']."\">");
+                    printf("<form action=\"msg_del.php\"><input type=\"hidden\" name=\"sn\" value=\"".$rows[$i]['sn']."\">");
                     printf("<input type=\"submit\" name=\"button\" value=\"Delete\"></form>");
                     print("------------------------------------------------------------------<br>");
                     $i++;
@@ -65,13 +65,13 @@
 
             if ($page > 0) {
                 $last = $page - 2;
-                echo "<a href=\"?page=$last\">Last 5 Records</a> |";
-                echo "<a href=\"?page=$page\">Next 5 Records</a>";
+                echo "<a href=\"?page=$last\">Last page</a> |";
+                echo "<a href=\"?page=$page\">Next page</a>";
             } elseif ($page == 0) {
-                echo "<a href=\"?page=$page\">Next 5 Records</a>";
+                echo "<a href=\"?page=$page\">Next page</a>";
             } elseif ($left_data < $limit) {
                 $last = $page - 2;
-                echo "<a href=\"?page=$last\">Last 5 Records</a>";
+                echo "<a href=\"?page=$last\">Last page</a>";
             }
             $result->close();
         ?>

@@ -3,11 +3,11 @@
 
     $name = $_GET['name'];
     $new_msg = $_GET['new_msg'];
-    $time = $_GET['time'];
+    $sn = $_GET['sn'];
 
-    $sql = "UPDATE message SET msg = ? WHERE time = ?";
+    $sql = "UPDATE message SET msg = ? WHERE sn = ?";
     $result = $mysqli->prepare($sql);
-    $result->bind_param("ss", $new_msg, $time);
+    $result->bind_param("ss", $new_msg, $sn);
 
     if ($result->execute()) {
     	echo ("<script>window.alert('Message has been updated!')

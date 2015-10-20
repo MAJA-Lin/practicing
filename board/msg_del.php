@@ -1,8 +1,8 @@
 <?php
     include_once "connection.php";
 
-    $time = $_GET['time'];
-    $sql = "DELETE FROM message WHERE time = '$time'";
+    $sn = $_GET['sn'];
+    $sql = "DELETE FROM message WHERE sn = '$sn'";
 
     if (($result = $mysqli->query($sql))) {
         echo ("<script>window.alert('Message has been deleted!')

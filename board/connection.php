@@ -1,5 +1,4 @@
 <?php
-
     $db_server = "localhost";
     $db_name = "message_board";
     $db_user = "";

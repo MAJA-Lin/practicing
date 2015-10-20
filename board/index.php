@@ -9,6 +9,13 @@
 </head>
 <body>
     <div>
+        <form action="msg_search.php" method="get">
+            <br>
+            <h2><strong>Search the specific message<strong></h2>
+            keyword: <input type="text" name="search" placeholder="search" size="30"/><br>
+            <input type="submit" name="button" value="submit" /><br>
+        </form>
+        <br>---------------------------------------------------------<br>
         <form action="msg_add.php" method="get">
             <br>
             <h2><strong>Leave new message<strong></h2>

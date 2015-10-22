@@ -1,5 +1,5 @@
 <?php
-    include_once("classes/MessageClass.php");
+include_once("classes/MessageClass.php");
 
 ?>
 <!DOCTYPE html>
@@ -21,8 +21,8 @@
     </div>
     <div>
         <?php
-            $index = new MessageClass();
-            $index->printout();
+        $index = new MessageClass();
+        $index->printout();
         ?>
     </div>
 </body>

@@ -1,7 +1,5 @@
 <?php
 
-    //namespace board\classes;
-
     class SqlConnection
     {
         protected $db_server = "localhost";

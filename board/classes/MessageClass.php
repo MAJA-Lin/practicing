@@ -35,15 +35,8 @@
                 die("Failed to get data " . $mysqli->error);
             }
 
-            $page_count = 0;
-            $left_data = 0;
-            while ($left_data < $count) {
-                $display = $page_count + 1;
-                echo "<a href=\"?page=$page_count\">Page ". $display ."</a> &#8195;";
-                $left_data = $left_data + $limit;
-                $page_count++;
-            }
-            $result->close();
+            $this->listPages($count, $limit);
+            $mysqli->close();
 
         }
 
@@ -68,9 +61,16 @@
             print("------------------------------------------------------------------<br>");
         }
 
-        public function listPages()
+        public function listPages($count, $limit)
         {
-            echo "Hello";
+            $page_count = 0;
+            $left_data = 0;
+            while ($left_data < $count) {
+                $display = $page_count + 1;
+                echo "<a href=\"?page=$page_count\">Page ". $display ."</a> &#8195;";
+                $left_data = $left_data + $limit;
+                $page_count++;
+            }
         }
     }
 

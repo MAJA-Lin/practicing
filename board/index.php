@@ -1,12 +1,15 @@
 <?php
+
+	/*
     namespace board;
 
     include_once __DIR__ . "/autoload.php";
 
-    include_once("MessageClass.php");
+    use board\classes\MessageClass as msg;
+    use board\classes\SqlConnection as connection;
+    */
 
-    //use board\connect as connect;
-    //use board\msg_management as msg;
+    include_once("classes/MessageClass.php");
 
 ?>
 <!DOCTYPE html>

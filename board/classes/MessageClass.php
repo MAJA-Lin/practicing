@@ -1,12 +1,8 @@
 <?php
-
-    namespace board;
-
     include_once("SqlConnection.php");
+    include_once("FrontOutput.php");
 
-    //use board\connection as connect;
-
-    class MessageClass extends SqlConnection
+    class MessageClass extends SqlConnection implements FrontOutput
     {
         public function printout()
         {
@@ -31,28 +27,9 @@
 
             $left_data = $count - (($page - 1) * $limit);
             $sql = "SELECT * FROM message LIMIT $offset, $limit";
-
             if ($result = $mysqli->query($sql)) {
                 while ($row = $result->fetch_array(MYSQL_ASSOC)) {
-                    $rows[] = $row;
-                    print("<br>Name: ".$rows[$i]['name']);
-                    print("<br>Time: ".$rows[$i]['time']);
-                    print("<br>Message: ".$rows[$i]['msg']);
-
-                    printf("<form action=\"msg_update.php\"><input type=\"hidden\" 
-                    		name=\"sn\" value=\"".$rows[$i]['sn']."\">");
-                    printf("<input type=\"hidden\" name=\"name\" value=\""
-                    		.$rows[$i]['name']."\">");
-                    printf("<input type=\"text\" name=\"new_msg\" placeholder=\"
-                    		edit message here\" size=\"50\">");
-                    printf("<input type=\"submit\" name=\"button\" 
-                    		value=\"Update\"></form>");
-
-                    printf("<form action=\"msg_del.php\"><input type=\"hidden\" name=\"sn\" 
-                    		value=\"".$rows[$i]['sn']."\">");
-                    printf("<input type=\"submit\" name=\"button\" value=\"Delete\"></form>");
-                    print("------------------------------------------------------------------<br>");
-                    $i++;
+                    $this->listMessage($row);
                 }
             } else {
                 die("Failed to get data " . $mysqli->error);
@@ -70,5 +47,31 @@
 
         }
 
+        public function listMessage($row)
+        {
+            print("<br>Name: ".$row['name']);
+            print("<br>Time: ".$row['time']);
+            print("<br>Message: ".$row['msg']);
+
+            printf("<form action=\"msg_update.php\"><input type=\"hidden\" 
+                    name=\"sn\" value=\"".$row['sn']."\">");
+            printf("<input type=\"hidden\" name=\"name\" value=\""
+                    .$row['name']."\">");
+            printf("<input type=\"text\" name=\"new_msg\" placeholder=\"
+                    edit message here\" size=\"50\">");
+            printf("<input type=\"submit\" name=\"button\" 
+                    value=\"Update\"></form>");
+
+            printf("<form action=\"msg_del.php\"><input type=\"hidden\" name=\"sn\" 
+                    value=\"".$row['sn']."\">");
+            printf("<input type=\"submit\" name=\"button\" value=\"Delete\"></form>");
+            print("------------------------------------------------------------------<br>");
+        }
+
+        public function listPages()
+        {
+            echo "Hello";
+        }
     }
+
 ?>

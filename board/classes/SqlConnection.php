@@ -1,6 +1,6 @@
 <?php
 
-    namespace board;
+    //namespace board\classes;
 
     class SqlConnection
     {

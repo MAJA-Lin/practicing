@@ -3,8 +3,10 @@
 
     include_once __DIR__ . "/autoload.php";
 
-    use board\SqlConnection as connect;
-    use board\MessageClass as msg;
+    include_once("MessageClass.php");
+
+    //use board\connect as connect;
+    //use board\msg_management as msg;
 
 ?>
 <!DOCTYPE html>
@@ -26,7 +28,7 @@
     </div>
     <div>
         <?php
-            $index = new msg\Message();
+            $index = new MessageClass();
             $index->printout();
         ?>
     </div>

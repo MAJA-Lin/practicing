@@ -2,9 +2,17 @@
 
     namespace board;
 
+<<<<<<< HEAD:board/MessageClass.php
     use board\SqlConnection as connect;
 
     class MessageClass extends connect\SqlConnection
+=======
+    include_once("SqlConnection.php");
+
+    //use board\connection as connect;
+
+    class MessageClass extends SqlConnection
+>>>>>>> 9f815e9:board/MessageClass.php
     {
         public function printout()
         {

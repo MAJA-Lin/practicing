@@ -2,11 +2,9 @@
 
     namespace board\msg_management;
 
-    include_once("connection.php");
-
     use board\connection as connect;
 
-    class Message extends connect\SqlConnection
+    class MessageClass extends connect\SqlConnection
     {
         public function printout()
         {

@@ -1,7 +1,7 @@
 <?php
     namespace board\index;
 
-    include_once("msg_management.php");
+    include_once __DIR__ . "/autoload.php";
 
     use board\connect as connect;
     use board\msg_management as msg;

@@ -1,8 +1,8 @@
 <?php
 
-    namespace board\msg_management;
+    namespace board;
 
-    use board\connection as connect;
+    use board\SqlConnection as connect;
 
     class MessageClass extends connect\SqlConnection
     {

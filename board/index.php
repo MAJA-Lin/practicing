@@ -1,10 +1,10 @@
 <?php
-    namespace board\index;
+    namespace board;
 
     include_once __DIR__ . "/autoload.php";
 
-    use board\connect as connect;
-    use board\msg_management as msg;
+    use board\SqlConnection as connect;
+    use board\MessageClass as msg;
 
 ?>
 <!DOCTYPE html>

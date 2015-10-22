@@ -1,5 +1,8 @@
 <?php
-    include_once "connection.php";
+    include_once "classes/SqlConnection.php";
+
+    $conneting = new SqlConnection;
+    $mysqli = $conneting->dbConnection();
 
     $name = $_GET['name'];
     $new_msg = $_GET['new_msg'];

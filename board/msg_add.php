@@ -1,6 +1,8 @@
 <?php
-    include_once "connection.php";
+    include_once "classes/SqlConnection.php";
 
+    $conneting = new SqlConnection;
+    $mysqli = $conneting->dbConnection();
     $name = $_GET['name'];
     $msg = $_GET['msg'];
     $sql = "INSERT INTO message (name, msg, time) VALUES (?,?,?)";
@@ -12,7 +14,7 @@
     if ($result->execute()) {
         echo ("<script>window.alert('Message has been updated!')
                     location.href='index.php';</script>");
-        $result->close();
+        $mysqli->close();
         exit();
     } else {
         echo "Error ". $result->error;

@@ -22,7 +22,7 @@
         <?php
             $i = 0;
             $limit = 10;
-            /* Get total number of records */
+
             $sql= "SELECT count(sn) FROM message";
             $result = $mysqli->query($sql);
             if (!$result) {

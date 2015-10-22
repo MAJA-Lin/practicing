@@ -2,13 +2,15 @@
 
     namespace board\msg_management;
 
-    use board\connect as connect;
+    include_once("connection.php");
 
-    class Message extends SqlConnection
+    use board\connection as connect;
+
+    class Message extends connect\SqlConnection
     {
         public function printout()
         {
-            $this->dbConnection();
+            $mysqli = $this->dbConnection();
             $i = 0;
             $limit = 10;
             $sql= "SELECT count(sn) FROM message";
@@ -79,30 +81,4 @@
         }
 
     }
-?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ?>

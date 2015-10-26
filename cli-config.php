@@ -1,9 +1,15 @@
 <?php
-// cli-config.php
-require_once "bootstrap.php";
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
+use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
+use Symfony\Component\Console\Helper\HelperSet;
 
-$helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
-    'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($entityManager)
+// replace with file to your own project bootstrap
+require_once 'bootstrap.php';
+
+$helperSet = new HelperSet(array(
+    'em' => new EntityManagerHelper($entityManager),
+    'conn' => new ConnectionHelper($entityManager->getConnection())
 ));
 
-return $helperSet;
+return ConsoleRunner::createHelperSet($entityManager);

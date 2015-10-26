@@ -5,7 +5,7 @@ require_once "vendor/autoload.php";
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 
-$paths = array("/path/to/entity-files");
+$paths = array(__DIR__."/entities");
 $isDevMode = false;
 
 // the connection configuration
@@ -14,7 +14,7 @@ $dbParams = array(
     'user'     => 'test',
     'password' => 'test5566',
     'dbname'   => 'message_board',
-    'host'     => 'localhost',
+    'host'     => 'localhost'
 );
 
 $config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);

@@ -11,7 +11,7 @@ $isDevMode = false;
 // the connection configuration
 $dbParams = array(
     'driver'   => 'pdo_mysql',
-    'user'     => 'test',
+    'user'     => 'tester',
     'password' => 'test5566',
     'dbname'   => 'message_board',
     'host'     => 'localhost'

@@ -17,7 +17,7 @@ class Message
      */
     protected $time;
     /**
-     * @Column(type="string", length="20", nullable="TRUE")
+     * @Column(type="string", length=20, nullable=TRUE)
      */
     protected $name;
 

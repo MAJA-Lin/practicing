@@ -1,0 +1,16 @@
+Message:
+  type: entity
+  table: message
+  id:
+    sn:
+      type:integer
+      generator:
+        strategy: AUTO
+  fields:
+    msg:
+      type: text
+    time:
+      type: datetime
+    name:
+      type: string
+      length: 20

@@ -1,8 +1,10 @@
 <?php
-include_once("SqlConnection.php");
-include_once("FrontOutput.php");
 
-class MessageClass extends SqlConnection implements FrontOutput
+require_once "../bootstrap.php";
+
+use scott\board\classes as board;
+
+class MessageClass implements board\FrontOutput
 {
     public function printout()
     {

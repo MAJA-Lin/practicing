@@ -1,6 +1,6 @@
 <?php
 /**
- * @Entity @Table(name="message")
+ * @Entity(repositoryClass="MessageRepository") @Table(name="message")
  */
 class Message
 {
@@ -21,7 +21,7 @@ class Message
      */
     protected $name;
 
-    public function getSN()
+    public function getSn()
     {
         return $this->sn;
     }

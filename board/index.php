@@ -24,7 +24,7 @@ require_once "MessageClass.php";
     <div>
         <?php
         $index = new MessageClass();
-        $index->printout();
+        $index->printout($entityManager);
         ?>
     </div>
 </body>

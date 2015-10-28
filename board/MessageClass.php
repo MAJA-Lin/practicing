@@ -4,39 +4,37 @@ require_once "bootstrap.php";
 
 class MessageClass
 {
-    public function printout()
+
+    public function printout($em)
     {
-        $mysqli = $this->dbConnection();
         $i = 0;
-        $limit = 10;
-        $sql= "SELECT count(sn) FROM message";
-        $result = $mysqli->query($sql);
-        if (!$result) {
-            die('Failed to get data: ' . $mysqli->error);
-        }
-        $row = $result->fetch_array(MYSQL_NUM);
-        $count = $row[0];
+        $pageLimit = 10;
+
+        //$dql = "SELECT count(m.sn) FROM Message m";
+
+        //$query = $em->createQuery($dql)->getResult();
+        $total = $em->getRepository('Message')->getTotalNumber();
+
+        echo "<br>";
+        echo $total;
 
         if (isset($_GET{'page'})) {
             $page = $_GET{'page'} + 1;
-            $offset = $limit * ($page - 1);
+            $offset = $pageLimit * ($page - 1);
         } else {
             $page = 1;
             $offset = 0;
         }
 
-        $left_data = $count - (($page - 1) * $limit);
-        $sql = "SELECT * FROM message LIMIT $offset, $limit";
-        if ($result = $mysqli->query($sql)) {
-            while ($row = $result->fetch_array(MYSQL_ASSOC)) {
-                $this->listMessage($row);
-            }
-        } else {
-            die("Failed to get data " . $mysqli->error);
-        }
+        $left_data = $total - (($page - 1) * $pageLimit);
+        $query = $em->getRepository('Message')->getPages($offset, $pageLimit);
 
-        $this->listPages($count, $limit);
-        $mysqli->close();
+        echo "<br><br>";
+        var_dump($query);
+        echo "<br>";
+        //echo get_class($query[0]->getAvatar());
+
+        $this->listPages($total, $pageLimit);
 
     }
 
@@ -61,17 +59,34 @@ class MessageClass
         print("------------------------------------------------------------------<br>");
     }
 
-    public function listPages($count, $limit)
+    public function listPages($total, $pageLimit)
     {
         $page_count = 0;
         $left_data = 0;
-        while ($left_data < $count) {
+        echo "<br>";
+        while ($left_data < $total) {
             $display = $page_count + 1;
             echo "<a href=\"?page=$page_count\">Page ". $display ."</a> &#8195;";
-            $left_data = $left_data + $limit;
+            $left_data = $left_data + $pageLimit;
             $page_count++;
         }
     }
+
+    public function updateMessage($em, $sn, $newMsg)
+    {
+        $message = $em->find('Message', $sn);
+
+        if ($message === null) {
+            echo "Can't find message.\n";
+            exit(1);
+        } else {
+            $message->setMsg($newMsg);
+            $em->flush();
+            echo ("<script>window.alert('Message has been updated!')
+            location.href='index.php';</script>");
+        }
+    }
+
 }
 
 ?>

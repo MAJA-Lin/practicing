@@ -1,10 +1,8 @@
 <?php
 
-require_once "../bootstrap.php";
+require_once "bootstrap.php";
 
-use scott\board\classes as board;
-
-class MessageClass implements board\FrontOutput
+class MessageClass
 {
     public function printout()
     {

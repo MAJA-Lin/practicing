@@ -1,5 +1,7 @@
 <?php
-include_once("classes/MessageClass.php");
+require_once "bootstrap.php";
+
+require_once "MessageClass.php";
 
 ?>
 <!DOCTYPE html>

@@ -29,10 +29,9 @@ class MessageClass
         $left_data = $total - (($page - 1) * $pageLimit);
         $query = $em->getRepository('Message')->getPages($offset, $pageLimit);
 
-        echo "<br><br>";
-        var_dump($query);
-        echo "<br>";
-        //echo get_class($query[0]->getAvatar());
+        foreach ($query as $value) {
+            $this->listMessage($value);
+        }
 
         $this->listPages($total, $pageLimit);
 

@@ -25,12 +25,12 @@ class MessageRepository extends EntityRepository
      */
     public function getPages($offset, $pageLimit)
     {
-        $dql = "SELECT m.name, m.time, m.msg FROM Message m";
+        $dql = "SELECT m.sn, m.name, m.time, m.msg FROM Message m";
         $query = $this->_em
-                    ->createQuery('SELECT m.name, m.time, m.msg FROM Message m')
+                    ->createQuery($dql)
                     ->setFirstResult($offset)
                     ->setMaxResults($pageLimit)
-                    ->getResult();
+                    ->getScalarResult();
         return $query;
     }
 

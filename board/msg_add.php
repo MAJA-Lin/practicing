@@ -9,6 +9,7 @@ $insertQuery = new Message();
 $insertQuery->setName($name);
 $insertQuery->setMsg($msg);
 $insertQuery->setTime();
+
 $entityManager->persist($insertQuery);
 $entityManager->flush();
 

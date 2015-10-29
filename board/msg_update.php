@@ -13,6 +13,8 @@ if ($query === null) {
     exit(1);
 } else {
     $query->setMsg($new_msg);
+
+    $entityManager->persist($query);
     $entityManager->flush();
 
     echo ("<script>window.alert('Message has been updated!')

@@ -15,9 +15,6 @@ class MessageClass
         //$query = $em->createQuery($dql)->getResult();
         $total = $em->getRepository('Message')->getTotalNumber();
 
-        echo "<br>";
-        echo $total;
-
         if (isset($_GET{'page'})) {
             $page = $_GET{'page'} + 1;
             $offset = $pageLimit * ($page - 1);

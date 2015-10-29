@@ -1,24 +1,23 @@
 <?php
-include_once "classes/SqlConnection.php";
-
-$conneting = new SqlConnection;
-$mysqli = $conneting->dbConnection();
+require_once "bootstrap.php";
 
 $name = $_GET['name'];
 $new_msg = $_GET['new_msg'];
 $sn = $_GET['sn'];
 
-$sql = "UPDATE message SET msg = ? WHERE sn = ?";
-$result = $mysqli->prepare($sql);
-$result->bind_param("ss", $new_msg, $sn);
+$query = $entityManager->find('Message', $sn);
 
-if ($result->execute()) {
-	echo ("<script>window.alert('Message has been updated!')
+if ($query === null) {
+    echo ("<script>window.alert('Update failed.')
                 location.href='index.php';</script>");
-	$mysqli->close();
-	exit();
+    exit(1);
 } else {
-	echo "Error ". $result->error;
+    $query->setMsg($new_msg);
+    $entityManager->flush();
+
+    echo ("<script>window.alert('Message has been updated!')
+                location.href='index.php';</script>");
+    exit();
 }
 
 ?>

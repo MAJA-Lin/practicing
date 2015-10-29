@@ -38,7 +38,7 @@ class Message
 
     public function setTime()
     {
-        $this->time = date("Y-m-d H:i:s");
+        $this->time = date_create(date("Y-m-d H:i:s"));
     }
 
     public function getTime()

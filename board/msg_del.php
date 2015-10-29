@@ -1,17 +1,21 @@
 <?php
-include_once "classes/SqlConnection.php";
 
-$conneting = new SqlConnection;
-$mysqli = $conneting->dbConnection();
+require_once "bootstrap.php";
+
 $sn = $_GET['sn'];
-$sql = "DELETE FROM message WHERE sn = '$sn'";
+$query = $entityManager->find('Message', $sn);
 
-if (($result = $mysqli->query($sql))) {
+if ($query === null) {
+    echo ("<script>window.alert('Deletion failed.')
+                location.href='index.php';</script>");
+    exit(1);
+} else {
+    $entityManager->remove($query);
+    $entityManager->flush();
+
     echo ("<script>window.alert('Message has been deleted!')
                 location.href='index.php';</script>");
-    $mysqli->close();
     exit();
-} else {
-    echo "Error ". $mysqli->error;
 }
+
 ?>

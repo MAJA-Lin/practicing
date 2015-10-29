@@ -1,23 +1,20 @@
 <?php
-include_once "classes/SqlConnection.php";
 
-$conneting = new SqlConnection;
-$mysqli = $conneting->dbConnection();
+require_once "bootstrap.php";
+
 $name = $_GET['name'];
 $msg = $_GET['msg'];
-$sql = "INSERT INTO message (name, msg, time) VALUES (?,?,?)";
+//$time = date("Y-m-d H:i:s");
 
-$result = $mysqli->prepare($sql);
-$time = date("Y-m-d H:i:s");
-$result->bind_param("sss", $name, $msg, $time);
+$insertQuery = new Message();
+$insertQuery->setName($name);
+$insertQuery->setMsg($msg);
+$insertQuery->setTime();
+$entityManager->persist($insertQuery);
+$entityManager->flush();
 
-if ($result->execute()) {
-    echo ("<script>window.alert('Message has been updated!')
-                location.href='index.php';</script>");
-    $mysqli->close();
-    exit();
-} else {
-    echo "Error ". $result->error;
-}
+echo ("<script>window.alert('Message has been added!')
+            location.href='index.php';</script>");
+exit();
 
 ?>

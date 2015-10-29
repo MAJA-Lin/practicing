@@ -4,7 +4,6 @@ require_once "bootstrap.php";
 
 $name = $_GET['name'];
 $msg = $_GET['msg'];
-//$time = date("Y-m-d H:i:s");
 
 $insertQuery = new Message();
 $insertQuery->setName($name);

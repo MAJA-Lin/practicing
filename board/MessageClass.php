@@ -28,7 +28,7 @@ class MessageClass
 
         foreach ($query as $value) {
             $this->listMessage($value, $value['sn']);
-            //$this->listReplyMessage($value);
+            $this->listReplyMessage($em, $value);
         }
 
         $this->listPages($total, $pageLimit);
@@ -68,32 +68,32 @@ class MessageClass
             $page_count++;
         }
     }
-    /*
-    public function listReplyMessage($parentQuery)
+
+    public function listReplyMessage($em, $parentQuery)
     {
         #do sql/dql query to find key in reply_message, then show those related messages.
-        $target = $parent['sn'];
+        $target = $parentQuery['sn'];
         //SELECT reply_message.reply_sn, reply_message.name, reply_message.time, 
             //reply_message.msg FROM reply_message INNER JOIN message 
             //ON message.sn = reply_message.target;
-        $dql = "SELECT r FROM ReplyMessage r JOIN Message m ON m.sn = r.target";
-        $query = $em->createQuery($dql)->getScalarResult();
+        $dql = "SELECT r.name, r.time, r.msg, r.reply FROM ReplyMessage r JOIN r.message m " .
+        "WHERE m.sn = ?1";
+        $query = $em->createQuery($dql)->setParameter(1, $target)->getScalarResult();
+
 
         if ($query === null) {
-
-        }
-
-        if (#if there is no repl, just show user the adding reply block) {
-            # code...
+            $this->addForm();
         } else {
             printf("<details><summary>Click to see reply</summary>");
-            foreach () {
-                #maybe use listMessage again?
+
+            foreach ($query as $value) {
+                $this->listMessage($value, $value['sn']);
             }
+
+            $this->addForm();
+            printf("</details>");
         }
-
-
-    }*/
+    }
 
     public function updateMessage($em, $sn, $newMsg)
     {
@@ -110,6 +110,17 @@ class MessageClass
         }
     }
 
+    public function addForm()
+    {
+        printf("<form action=\"msg_reply_add.php\" method=\"get\">");
+        printf("<br><h3><strong>Reply this post<strong></h3>");
+        printf("Message: <input type=\"text\" name=\"msg\" 
+            placeholder=\"reply here\" size=\"50\"/><br>");
+        printf("Name: <input type=\"varchar\" name=\"name\" 
+            placeholder=\"User Name\" /><br>");
+        printf("<input type=\"submit\" name=\"button\" 
+            value=\"submit\" /><br></form>");
+    }
 }
 
 ?>

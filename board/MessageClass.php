@@ -43,8 +43,6 @@ class MessageClass
 
         printf("<form action=\"msg_update.php\"><input type=\"hidden\" 
                 name=\"sn\" value=\"".$sn."\">");
-        printf("<input type=\"hidden\" name=\"name\" value=\""
-                .$row['name']."\">");
         printf("<input type=\"text\" name=\"new_msg\" placeholder=\"
                 edit message here\" size=\"50\">");
         printf("<input type=\"submit\" name=\"button\" 
@@ -77,7 +75,7 @@ class MessageClass
             //reply_message.msg FROM reply_message INNER JOIN message 
             //ON message.sn = reply_message.target;
         $dql = "SELECT r.name, r.time, r.msg, r.reply FROM ReplyMessage r JOIN r.message m " .
-        "WHERE m.sn = ?1";
+        "WHERE m.sn = '21'";
         $query = $em->createQuery($dql)->setParameter(1, $target)->getScalarResult();
 
 

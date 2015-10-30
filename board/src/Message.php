@@ -1,4 +1,7 @@
 <?php
+
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * @Entity(repositoryClass="MessageRepository") @Table(name="message")
  */
@@ -20,6 +23,15 @@ class Message
      * @Column(type="string", length=20, nullable=TRUE)
      */
     protected $name;
+    /**
+     * @OneToMany(targetEntity="ReplyMessage", mappedBy="message")
+     **/
+    protected $replyMessage;
+
+    public function __construct()
+    {
+        $this->replyMessage = new ArrayCollection();
+    }
 
     public function getSn()
     {

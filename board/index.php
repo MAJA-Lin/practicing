@@ -17,6 +17,7 @@ require_once "MessageClass.php";
             <h2><strong>Leave new message<strong></h2>
             Message: <input type="text" name="msg" placeholder="commit here" size="50"/><br>
             Name: <input type="varchar" name="name" placeholder="User Name" /><br>
+            <input type="hidden" name="table" value="message" />
             <input type="submit" name="button" value="submit" /><br>
         </form>
         <br>---------------------------------------------------------<br>

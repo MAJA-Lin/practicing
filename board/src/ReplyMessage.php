@@ -1,4 +1,7 @@
 <?php
+
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * @Entity(repositoryClass="ReplyMessageRepository") @Table(name="reply_message")
  */
@@ -9,10 +12,10 @@ class ReplyMessage
      */
     protected $reply_sn;
     /**
-     * @ManyToOne(targetEntity="Message")
+     * @ManyToOne(targetEntity="Message", inversedBy="replyMessage")
      * @JoinColumn(name="target", referencedColumnName="sn")
      **/
-    private $target;
+    protected $message;
     /**
      * @Column(type="text")
      */
@@ -28,7 +31,7 @@ class ReplyMessage
 
     public function __construct()
     {
-        $this->target = new ArrayCollection();
+        $this->message = new ArrayCollection();
     }
 
     public function getReplySn()

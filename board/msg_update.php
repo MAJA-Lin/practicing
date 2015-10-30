@@ -1,11 +1,15 @@
 <?php
 require_once "bootstrap.php";
 
-$name = $_GET['name'];
 $new_msg = $_GET['new_msg'];
 $sn = $_GET['sn'];
+$table = $_GET['table'];
 
-$query = $entityManager->find('Message', $sn);
+if ($table == "message") {
+    $query = $entityManager->find('Message', $sn);
+} elseif ($table == "reply" && isset($_GET['sn'])) {
+    $query = $entityManager->find('ReplyMessage', $sn)
+}
 
 if ($query === null) {
     echo ("<script>window.alert('Update failed.')

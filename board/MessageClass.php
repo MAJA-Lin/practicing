@@ -27,7 +27,7 @@ class MessageClass
         $query = $em->getRepository('Message')->getPages($offset, $pageLimit);
 
         foreach ($query as $value) {
-            $this->listMessage($value, $value['sn']);
+            $this->listMessage($value, $value['sn'], 'message');
             $this->listReplyMessage($em, $value);
         }
 
@@ -35,7 +35,7 @@ class MessageClass
 
     }
 
-    public function listMessage($row, $sn)
+    public function listMessage($row, $sn, $table)
     {
         print("<br>Name: ".$row['name']);
         print("<br>Time: ".$row['time']);
@@ -45,11 +45,13 @@ class MessageClass
                 name=\"sn\" value=\"".$sn."\">");
         printf("<input type=\"text\" name=\"new_msg\" placeholder=\"
                 edit message here\" size=\"50\">");
+        printf("<input type=\"hidden\" name=\"table\" value=\"".$table."\">");
         printf("<input type=\"submit\" name=\"button\" 
                 value=\"Update\"></form>");
 
         printf("<form action=\"msg_del.php\"><input type=\"hidden\" name=\"sn\" 
                 value=\"".$sn."\">");
+        printf("<input type=\"hidden\" name=\"table\" value=\"".$table."\">");
         printf("<input type=\"submit\" name=\"button\" value=\"Delete\"></form>");
         print("------------------------------------------------------------------<br>");
     }
@@ -85,14 +87,15 @@ class MessageClass
             printf("<details><summary>Click to see reply</summary>");
 
             foreach ($query as $value) {
-                $this->listMessage($value, $value['sn']);
+                $this->listMessage($value, $value['sn'], 'reply');
             }
 
-            $this->addForm();
+            $this->addForm('reply');
             printf("</details>");
         }
     }
-
+    /*
+    #Leave this to msg_update.php
     public function updateMessage($em, $sn, $newMsg)
     {
         $message = $em->find('Message', $sn);
@@ -107,15 +110,17 @@ class MessageClass
             location.href='index.php';</script>");
         }
     }
+    */
 
-    public function addForm()
+    public function addForm($table)
     {
-        printf("<form action=\"msg_reply_add.php\" method=\"get\">");
+        printf("<form action=\"msg_add.php\" method=\"get\">");
         printf("<br><h3><strong>Reply this post<strong></h3>");
         printf("Message: <input type=\"text\" name=\"msg\" 
             placeholder=\"reply here\" size=\"50\"/><br>");
         printf("Name: <input type=\"varchar\" name=\"name\" 
             placeholder=\"User Name\" /><br>");
+        printf("<input type=\"hidden\" name=\"table\" value=\"".$table."\">");
         printf("<input type=\"submit\" name=\"button\" 
             value=\"submit\" /><br></form>");
     }

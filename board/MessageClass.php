@@ -27,21 +27,22 @@ class MessageClass
         $query = $em->getRepository('Message')->getPages($offset, $pageLimit);
 
         foreach ($query as $value) {
-            $this->listMessage($value);
+            $this->listMessage($value, $value['sn']);
+            //$this->listReplyMessage($value);
         }
 
         $this->listPages($total, $pageLimit);
 
     }
 
-    public function listMessage($row)
+    public function listMessage($row, $sn)
     {
         print("<br>Name: ".$row['name']);
         print("<br>Time: ".$row['time']);
         print("<br>Message: ".$row['msg']);
 
         printf("<form action=\"msg_update.php\"><input type=\"hidden\" 
-                name=\"sn\" value=\"".$row['sn']."\">");
+                name=\"sn\" value=\"".$sn."\">");
         printf("<input type=\"hidden\" name=\"name\" value=\""
                 .$row['name']."\">");
         printf("<input type=\"text\" name=\"new_msg\" placeholder=\"
@@ -50,7 +51,7 @@ class MessageClass
                 value=\"Update\"></form>");
 
         printf("<form action=\"msg_del.php\"><input type=\"hidden\" name=\"sn\" 
-                value=\"".$row['sn']."\">");
+                value=\"".$sn."\">");
         printf("<input type=\"submit\" name=\"button\" value=\"Delete\"></form>");
         print("------------------------------------------------------------------<br>");
     }
@@ -67,6 +68,32 @@ class MessageClass
             $page_count++;
         }
     }
+    /*
+    public function listReplyMessage($parentQuery)
+    {
+        #do sql/dql query to find key in reply_message, then show those related messages.
+        $target = $parent['sn'];
+        //SELECT reply_message.reply_sn, reply_message.name, reply_message.time, 
+            //reply_message.msg FROM reply_message INNER JOIN message 
+            //ON message.sn = reply_message.target;
+        $dql = "SELECT r FROM ReplyMessage r JOIN Message m ON m.sn = r.target";
+        $query = $em->createQuery($dql)->getScalarResult();
+
+        if ($query === null) {
+
+        }
+
+        if (#if there is no repl, just show user the adding reply block) {
+            # code...
+        } else {
+            printf("<details><summary>Click to see reply</summary>");
+            foreach () {
+                #maybe use listMessage again?
+            }
+        }
+
+
+    }*/
 
     public function updateMessage($em, $sn, $newMsg)
     {

@@ -4,8 +4,17 @@ require_once "bootstrap.php";
 
 $name = $_GET['name'];
 $msg = $_GET['msg'];
+$table = $_GET['table'];
 
-$insertQuery = new Message();
+if ($table == "message") {
+    $insertQuery = new Message();
+} elseif ($table == "reply" && isset($_GET['sn'])) {
+    $message = $entityManager->find('Message', $_GET['sn']);
+    $insertQuery = new ReplyMessage();
+    $insertQuery->setMessage($message);
+    //$insertQuery->setTarget($_GET['sn']);
+}
+
 $insertQuery->setName($name);
 $insertQuery->setMsg($msg);
 $insertQuery->setTime();

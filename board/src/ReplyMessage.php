@@ -1,4 +1,7 @@
 <?php
+
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * @Entity(repositoryClass="ReplyMessageRepository") @Table(name="reply_message")
  */
@@ -8,27 +11,33 @@ class ReplyMessage
      * @Id @Column(type="integer") @GeneratedValue
      */
     protected $reply_sn;
+
     /**
+     * Unidirectional - Many-To-One
+     *
      * @ManyToOne(targetEntity="Message")
-     * @JoinColumn(name="target", referencedColumnName="sn")
+     * @JoinColumn(name="message_sn", referencedColumnName="sn")
      **/
-    private $target;
+    protected $message;
+
     /**
      * @Column(type="text")
      */
     protected $msg;
+
     /**
      * @Column(type="datetime")
      */
     protected $time;
+
     /**
      * @Column(type="string", length=20, nullable=TRUE)
      */
     protected $name;
 
-    public function __construct()
+    public function setMessage(Message $m)
     {
-        $this->target = new ArrayCollection();
+        $this->message = $m;
     }
 
     public function getReplySn()

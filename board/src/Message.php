@@ -8,14 +8,17 @@ class Message
      * @Id @Column(type="integer") @GeneratedValue
      */
     protected $sn;
+
     /**
      * @Column(type="text")
      */
     protected $msg;
+
     /**
      * @Column(type="datetime")
      */
     protected $time;
+
     /**
      * @Column(type="string", length=20, nullable=TRUE)
      */

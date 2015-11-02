@@ -18,7 +18,7 @@ class ReplyMessage
      * @ManyToOne(targetEntity="Message")
      * @JoinColumn(name="message_sn", referencedColumnName="sn")
      **/
-    protected $message;
+    private $message_table;
 
     /**
      * @Column(type="text")
@@ -35,9 +35,13 @@ class ReplyMessage
      */
     protected $name;
 
-    public function setMessage(Message $m)
+    public function getMessageTable()
     {
-        $this->message = $m;
+        return $this->message_table;
+    }
+    public function setMessageTable(Message $m)
+    {
+        $this->message_table = $m;
     }
 
     public function getReplySn()

@@ -10,15 +10,14 @@ class ReplyMessage
     /**
      * @Id @Column(type="integer") @GeneratedValue
      */
-    protected $reply_sn;
+    protected $id;
 
     /**
      * Unidirectional - Many-To-One
      *
      * @ManyToOne(targetEntity="Message")
-     * @JoinColumn(name="message_sn", referencedColumnName="sn")
      **/
-    private $message_table;
+    private $message;
 
     /**
      * @Column(type="text")
@@ -35,18 +34,18 @@ class ReplyMessage
      */
     protected $name;
 
-    public function getMessageTable()
+    public function getMessage()
     {
-        return $this->message_table;
+        return $this->message;
     }
-    public function setMessageTable(Message $m)
+    public function setMessage(Message $m)
     {
-        $this->message_table = $m;
+        $this->message = $m;
     }
 
-    public function getReplySn()
+    public function getId()
     {
-        return $this->reply_sn;
+        return $this->id;
     }
 
     public function getMsg()

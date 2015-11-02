@@ -7,7 +7,7 @@ class Message
     /**
      * @Id @Column(type="integer") @GeneratedValue
      */
-    protected $sn;
+    protected $id;
 
     /**
      * @Column(type="text")
@@ -24,9 +24,9 @@ class Message
      */
     protected $name;
 
-    public function getSn()
+    public function getId()
     {
-        return $this->sn;
+        return $this->id;
     }
 
     public function getMsg()

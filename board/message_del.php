@@ -2,13 +2,13 @@
 
 require_once "bootstrap.php";
 
-$sn = $_GET['sn'];
+$id = $_GET['id'];
 $table = $_GET['table'];
 
 if ($table == "message") {
-    $query = $entityManager->find('Message', $sn);
-} elseif ($table == "reply" && isset($_GET['sn'])) {
-    $query = $entityManager->find('ReplyMessage', $sn)
+    $query = $entityManager->find('Message', $id);
+} elseif ($table == "reply" && isset($_GET['id'])) {
+    $query = $entityManager->find('ReplyMessage', $id)
 }
 
 

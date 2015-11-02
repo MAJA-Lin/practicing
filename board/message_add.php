@@ -12,7 +12,6 @@ if ($table == "message") {
     $message = $entityManager->find('Message', $_GET['id']);
     $insertQuery = new ReplyMessage();
     $insertQuery->setMessage($message);
-    //$insertQuery->setTarget($_GET['id']);
 }
 
 $insertQuery->setName($name);
@@ -23,7 +22,5 @@ $entityManager->persist($insertQuery);
 $entityManager->flush();
 
 echo ("<script>window.alert('Message has been added!')
-            location.href='index.php';</script>");
+            location.href='message_show.php';</script>");
 exit();
-
-?>

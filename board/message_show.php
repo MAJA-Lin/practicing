@@ -10,11 +10,12 @@ require_once "message_show.php";
 </head>
 <body>
     <div>
-        <form action="msg_add.php" method="get">
+        <form action="message_add.php" method="get">
             <br>
             <h2><strong>Leave new message<strong></h2>
             Message: <input type="text" name="msg" placeholder="commit here" size="50"/><br>
             Name: <input type="varchar" name="name" placeholder="User Name" /><br>
+            <input type="hidden" name="table" value="message" />
             <input type="submit" name="button" value="submit" /><br>
         </form>
         <br>---------------------------------------------------------<br>
@@ -38,8 +39,8 @@ require_once "message_show.php";
         $query = $entityManager->getRepository('Message')->getPages($offset, $pageLimit);
 
         foreach ($query as $value) {
-            listMessage($value, $value['sn'], 'message');
-            //listReplyMessage($entityManager, $value);
+            listMessage($value, $value['id'], 'message');
+            listReplyMessage($entityManager, $value);
         }
 
         listPages($total, $pageLimit);
@@ -50,22 +51,32 @@ require_once "message_show.php";
 
 <?php
 
-function listMessage($row, $sn, $table)
+function listMessage($row, $id, $table)
 {
-    print("<br>Name: ".$row['name']);
-    print("<br>Time: ".$row['time']);
-    print("<br>Message: ".$row['msg']);
+    if ($table == 'message') {
+        $name = $row['name'];
+        $time = $row['time'];
+        $msg = $row['msg'];
+    } elseif ($table == 'reply') {
+        $name = $row['r_name'];
+        $time = $row['r_time']->format('Y-m-d H:i:s');
+        $msg = $row['r_msg'];
+    }
 
-    printf("<form action=\"msg_update.php\"><input type=\"hidden\" 
-            name=\"sn\" value=\"".$sn."\">");
+    print("<br>Name: ".$name);
+    print("<br>Time: ".$time);
+    print("<br>Message: ".$msg);
+
+    printf("<form action=\"message_update.php\"><input type=\"hidden\" 
+            name=\"id\" value=\"".$id."\">");
     printf("<input type=\"text\" name=\"new_msg\" placeholder=\"
             edit message here\" size=\"50\">");
     printf("<input type=\"hidden\" name=\"table\" value=\"".$table."\">");
     printf("<input type=\"submit\" name=\"button\" 
             value=\"Update\"></form>");
 
-    printf("<form action=\"msg_del.php\"><input type=\"hidden\" name=\"sn\" 
-            value=\"".$sn."\">");
+    printf("<form action=\"message_del.php\"><input type=\"hidden\" name=\"id\" 
+            value=\"".$id."\">");
     printf("<input type=\"hidden\" name=\"table\" value=\"".$table."\">");
     printf("<input type=\"submit\" name=\"button\" value=\"Delete\"></form>");
     print("------------------------------------------------------------------<br>");
@@ -86,65 +97,40 @@ function listPages($total, $pageLimit)
 
 function listReplyMessage($entityManager, $parentQuery)
 {
-    #do sql/dql query to find key in reply_message, then show those related messages.
-    $target = $parentQuery['sn'];
-    //SELECT reply_message.reply_sn, reply_message.name, reply_message.time, 
-        //reply_message.msg FROM reply_message INNER JOIN message 
-        //ON message.sn = reply_message.target;
-    /*$dql = "SELECT r.name, r.time, r.msg, r.reply FROM ReplyMessage r JOIN r.message m " .
-    "WHERE m.sn = '21'";
-    $query = $entityManager->createQuery($dql)->setParameter(1, $target)->getScalarResult();
-    */
+    $target = $parentQuery['id'];
 
-    $message = $entityManager->find('Message', $target);
+    $dql = "SELECT r, m FROM ReplyMessage r JOIN r.message m WHERE m.id = ?1 GROUP BY r.id";
+    $reply = $entityManager->createQuery($dql)
+        ->setParameter(1, $target)->getScalarResult();
 
-    //$reply = $entityManager->find('ReplyMessage',);
-    //$reply->getMessageTable()->add($message);
-    /*
-    if ($query === null) {
-        addForm();
+    if ($reply === null) {
+        printf("<details><summary>Click to reply this message.</summary>");
+        addForm($target, "reply");
+        printf("</details>");
     } else {
         printf("<details><summary>Click to see reply</summary>");
 
-        foreach ($query as $value) {
-            listMessage($value, $value['sn'], 'reply');
+        foreach ($reply as $value) {
+            listMessage($value, $value['r_id'], 'reply');
         }
 
-        $this->addForm('reply');
+        addForm($target, 'reply');
         printf("</details>");
     }
-    */
 }
-/*
-#Leave this to msg_update.php
-public function updateMessage($entityManager, $sn, $newMsg)
-{
-    $message = $entityManager->find('Message', $sn);
 
-    if ($message === null) {
-        echo "Can't find message.\n";
-        exit(1);
-    } else {
-        $message->setMsg($newMsg);
-        $entityManager->flush();
-        echo ("<script>window.alert('Message has been updated!')
-        location.href='index.php';</script>");
-    }
-}
-*/
-
-function addForm($table)
+function addForm($id, $table)
 {
-    printf("<form action=\"msg_add.php\" method=\"get\">");
+    printf("<form action=\"message_add.php\" method=\"get\">");
     printf("<br><h3><strong>Reply this post<strong></h3>");
     printf("Message: <input type=\"text\" name=\"msg\" 
         placeholder=\"reply here\" size=\"50\"/><br>");
     printf("Name: <input type=\"varchar\" name=\"name\" 
         placeholder=\"User Name\" /><br>");
     printf("<input type=\"hidden\" name=\"table\" value=\"".$table."\">");
+    printf("<input type=\"hidden\" name=\"id\" value=\"".$id."\">");
     printf("<input type=\"submit\" name=\"button\" 
         value=\"submit\" /><br></form>");
 }
-
 
 ?>

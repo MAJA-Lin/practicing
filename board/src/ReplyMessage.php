@@ -16,7 +16,7 @@ class ReplyMessage
      * Unidirectional - Many-To-One
      *
      * @ManyToOne(targetEntity="Message")
-     * @JoinColumn(name="message_id", referencedColumnName="id", onDelete="SET NULL")
+     * @JoinColumn(name="message_id", referencedColumnName="id", onDelete="CASCADE")
      **/
     private $message;
 
@@ -34,6 +34,11 @@ class ReplyMessage
      * @Column(type="string", length=20, nullable=TRUE)
      */
     protected $name;
+
+    public function __construct()
+    {
+        $this->message = new ArrayCollection();
+    }
 
     public function getMessage()
     {

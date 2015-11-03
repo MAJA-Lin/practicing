@@ -1,6 +1,6 @@
 <?php
 require_once "bootstrap.php";
-require_once "message_show.php";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +14,7 @@ require_once "message_show.php";
             <br>
             <h2><strong>Leave new message<strong></h2>
             Message: <input type="text" name="msg" placeholder="commit here" size="50"/><br>
-            Name: <input type="varchar" name="name" placeholder="User Name" /><br>
+            Name: <input type="text" name="name" placeholder="User Name" /><br>
             <input type="hidden" name="table" value="message" />
             <input type="submit" name="button" value="submit" /><br>
         </form>
@@ -22,7 +22,6 @@ require_once "message_show.php";
     </div>
     <div>
         <?php
-        $i = 0;
         $pageLimit = 10;
 
         $total = $entityManager->getRepository('Message')->getTotalNumber();
@@ -89,7 +88,7 @@ function listPages($total, $pageLimit)
     echo "<br>";
     while ($left_data < $total) {
         $display = $page_count + 1;
-        echo "<a href=\"?page=$page_count\">Page ". $display ."</a> &#8195;";
+        echo "<a href=\"?page=$page_count\">Page ". $display ."</a>  ";
         $left_data = $left_data + $pageLimit;
         $page_count++;
     }
@@ -125,7 +124,7 @@ function addForm($id, $table)
     printf("<br><h3><strong>Reply this post<strong></h3>");
     printf("Message: <input type=\"text\" name=\"msg\" 
         placeholder=\"reply here\" size=\"50\"/><br>");
-    printf("Name: <input type=\"varchar\" name=\"name\" 
+    printf("Name: <input type=\"text\" name=\"name\" 
         placeholder=\"User Name\" /><br>");
     printf("<input type=\"hidden\" name=\"table\" value=\"".$table."\">");
     printf("<input type=\"hidden\" name=\"id\" value=\"".$id."\">");

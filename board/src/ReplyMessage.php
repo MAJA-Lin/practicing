@@ -16,6 +16,7 @@ class ReplyMessage
      * Unidirectional - Many-To-One
      *
      * @ManyToOne(targetEntity="Message")
+     * @JoinColumn(name="message_id", referencedColumnName="id", onDelete="SET NULL")
      **/
     private $message;
 

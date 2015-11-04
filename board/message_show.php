@@ -52,14 +52,13 @@ require_once "bootstrap.php";
 
 function listMessage($row, $id, $table)
 {
+    $name = $row['name'];
+    $msg = $row['msg'];
+
     if ($table == 'message') {
-        $name = $row['name'];
         $time = $row['time'];
-        $msg = $row['msg'];
     } elseif ($table == 'reply') {
-        $name = $row['r_name'];
-        $time = $row['r_time']->format('Y-m-d H:i:s');
-        $msg = $row['r_msg'];
+        $time = $row['time']->format('Y-m-d H:i:s');
     }
 
     print("<br>Name: ".$name);
@@ -98,9 +97,8 @@ function listReplyMessage($entityManager, $parentQuery)
 {
     $target = $parentQuery['id'];
 
-    $dql = "SELECT r, m FROM ReplyMessage r JOIN r.message m WHERE m.id = ?1 GROUP BY r.id";
-    $reply = $entityManager->createQuery($dql)
-        ->setParameter(1, $target)->getScalarResult();
+    $reply = $entityManager->getRepository('ReplyMessage')
+        ->findBy(array('message' => $target));
 
     if ($reply === null) {
         printf("<details><summary>Click to reply this message.</summary>");
@@ -110,7 +108,11 @@ function listReplyMessage($entityManager, $parentQuery)
         printf("<details><summary>Click to see reply</summary>");
 
         foreach ($reply as $value) {
-            listMessage($value, $value['r_id'], 'reply');
+            $id = $value->getId();
+            $arr['name'] = $value->getName();
+            $arr['msg'] = $value->getMsg();
+            $arr['time'] = $value->getTime();
+            listMessage($arr, $id, 'reply');
         }
 
         addForm($target, 'reply');

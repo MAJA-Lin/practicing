@@ -3,7 +3,7 @@
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @Entity(repositoryClass="ReplyMessageRepository") @Table(name="reply_message")
+ * @Entity @Table(name="reply_message")
  */
 class ReplyMessage
 {

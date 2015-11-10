@@ -1,0 +1,26 @@
+{# app/Resources/views/message/reply_details.html.twig #}
+{#}
+            printf("<details><summary>Click to see reply</summary>");
+
+            foreach ($reply as $value) {
+                $id = $value->getId();
+                $arr['name'] = $value->getName();
+                $arr['msg'] = $value->getMsg();
+                $arr['time'] = $value->getTime();
+                listMessage($arr, $id, 'reply');
+            }
+#}
+{% if replyExists %}
+    <details>
+        <summary>Click to see reply</summary>
+        {% for reply in replys %}
+            ##~~~
+        {% endfor %}
+        addform
+    </details>
+{% else %}
+    <details>
+        <summary>Click to reply this message.</summary>
+    </details>
+    addform
+{% endif %}

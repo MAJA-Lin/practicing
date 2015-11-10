@@ -4,3 +4,4 @@
 /board/info.php
 composer.phar
 vendor/
+/board_remaster/app/sessions/

@@ -1,0 +1,39 @@
+{# app/Resources/views/message/show.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div name="new_form">
+        <form action="/app_dev.php/message/add">
+            <h2><strong>Leave new message here: </strong></h2>
+            Message: <input type="text" name="msg" placeholder="commit here" size="50"/><br>
+            Name: <input type="text" name="name" placeholder="User Name" /><br>
+            <input type="hidden" name="table" value="message" />
+            <input type="submit" name="button" value="submit" /><br>
+        </form>
+        <br>---------------------------------------------------------<br>
+    </div>
+    <div name="message">
+        <ol>
+            {% block listMessage %}
+                {% for messages in message %}
+                    {{ include('message/message_details.html.twig',
+                        { 'messages': messages, 'replys': reply}) }}
+                    {#
+                    {{ include('message/message_details.html.twig',
+                        { 'messages': messages, 'replys': reply, 'replyExists': replyExists}) }}
+                    #}
+
+                {% endfor %}
+
+            {% endblock %}
+        </ol>
+    </div>
+    <div name="page">
+
+        {#% <a href=""></a>
+            沒有直接用網址傳get, 試試轉址redirect
+            return $this->redirectToRoute('/message/show/page(?)');
+        %#}
+
+    </div>
+{% endblock %}

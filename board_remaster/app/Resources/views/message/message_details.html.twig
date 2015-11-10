@@ -1,0 +1,26 @@
+{# app/Resources/views/message/message_details.html.twig #}
+
+<li>
+    Name: {{ messages.name }}<br>
+    Time: {{ messages.time }}<br>
+    Message: {{ messages.msg }}<br>
+    {# plus form & reply here 
+        And don't forget to add list page at the buttom of this page.
+    #}
+    <form action="/app_dev.php/message/update"><input type="hidden" 
+            name="id" value={{ messages.id }}>
+    <input type="text" name="new_msg" placeholder="
+            edit message here" size="50">
+    <input type="hidden" name="table" value="table">
+    <input type="submit" name="button" value="Update"></form>
+
+    <form action="/app_dev.php/message/delete"><input type="hidden" name="id" 
+            value={{ messages.id }}>
+    <input type="hidden" name="table" value="table">
+    <input type="submit" name="button" value="Delete"></form>
+
+    {#
+        {{ include('message/reply_details.html.twig',
+        { 'messages': messages,'replys': replys, 'replyExists': replyExists }) }}
+        #}
+</li>

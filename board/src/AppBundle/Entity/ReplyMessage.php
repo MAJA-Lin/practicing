@@ -1,37 +1,40 @@
 <?php
 
+namespace AppBundle\Entity;
+
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @Entity @Table(name="reply_message")
+ * @ORM\Entity @ORM\Table(name="reply_message")
  */
 class ReplyMessage
 {
     /**
-     * @Id @Column(type="integer") @GeneratedValue
+     * @ORM\Id @ORM\Column(type="integer") @ORM\GeneratedValue
      */
     protected $id;
 
     /**
      * Unidirectional - Many-To-One
      *
-     * @ManyToOne(targetEntity="Message")
-     * @JoinColumn(name="message_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Message", inversedBy="reply")
+     * @ORM\JoinColumn(name="message_id", referencedColumnName="id", onDelete="CASCADE")
      **/
     private $message;
 
     /**
-     * @Column(type="text")
+     * @ORM\Column(type="text")
      */
     protected $msg;
 
     /**
-     * @Column(type="datetime")
+     * @ORM\Column(type="datetime")
      */
     protected $time;
 
     /**
-     * @Column(type="string", length=20, nullable=TRUE)
+     * @ORM\Column(type="string", length=20, nullable=TRUE)
      */
     protected $name;
 

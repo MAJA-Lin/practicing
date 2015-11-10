@@ -1,0 +1,24 @@
+{# app/Resources/views/message/message_details.html.twig #}
+
+<li>
+    Name: {{ message.name }}<br>
+    Time: {{ message.time }}<br>
+    Message: {{ message.msg }}<br>
+
+    <form action="/message/update"><input type="hidden" 
+            name="id" value={{ message.id }}>
+    <input type="text" name="msg" placeholder="
+            edit message here" size="50">
+    <input type="hidden" name="table" value="message">
+    <input type="submit" name="button" value="Update"></form>
+
+    <form action="/message/delete"><input type="hidden" name="id" 
+            value={{ message.id }}>
+    <input type="hidden" name="table" value="message">
+    <input type="submit" name="button" value="Delete"></form>
+
+    {% block replys %}
+        {{ include('message/reply_details.html.twig',
+            { 'id': message.id, 'reply': reply, 'replyExists': replyExists }) }}
+    {% endblock %}
+</li>

@@ -1,0 +1,11 @@
+{# app/Resources/views/message/add.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Your new message has been added: </h2>
+    Name: {{ message.name }}<br>
+    Time: {{ message.time|date('Y-m-d H:i:s') }}<br>
+    Message: {{ message.msg }}<br>
+        <script>window.alert('Message has been added!')
+                location.href='/app_dev.php/message/show';</script>
+{% endblock %}

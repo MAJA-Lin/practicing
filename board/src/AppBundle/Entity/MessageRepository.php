@@ -1,5 +1,7 @@
 <?php
 
+namespace AppBundle\Entity;
+
 use Doctrine\ORM\EntityRepository;
 
 class MessageRepository extends EntityRepository
@@ -11,7 +13,7 @@ class MessageRepository extends EntityRepository
      */
     public function getTotalNumber()
     {
-        $dql = "SELECT count(m.id) FROM Message m";
+        $dql = "SELECT count(m.id) FROM AppBundle:Message m";
         $query = $this->_em->createQuery($dql)->getSingleResult();
         $total = $query[1];
         return $total;
@@ -25,7 +27,7 @@ class MessageRepository extends EntityRepository
      */
     public function getPages($offset, $pageLimit)
     {
-        $dql = "SELECT m.id, m.name, m.time, m.msg FROM Message m";
+        $dql = "SELECT m.id, m.name, m.time, m.msg FROM AppBundle:Message m";
         $query = $this->_em
             ->createQuery($dql)
             ->setFirstResult($offset)

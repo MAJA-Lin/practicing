@@ -15,7 +15,8 @@
         </ol>
     </div>
     <div name="page">
-        
+        {% for i in 1..totalPage %}
+            <a href="{{ path('show', {'page': i})}}">Page {{ i }}</a>
+        {% endfor %}
     </div>
-
 {% endblock %}

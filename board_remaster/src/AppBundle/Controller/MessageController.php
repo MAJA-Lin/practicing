@@ -12,8 +12,8 @@ use AppBundle\Entity as Entity;
 class MessageController extends Controller
 {
     /**
-     * @Route("/message/show/{page}", defaults={"page": 1}, requirements={
-     *      "page": "\d+"})
+     * @Route("/message/show/{page}", name="show", defaults={"page": 1}, 
+     *      requirements={"page": "\d+"})
      * @Method("GET")
      */
     public function showAction($page)
@@ -22,12 +22,20 @@ class MessageController extends Controller
         $em =$this->getDoctrine()->getManager();
         $total = $em->getRepository('AppBundle:Message')->getTotalNumber();
 
-        if (isset($_GET{'page'})) {
-            $page = $_GET{'page'} + 1;
+        /*
+        if (isset($page)) {
+            $page = $page + 1;
             $offset = $pageLimit * ($page - 1);
         } else {
             $page = 1;
             $offset = 0;
+        }
+        */
+
+        if ($page == 1){
+            $offset = 0;
+        } else {
+            $offset = $pageLimit * ($page - 1);
         }
 
         $query = $em->getRepository('AppBundle:Message')->getPages($offset, $pageLimit);
@@ -120,7 +128,7 @@ class MessageController extends Controller
         $entityManager = $this->getDoctrine()->getManager();
 
         $id = $_GET['id'];
-        $msg = $_GET['new_msg'];
+        $msg = $_GET['msg'];
         $table = $_GET['table'];
 
         if ($table == "message") {
@@ -132,7 +140,7 @@ class MessageController extends Controller
         if ($query === null) {
             exit(1);
         } else {
-            $query->setMsg($new_msg);
+            $query->setMsg($msg);
             $entityManager->persist($query);
             $entityManager->flush();
         }

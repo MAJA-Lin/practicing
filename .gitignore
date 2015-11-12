@@ -1,7 +1,5 @@
 #ingore files
-/board/index.html
-/board/testgo.php
-/board/info.php
 composer.phar
 vendor/
 /board_remaster/app/sessions/
+/board_remaster/

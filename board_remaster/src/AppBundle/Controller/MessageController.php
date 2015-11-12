@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity as Entity;
@@ -11,9 +12,11 @@ use AppBundle\Entity as Entity;
 class MessageController extends Controller
 {
     /**
-     * @Route("/message/show")
+     * @Route("/message/show/{page}", defaults={"page": 1}, requirements={
+     *      "page": "\d+"})
+     * @Method("GET")
      */
-    public function showAction()
+    public function showAction($page)
     {
         $pageLimit = 10;
         $em =$this->getDoctrine()->getManager();
@@ -27,26 +30,31 @@ class MessageController extends Controller
             $offset = 0;
         }
 
-        $left_data = $total - (($page - 1) * $pageLimit);
         $query = $em->getRepository('AppBundle:Message')->getPages($offset, $pageLimit);
-        /*
-        foreach ($query as $value) {
-            $reply = $em->getRepository('AppBundle:ReplyMessage')
-            ->findBy(array('message' => $value['id']));
+
+        foreach ($query as $key=>$value) {
+            $reply[$key] = $em->getRepository('AppBundle:ReplyMessage')
+                ->findBy(array('message' => $value['id']));
+            $replyExists[$key] = empty($reply[$key]);
         }
 
-        //listPages($total, $pageLimit);
-        $replyExists = isset($reply);
-        */
+        $totalPage = floor($total / $pageLimit);
+        if (($total % $pageLimit) > 0) {
+            $totalPage++;
+        }
 
         return $this->render(
             'message/show.html.twig',
-            array('message' => $query, 'reply' => $pageLimit)//, 'replyExists' => $replyExists)
+            array('message' => $query, 'reply' => $reply, 
+                'replyExists' => $replyExists, 'table' => 'message', 'page' => $page,
+                'totalPage' => $totalPage
+                )
         );
     }
 
     /**
      * @Route("/message/add")
+     * @Method("GET")
      */
     public function addAction()
     {
@@ -56,7 +64,7 @@ class MessageController extends Controller
         $entityManager = $this->getDoctrine()->getManager();
         if ($table == "message") {
             $insertQuery = new Entity\Message();
-        } elseif ($table == "reply" && isset($_GET['id'])) {
+        } elseif ($table == "reply") {
             $message = $entityManager->find('AppBundle:Message', $_GET['id']);
             $insertQuery = new Entity\ReplyMessage();
             $insertQuery->setMessage($message);
@@ -77,21 +85,21 @@ class MessageController extends Controller
 
     /**
      * @Route("/message/delete")
+     * @Method("GET")
      */
     public function deleteAction()
     {
         $id = $_GET['id'];
-        //$table = $_GET['table'];
+        $table = $_GET['table'];
         $entityManager = $this->getDoctrine()->getManager();
 
         $query = $entityManager->find('AppBundle:Message', $id);
-        /*
+
         if ($table == "message") {
-            $query = $entityManager->find('Message', $id);
+            $query = $entityManager->find('AppBundle:Message', $id);
         } elseif ($table == "reply" && isset($_GET['id'])) {
-            $query = $entityManager->find('ReplyMessage', $id);
+            $query = $entityManager->find('AppBundle:ReplyMessage', $id);
         }
-        */
 
         $entityManager->remove($query);
         $entityManager->flush();
@@ -105,6 +113,7 @@ class MessageController extends Controller
 
     /**
      * @Route("/message/update")
+     * @Method("GET")
      */
     public function updateAction()
     {
@@ -112,48 +121,25 @@ class MessageController extends Controller
 
         $id = $_GET['id'];
         $msg = $_GET['new_msg'];
-        //$table = $_GET['table'];
+        $table = $_GET['table'];
 
-        /*
         if ($table == "message") {
-            $query = $entityManager->find('Message', $id);
+            $query = $entityManager->find('AppBundle:Message', $id);
         } elseif ($table == "reply" && isset($_GET['id'])) {
-            $query = $entityManager->find('ReplyMessage', $id);
+            $query = $entityManager->find('AppBundle:ReplyMessage', $id);
         }
 
         if ($query === null) {
-            echo ("<script>window.alert('Update failed.')
-                        location.href='message_show.php';</script>");
             exit(1);
         } else {
             $query->setMsg($new_msg);
             $entityManager->persist($query);
             $entityManager->flush();
-        */
-
-        $query = $entityManager->find('AppBundle:Message', $id);
-        $query->setMsg($msg);
-
-        $entityManager->persist($query);
-        $entityManager->flush();
+        }
 
         return $this->render(
             'message/update.html.twig',
             array('message' => $query)
-        );
-    }
-
-    private function listMessage($row)
-    {
-        $em =$this->getDoctrine()->getManager();
-        $reply = $em->getRepository('AppBundle:ReplyMessage')
-            ->findBy(array('message' => $row['id']));
-
-        $replyExists = isset($reply);
-
-        return $this->render(
-            'lucky/number.html.twig',
-            array('luckyNumberList' => '100')
         );
     }
 
@@ -167,34 +153,6 @@ class MessageController extends Controller
             echo "<a href=\"?page=$page_count\">Page ". $display ."</a>  ";
             $left_data = $left_data + $pageLimit;
             $page_count++;
-        }
-    }
-
-    private function listReply($parentQuery)
-    {
-        $target = $parentQuery['id'];
-        $em =$this->getDoctrine()->getManager();
-
-        $reply = $em->getRepository('ReplyMessage')
-            ->findBy(array('message' => $target));
-
-        if ($reply === null) {
-            printf("<details><summary>Click to reply this message.</summary>");
-            addForm($target, "reply");
-            printf("</details>");
-        } else {
-            printf("<details><summary>Click to see reply</summary>");
-
-            foreach ($reply as $value) {
-                $id = $value->getId();
-                $arr['name'] = $value->getName();
-                $arr['msg'] = $value->getMsg();
-                $arr['time'] = $value->getTime();
-                listMessage($arr, $id, 'reply');
-            }
-
-            addForm($target, 'reply');
-            printf("</details>");
         }
     }
 }

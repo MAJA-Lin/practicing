@@ -22,16 +22,6 @@ class MessageController extends Controller
         $em =$this->getDoctrine()->getManager();
         $total = $em->getRepository('AppBundle:Message')->getTotalNumber();
 
-        /*
-        if (isset($page)) {
-            $page = $page + 1;
-            $offset = $pageLimit * ($page - 1);
-        } else {
-            $page = 1;
-            $offset = 0;
-        }
-        */
-
         if ($page == 1){
             $offset = 0;
         } else {
@@ -149,18 +139,5 @@ class MessageController extends Controller
             'message/update.html.twig',
             array('message' => $query)
         );
-    }
-
-    private function listPages($total, $pageLimit)
-    {
-        $page_count = 0;
-        $left_data = 0;
-        echo "<br>";
-        while ($left_data < $total) {
-            $display = $page_count + 1;
-            echo "<a href=\"?page=$page_count\">Page ". $display ."</a>  ";
-            $left_data = $left_data + $pageLimit;
-            $page_count++;
-        }
     }
 }

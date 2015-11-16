@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Your message has been updated! </h2>
+    Name: {{ message.name }}<br>
+    Time: {{ message.time|date('Y-m-d H:i:s') }}<br>
+    Message: {{ message.msg }}<br>
+    <script>window.alert('Message has been updated!')
+                location.href='/message/show';</script>
+{% endblock %}
+

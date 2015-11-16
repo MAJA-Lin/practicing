@@ -1,18 +1,20 @@
 <?php
-// src/AppBundle/Controller/LuckyController.php
-namespace AppBundle\Controller;
+
+namespace Scott\BoardBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Entity as Entity;
+use Scott\BoardBundle\Entity as Entity;
 
 class MessageController extends Controller
 {
     /**
-     * @Route("/message/show/{page}", name="show", defaults={"page": 1}, 
+     * @Route("/message/show/{page}",
+     *      name="show",
+     *      defaults={"page": 1},
      *      requirements={"page": "\d+"})
      * @Method("GET")
      */
@@ -20,7 +22,7 @@ class MessageController extends Controller
     {
         $pageLimit = 10;
         $em =$this->getDoctrine()->getManager();
-        $total = $em->getRepository('AppBundle:Message')->getTotalNumber();
+        $total = $em->getRepository('ScottBoardBundle:Message')->getTotalNumber();
 
         if ($page == 1){
             $offset = 0;
@@ -28,10 +30,12 @@ class MessageController extends Controller
             $offset = $pageLimit * ($page - 1);
         }
 
-        $query = $em->getRepository('AppBundle:Message')->getPages($offset, $pageLimit);
+        $query = $em->getRepository('ScottBoardBundle:Message')
+            ->getPages($offset, $pageLimit);
 
         foreach ($query as $key=>$value) {
-            $reply[$key] = $em->getRepository('AppBundle:ReplyMessage')
+            $reply[$key] = $em
+                ->getRepository('ScottBoardBundle:ReplyMessage')
                 ->findBy(array('message' => $value['id']));
             $replyExists[$key] = empty($reply[$key]);
         }
@@ -63,7 +67,7 @@ class MessageController extends Controller
         if ($table == "message") {
             $insertQuery = new Entity\Message();
         } elseif ($table == "reply") {
-            $message = $entityManager->find('AppBundle:Message', $_GET['id']);
+            $message = $entityManager->find('ScottBoardBundle:Message', $_GET['id']);
             $insertQuery = new Entity\ReplyMessage();
             $insertQuery->setMessage($message);
         }
@@ -91,12 +95,12 @@ class MessageController extends Controller
         $table = $_GET['table'];
         $entityManager = $this->getDoctrine()->getManager();
 
-        $query = $entityManager->find('AppBundle:Message', $id);
+        $query = $entityManager->find('ScottBoardBundle:Message', $id);
 
         if ($table == "message") {
-            $query = $entityManager->find('AppBundle:Message', $id);
+            $query = $entityManager->find('ScottBoardBundle:Message', $id);
         } elseif ($table == "reply" && isset($_GET['id'])) {
-            $query = $entityManager->find('AppBundle:ReplyMessage', $id);
+            $query = $entityManager->find('ScottBoardBundle:ReplyMessage', $id);
         }
 
         $entityManager->remove($query);
@@ -122,9 +126,9 @@ class MessageController extends Controller
         $table = $_GET['table'];
 
         if ($table == "message") {
-            $query = $entityManager->find('AppBundle:Message', $id);
+            $query = $entityManager->find('ScottBoardBundle:Message', $id);
         } elseif ($table == "reply" && isset($_GET['id'])) {
-            $query = $entityManager->find('AppBundle:ReplyMessage', $id);
+            $query = $entityManager->find('ScottBoardBundle:ReplyMessage', $id);
         }
 
         if ($query === null) {

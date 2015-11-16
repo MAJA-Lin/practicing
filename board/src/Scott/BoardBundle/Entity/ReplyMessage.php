@@ -1,19 +1,29 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace Scott\BoardBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="MessageRepository") @ORM\Table(name="message")
+ * @ORM\Entity @ORM\Table(name="reply_message")
  */
-class Message
+class ReplyMessage
 {
     /**
-     * @ORM\Id @ORM\Column(type="integer") @ORM\GeneratedValue
+     * @ORM\Id 
+     * @ORM\Column(type="integer") 
+     * @ORM\GeneratedValue
      */
     protected $id;
+
+    /**
+     * Unidirectional - Many-To-One
+     *
+     * @ORM\ManyToOne(targetEntity="Message", inversedBy="reply")
+     * @ORM\JoinColumn(name="message_id", referencedColumnName="id", onDelete="CASCADE")
+     **/
+    private $message;
 
     /**
      * @ORM\Column(type="text")
@@ -30,25 +40,18 @@ class Message
      */
     protected $name;
 
-    /**
-     * @ORM\OneToMany(targetEntity="ReplyMessage", mappedBy="message")
-     * @ORM\JoinColumn(name="reply_id", referencedColumnName="id")
-     */
-    protected $reply;
-
     public function __construct()
     {
-        $this->reply = new ArrayCollection();
+        $this->message = new ArrayCollection();
     }
 
-    public function getReply()
+    public function getMessage()
     {
-        return $this->reply;
+        return $this->message;
     }
-
-    public function setReply($reply)
+    public function setMessage(Message $m)
     {
-        $this->reply = $reply;
+        $this->message = $m;
     }
 
     public function getId()

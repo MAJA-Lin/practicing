@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ include('message/add_form.html.twig', { 'table': table }) }}
+    <div name="message">
+        <ol>
+            {% block listMessage %}
+                {% for key, messages in message %}
+                    {{ include('message/message_details.html.twig',
+                        { 'message': messages, 'reply': reply[key], 'replyExists': replyExists[key] }) }}
+                    <br>
+                {% endfor %}
+            {% endblock %}
+        </ol>
+    </div>
+    <div name="page">
+        {% for i in 1..totalPage %}
+            <a href="{{ path('show', {'page': i})}}">Page {{ i }}</a>
+        {% endfor %}
+    </div>
+{% endblock %}

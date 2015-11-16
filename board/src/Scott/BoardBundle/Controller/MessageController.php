@@ -22,7 +22,9 @@ class MessageController extends Controller
     {
         $pageLimit = 10;
         $em =$this->getDoctrine()->getManager();
-        $total = $em->getRepository('ScottBoardBundle:Message')->getTotalNumber();
+
+        $total = $em->getRepository('ScottBoardBundle:Message')
+            ->getTotalNumber();
 
         if ($page == 1){
             $offset = 0;
@@ -72,7 +74,11 @@ class MessageController extends Controller
         if ($table == "message") {
             $insertQuery = new Entity\Message();
         } elseif ($table == "reply") {
-            $message = $entityManager->find('ScottBoardBundle:Message', $_GET['id']);
+            $message = $entityManager->find(
+                'ScottBoardBundle:Message',
+                $_GET['id']
+            );
+
             $insertQuery = new Entity\ReplyMessage();
             $insertQuery->setMessage($message);
         }

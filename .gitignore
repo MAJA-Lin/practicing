@@ -1,5 +1,16 @@
 #ingore files
 composer.phar
-vendor/
-/board_remaster/app/sessions/
 /board_remaster/
+/board/app/bootstrap.php.cache
+/board/app/cache/*
+!/board/app/cache/.gitkeep
+/board/app/config/parameters.yml
+/board/app/logs/*
+!/board/app/logs/.gitkeep
+/board/app/sessions/*
+!/board/app/sessions/.gitkeep
+/board/app/phpunit.xml
+/board/bin/
+/board/composer.phar
+/board/vendor/
+/board/web/bundles/

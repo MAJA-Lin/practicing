@@ -1,6 +1,6 @@
 <?php
 
-namespace Scott\BoardBundle\Entity;
+namespace Scott\BoardBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 

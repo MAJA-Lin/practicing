@@ -6,14 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity(repositoryClass="Scott\BoardBundle\Entity\MessageRepository") 
+ * @ORM\Entity(repositoryClass="Scott\BoardBundle\Repository\MessageRepository")
  * @ORM\Table(name="message")
  */
 class Message
 {
     /**
-     * @ORM\Id 
-     * @ORM\Column(type="integer") 
+     * @ORM\Id
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
      */
     protected $id;

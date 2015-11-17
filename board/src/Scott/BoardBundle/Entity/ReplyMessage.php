@@ -11,8 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 class ReplyMessage
 {
     /**
-     * @ORM\Id 
-     * @ORM\Column(type="integer") 
+     * @ORM\Id
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
      */
     protected $id;

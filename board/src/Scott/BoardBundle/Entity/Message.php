@@ -71,7 +71,7 @@ class Message
 
     public function setTime()
     {
-        $this->time = date_create(date("Y-m-d H:i:s"));
+        $this->time = new \DateTime();
     }
 
     public function getTime()

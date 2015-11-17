@@ -36,7 +36,8 @@ class MessageController extends Controller
         foreach ($query as $key=>$value) {
             $reply[$key] = $em
                 ->getRepository('ScottBoardBundle:ReplyMessage')
-                ->findBy(array('message' => $value['id']));
+                ->findBy(['message' => $value['id']]);
+
             $replyExists[$key] = empty($reply[$key]);
         }
 
@@ -47,10 +48,14 @@ class MessageController extends Controller
 
         return $this->render(
             'message/show.html.twig',
-            array('message' => $query, 'reply' => $reply, 
-                'replyExists' => $replyExists, 'table' => 'message', 'page' => $page,
+            [
+                'message' => $query,
+                'reply' => $reply,
+                'replyExists' => $replyExists,
+                'table' => 'message',
+                'page' => $page,
                 'totalPage' => $totalPage
-                )
+            ]
         );
     }
 
@@ -81,7 +86,7 @@ class MessageController extends Controller
 
         return $this->render(
             'message/add.html.twig',
-            array('message' => $insertQuery)
+            ['message' => $insertQuery]
         );
     }
 
@@ -108,7 +113,7 @@ class MessageController extends Controller
 
         return $this->render(
             'message/delete.html.twig',
-            array('message' => $query)
+            ['message' => $query]
         );
 
     }
@@ -141,7 +146,7 @@ class MessageController extends Controller
 
         return $this->render(
             'message/update.html.twig',
-            array('message' => $query)
+            ['message' => $query]
         );
     }
 }

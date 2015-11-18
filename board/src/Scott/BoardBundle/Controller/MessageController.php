@@ -20,9 +20,12 @@ class MessageController extends Controller
      */
     public function showAction($page)
     {
-        $pageLimit = 10;
-        $em =$this->getDoctrine()->getManager();
+        $request = Request::createFromGlobals();
+        $request->query->set('page', $page);
 
+        $pageLimit = 10;
+
+        $em =$this->getDoctrine()->getManager();
         $total = $em->getRepository('ScottBoardBundle:Message')
             ->getTotalNumber();
 
@@ -65,18 +68,20 @@ class MessageController extends Controller
      * @Route("/message/add")
      * @Method("GET")
      */
-    public function addAction()
+    public function addAction(Request $request)
     {
-        $name = $_GET['name'];
-        $msg = $_GET['msg'];
-        $table = $_GET['table'];
+        $name = $request->query->get('name');
+        $msg = $request->query->get('msg');
+        $table = $request->query->get('table');
+        $id = $request->query->get('id');
+
         $entityManager = $this->getDoctrine()->getManager();
         if ($table == "message") {
             $insertQuery = new Entity\Message();
         } elseif ($table == "reply") {
             $message = $entityManager->find(
                 'ScottBoardBundle:Message',
-                $_GET['id']
+                $id
             );
 
             $insertQuery = new Entity\ReplyMessage();
@@ -100,17 +105,17 @@ class MessageController extends Controller
      * @Route("/message/delete")
      * @Method("GET")
      */
-    public function deleteAction()
+    public function deleteAction(Request $request)
     {
-        $id = $_GET['id'];
-        $table = $_GET['table'];
-        $entityManager = $this->getDoctrine()->getManager();
+        $id = $request->query->get('id');
+        $table = $request->query->get('table');
 
+        $entityManager = $this->getDoctrine()->getManager();
         $query = $entityManager->find('ScottBoardBundle:Message', $id);
 
         if ($table == "message") {
             $query = $entityManager->find('ScottBoardBundle:Message', $id);
-        } elseif ($table == "reply" && isset($_GET['id'])) {
+        } elseif ($table == "reply" && isset($id)) {
             $query = $entityManager->find('ScottBoardBundle:ReplyMessage', $id);
         }
 
@@ -128,17 +133,17 @@ class MessageController extends Controller
      * @Route("/message/update")
      * @Method("GET")
      */
-    public function updateAction()
+    public function updateAction(Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
 
-        $id = $_GET['id'];
-        $msg = $_GET['msg'];
-        $table = $_GET['table'];
+        $id = $request->query->get('id');
+        $msg = $request->query->get('msg');
+        $table = $request->query->get('table');
 
         if ($table == "message") {
             $query = $entityManager->find('ScottBoardBundle:Message', $id);
-        } elseif ($table == "reply" && isset($_GET['id'])) {
+        } elseif ($table == "reply" && isset($id)) {
             $query = $entityManager->find('ScottBoardBundle:ReplyMessage', $id);
         }
 

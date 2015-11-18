@@ -13,17 +13,21 @@
                     Name: {{ replys.getName() }}<br>
                     Time: {{ replys.getTime()|date('Y-m-d H:i:s') }}<br>
                     Message: {{ replys.getMsg() }}<br>
-                    <form action="/message/update"><input type="hidden" 
-                            name="id" value={{ replys.id }}>
-                    <input type="text" name="msg" placeholder="
-                            edit message here" size="50">
-                    <input type="hidden" name="table" value="reply">
-                    <input type="submit" name="button" value="Update"></form>
+                    <form action="/message/reply/update">
+                        <input type="hidden" name="id" value={{ replys.id }} />
+                        <input type="text"
+                            name="msg"
+                            placeholder="edit message here"
+                            size="50"
+                            maxlength="200"
+                        />
+                        <input type="submit" name="button" value="Update" />
+                    </form>
 
-                    <form action="/message/delete"><input type="hidden" name="id" 
-                            value={{ replys.id }}>
-                    <input type="hidden" name="table" value="reply">
-                    <input type="submit" name="button" value="Delete"></form>
+                    <form action="/message/reply/delete">
+                        <input type="hidden" name="id" value={{ replys.id }} />
+                        <input type="submit" name="button" value="Delete" />
+                    </form>
                 </li>
             {% endfor %}
         </ul>

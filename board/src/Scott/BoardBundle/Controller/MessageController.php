@@ -65,34 +65,56 @@ class MessageController extends Controller
     }
 
     /**
-     * @Route("/message/add")
+     * @Route("/message/add", name="add")
      * @Method("GET")
      */
     public function addAction(Request $request)
     {
         $name = $request->query->get('name');
         $msg = $request->query->get('msg');
-        $table = $request->query->get('table');
         $id = $request->query->get('id');
 
         $entityManager = $this->getDoctrine()->getManager();
-        if ($table == "message") {
-            $insertQuery = new Entity\Message();
-        } elseif ($table == "reply") {
-            $message = $entityManager->find(
-                'ScottBoardBundle:Message',
-                $id
-            );
 
-            if ( $message === null) {
-                return $this->render(
-                    'ScottBoardBundle:message:error.html.twig',
-                    ['reason' => 'reply']
-                );
-            } else {
-                $insertQuery = new Entity\ReplyMessage();
-                $insertQuery->setMessage($message);
-            }
+        $insertQuery = new Entity\Message();
+        $insertQuery->setName($name);
+        $insertQuery->setMsg($msg);
+        $insertQuery->setTime();
+
+        $entityManager->persist($insertQuery);
+        $entityManager->flush();
+
+        return $this->render(
+            'ScottBoardBundle:message:add.html.twig',
+            ['message' => $insertQuery]
+        );
+    }
+
+    /**
+     * @Route("/message/reply/add", name="reply_add")
+     * @Method("GET")
+     */
+    public function replyAddAction(Request $request)
+    {
+        $name = $request->query->get('name');
+        $msg = $request->query->get('msg');
+        $id = $request->query->get('id');
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $message = $entityManager->find(
+            'ScottBoardBundle:Message',
+            $id
+        );
+
+        if ( $message === null) {
+            return $this->render(
+                'ScottBoardBundle:message:error.html.twig',
+                ['reason' => 'reply']
+            );
+        } else {
+            $insertQuery = new Entity\ReplyMessage();
+            $insertQuery->setMessage($message);
         }
 
         $insertQuery->setName($name);
@@ -109,21 +131,15 @@ class MessageController extends Controller
     }
 
     /**
-     * @Route("/message/delete")
+     * @Route("/message/delete", name="delete")
      * @Method("GET")
      */
     public function deleteAction(Request $request)
     {
         $id = $request->query->get('id');
-        $table = $request->query->get('table');
 
         $entityManager = $this->getDoctrine()->getManager();
-
-        if ($table == "message") {
-            $query = $entityManager->find('ScottBoardBundle:Message', $id);
-        } elseif ($table == "reply" && isset($id)) {
-            $query = $entityManager->find('ScottBoardBundle:ReplyMessage', $id);
-        }
+        $query = $entityManager->find('ScottBoardBundle:Message', $id);
 
         if ($query === null) {
             return $this->render(
@@ -143,22 +159,72 @@ class MessageController extends Controller
     }
 
     /**
-     * @Route("/message/update")
+     * @Route("/message/reply/delete", name="reply_delete")
+     * @Method("GET")
+     */
+    public function replyDeleteAction(Request $request)
+    {
+        $id = $request->query->get('id');
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $query = $entityManager->find('ScottBoardBundle:ReplyMessage', $id);
+
+        if ($query === null) {
+            return $this->render(
+                'ScottBoardBundle:message:error.html.twig',
+                ['reason' => 'delete']
+            );
+        } else {
+            $entityManager->remove($query);
+            $entityManager->flush();
+        }
+
+        return $this->render(
+            'ScottBoardBundle:message:delete.html.twig',
+            ['message' => $query]
+        );
+    }
+
+    /**
+     * @Route("/message/update", name="update")
      * @Method("GET")
      */
     public function updateAction(Request $request)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-
         $id = $request->query->get('id');
         $msg = $request->query->get('msg');
-        $table = $request->query->get('table');
 
-        if ($table == "message") {
-            $query = $entityManager->find('ScottBoardBundle:Message', $id);
-        } elseif ($table == "reply" && isset($id)) {
-            $query = $entityManager->find('ScottBoardBundle:ReplyMessage', $id);
+        $entityManager = $this->getDoctrine()->getManager();
+        $query = $entityManager->find('ScottBoardBundle:Message', $id);
+
+        if ($query === null) {
+            return $this->render(
+                'ScottBoardBundle:message:error.html.twig',
+                ['reason' => 'update']
+            );
+        } else {
+            $query->setMsg($msg);
+            $entityManager->persist($query);
+            $entityManager->flush();
         }
+
+        return $this->render(
+            'ScottBoardBundle:message:update.html.twig',
+            ['message' => $query]
+        );
+    }
+
+    /**
+     * @Route("/message/reply/update", name="reply_update")
+     * @Method("GET")
+     */
+    public function replyUpdateAction(Request $request)
+    {
+        $id = $request->query->get('id');
+        $msg = $request->query->get('msg');
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $query = $entityManager->find('ScottBoardBundle:ReplyMessage', $id);
 
         if ($query === null) {
             return $this->render(

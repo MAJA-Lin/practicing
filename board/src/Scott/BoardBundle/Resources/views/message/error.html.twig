@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div name="error">
+        <h2><strong>出錯啦RRR</strong></h2>
+    </div>
+    <script>window.alert('Message you want to {{ reason }} is no longer available!')
+                location.href='/message/show';</script>
+{% endblock %}

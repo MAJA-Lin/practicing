@@ -84,8 +84,15 @@ class MessageController extends Controller
                 $id
             );
 
-            $insertQuery = new Entity\ReplyMessage();
-            $insertQuery->setMessage($message);
+            if ( $message === null) {
+                return $this->render(
+                    'ScottBoardBundle:message:error.html.twig',
+                    ['reason' => 'reply']
+                );
+            } else {
+                $insertQuery = new Entity\ReplyMessage();
+                $insertQuery->setMessage($message);
+            }
         }
 
         $insertQuery->setName($name);
@@ -111,7 +118,6 @@ class MessageController extends Controller
         $table = $request->query->get('table');
 
         $entityManager = $this->getDoctrine()->getManager();
-        $query = $entityManager->find('ScottBoardBundle:Message', $id);
 
         if ($table == "message") {
             $query = $entityManager->find('ScottBoardBundle:Message', $id);
@@ -119,8 +125,15 @@ class MessageController extends Controller
             $query = $entityManager->find('ScottBoardBundle:ReplyMessage', $id);
         }
 
-        $entityManager->remove($query);
-        $entityManager->flush();
+        if ($query === null) {
+            return $this->render(
+                'ScottBoardBundle:message:error.html.twig',
+                ['reason' => 'delete']
+            );
+        } else {
+            $entityManager->remove($query);
+            $entityManager->flush();
+        }
 
         return $this->render(
             'ScottBoardBundle:message:delete.html.twig',
@@ -148,7 +161,10 @@ class MessageController extends Controller
         }
 
         if ($query === null) {
-            exit(1);
+            return $this->render(
+                'ScottBoardBundle:message:error.html.twig',
+                ['reason' => 'update']
+            );
         } else {
             $query->setMsg($msg);
             $entityManager->persist($query);

@@ -16,7 +16,7 @@
     <input type="submit" name="button" value="Delete"></form>
 
     {% block replys %}
-        {{ include('message/reply_details.html.twig',
+        {{ include('ScottBoardBundle:message:reply_details.html.twig',
             { 'id': message.id, 'reply': reply, 'replyExists': replyExists }) }}
     {% endblock %}
 </li>

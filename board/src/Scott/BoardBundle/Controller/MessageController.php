@@ -49,7 +49,7 @@ class MessageController extends Controller
         }
 
         return $this->render(
-            'message/show.html.twig',
+            'ScottBoardBundle:message:show.html.twig',
             [
                 'message' => $query,
                 'reply' => $reply,
@@ -91,7 +91,7 @@ class MessageController extends Controller
         $entityManager->flush();
 
         return $this->render(
-            'message/add.html.twig',
+            'ScottBoardBundle:message:add.html.twig',
             ['message' => $insertQuery]
         );
     }
@@ -118,7 +118,7 @@ class MessageController extends Controller
         $entityManager->flush();
 
         return $this->render(
-            'message/delete.html.twig',
+            'ScottBoardBundle:message:delete.html.twig',
             ['message' => $query]
         );
 
@@ -151,7 +151,7 @@ class MessageController extends Controller
         }
 
         return $this->render(
-            'message/update.html.twig',
+            'ScottBoardBundle:message:update.html.twig',
             ['message' => $query]
         );
     }

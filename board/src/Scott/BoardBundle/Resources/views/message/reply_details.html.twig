@@ -1,7 +1,7 @@
 {% if replyExists %}
     <details>
         <summary>Click to reply this message.</summary>
-        {% include 'message/add_form.html.twig' with { 'table': 'reply', 'id': id } %}
+        {% include 'ScottBoardBundle:message:add_form.html.twig' with { 'table': 'reply', 'id': id } %}
 
     </details>
 {% else %}
@@ -27,6 +27,6 @@
                 </li>
             {% endfor %}
         </ul>
-        {% include 'message/add_form.html.twig' with { 'table': 'reply', 'id': id } %}
+        {% include 'ScottBoardBundle:message:add_form.html.twig' with { 'table': 'reply', 'id': id } %}
     </details>
 {% endif %}

@@ -38,30 +38,39 @@ class MessageController extends Controller
         $query = $em->getRepository('ScottBoardBundle:Message')
             ->getPages($offset, $pageLimit);
 
-        foreach ($query as $key=>$value) {
-            $reply[$key] = $em
-                ->getRepository('ScottBoardBundle:ReplyMessage')
-                ->findBy(['message' => $value['id']]);
+        if (empty($query)) {
+            return $this->render(
+                'ScottBoardBundle:message:error_page.html.twig',
+                ['page' => $page]
+            );
+        } else {
+            foreach ($query as $key=>$value) {
+                $reply[$key] = $em
+                    ->getRepository('ScottBoardBundle:ReplyMessage')
+                    ->findBy(['message' => $value['id']]);
 
-            $replyExists[$key] = empty($reply[$key]);
+                $replyExists[$key] = empty($reply[$key]);
+            }
+
+            $totalPage = floor($total / $pageLimit);
+            if (($total % $pageLimit) > 0) {
+                $totalPage++;
+            }
+
+            return $this->render(
+                'ScottBoardBundle:message:show.html.twig',
+                [
+                    'message' => $query,
+                    'reply' => $reply,
+                    'replyExists' => $replyExists,
+                    'table' => 'message',
+                    'page' => $page,
+                    'totalPage' => $totalPage
+                ]
+            );
         }
 
-        $totalPage = floor($total / $pageLimit);
-        if (($total % $pageLimit) > 0) {
-            $totalPage++;
-        }
 
-        return $this->render(
-            'ScottBoardBundle:message:show.html.twig',
-            [
-                'message' => $query,
-                'reply' => $reply,
-                'replyExists' => $replyExists,
-                'table' => 'message',
-                'page' => $page,
-                'totalPage' => $totalPage
-            ]
-        );
     }
 
     /**

@@ -15,11 +15,15 @@
                     Message: {{ replys.getMsg() }}<br>
                     <form action="/message/reply/update">
                         <input type="hidden" name="id" value={{ replys.id }} />
-                        <input type="text"
+                        <input
+                            type="text"
                             name="msg"
                             placeholder="edit message here"
                             size="50"
                             maxlength="200"
+                            pattern="[^ ].*"
+                            title="No white space at beginning!"
+                            required
                         />
                         <input type="submit" name="button" value="Update" />
                     </form>

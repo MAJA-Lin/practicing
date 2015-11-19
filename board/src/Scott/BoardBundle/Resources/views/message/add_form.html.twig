@@ -9,8 +9,29 @@
             <input type="hidden" name="id" value="{{ id }}" />
     {% endif %}
 
-    Message: <input type="text" name="msg" placeholder="commit here" size="50" maxlength="200" /><br>
-    Name: <input type="text" name="name" placeholder="User Name" maxlength="20" /><br>
+    Message: 
+        <input
+            type="text"
+            name="msg"
+            placeholder="commit here"
+            size="50"
+            maxlength="200"
+            pattern="[^ ].*"
+            title="No white space at beginning!"
+            required
+        />
+    <br>
+    Name: 
+        <input
+            type="text"
+            name="name"
+            placeholder="User Name"
+            maxlength="20"
+            pattern="[^ ].*"
+            title="No white space at beginning!"
+            required
+        />
+    <br>
     <input type="submit" name="button" value="submit" /><br>
     </form>
     <br>---------------------------------------------------------<br>

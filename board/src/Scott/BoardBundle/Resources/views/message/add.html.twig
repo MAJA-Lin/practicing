@@ -6,5 +6,5 @@
     Time: {{ message.time|date('Y-m-d H:i:s') }}<br>
     Message: {{ message.msg }}<br>
         <script>window.alert('Message has been added!')
-                location.href='/message/show';</script>
+                location.href="{{ path('show') }}";</script>
 {% endblock %}

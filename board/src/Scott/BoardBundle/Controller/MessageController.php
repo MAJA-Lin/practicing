@@ -69,19 +69,17 @@ class MessageController extends Controller
                 ]
             );
         }
-
-
     }
 
     /**
      * @Route("/message/add", name="add")
-     * @Method("GET")
+     * @Method("POST")
      */
     public function addAction(Request $request)
     {
-        $name = $request->query->get('name');
-        $msg = $request->query->get('msg');
-        $id = $request->query->get('id');
+        $name = $request->request->get('name');
+        $msg = $request->request->get('msg');
+        $id = $request->request->get('id');
 
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -101,13 +99,13 @@ class MessageController extends Controller
 
     /**
      * @Route("/message/reply/add", name="reply_add")
-     * @Method("GET")
+     * @Method("POST")
      */
     public function replyAddAction(Request $request)
     {
-        $name = $request->query->get('name');
-        $msg = $request->query->get('msg');
-        $id = $request->query->get('id');
+        $name = $request->request->get('name');
+        $msg = $request->request->get('msg');
+        $id = $request->request->get('id');
 
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -141,11 +139,11 @@ class MessageController extends Controller
 
     /**
      * @Route("/message/delete", name="delete")
-     * @Method("GET")
+     * @Method("DELETE")
      */
     public function deleteAction(Request $request)
     {
-        $id = $request->query->get('id');
+        $id = $request->request->get('id');
 
         $entityManager = $this->getDoctrine()->getManager();
         $query = $entityManager->find('ScottBoardBundle:Message', $id);
@@ -169,11 +167,11 @@ class MessageController extends Controller
 
     /**
      * @Route("/message/reply/delete", name="reply_delete")
-     * @Method("GET")
+     * @Method("DELETE")
      */
     public function replyDeleteAction(Request $request)
     {
-        $id = $request->query->get('id');
+        $id = $request->request->get('id');
 
         $entityManager = $this->getDoctrine()->getManager();
         $query = $entityManager->find('ScottBoardBundle:ReplyMessage', $id);
@@ -196,12 +194,12 @@ class MessageController extends Controller
 
     /**
      * @Route("/message/update", name="update")
-     * @Method("GET")
+     * @Method("PUT")
      */
     public function updateAction(Request $request)
     {
-        $id = $request->query->get('id');
-        $msg = $request->query->get('msg');
+        $id = $request->request->get('id');
+        $msg = $request->request->get('msg');
 
         $entityManager = $this->getDoctrine()->getManager();
         $query = $entityManager->find('ScottBoardBundle:Message', $id);
@@ -225,12 +223,12 @@ class MessageController extends Controller
 
     /**
      * @Route("/message/reply/update", name="reply_update")
-     * @Method("GET")
+     * @Method("PUT")
      */
     public function replyUpdateAction(Request $request)
     {
-        $id = $request->query->get('id');
-        $msg = $request->query->get('msg');
+        $id = $request->request->get('id');
+        $msg = $request->request->get('msg');
 
         $entityManager = $this->getDoctrine()->getManager();
         $query = $entityManager->find('ScottBoardBundle:ReplyMessage', $id);

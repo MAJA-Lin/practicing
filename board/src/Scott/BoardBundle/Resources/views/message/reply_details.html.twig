@@ -13,7 +13,8 @@
                     Name: {{ replys.getName() }}<br>
                     Time: {{ replys.getTime()|date('Y-m-d H:i:s') }}<br>
                     Message: {{ replys.getMsg() }}<br>
-                    <form action="/message/reply/update">
+                    <form action="{{ path('reply_update') }}" method="POST">
+                        <input type="hidden" name="_method" value="PUT">
                         <input type="hidden" name="id" value={{ replys.id }} />
                         <input
                             type="text"
@@ -28,7 +29,8 @@
                         <input type="submit" name="button" value="Update" />
                     </form>
 
-                    <form action="/message/reply/delete">
+                    <form action="{{ path('reply_delete') }}" method="POST">
+                        <input type="hidden" name="_method" value="DELETE">
                         <input type="hidden" name="id" value={{ replys.id }} />
                         <input type="submit" name="button" value="Delete" />
                     </form>
@@ -38,3 +40,4 @@
         {% include 'ScottBoardBundle:message:add_form.html.twig' with { 'table': 'reply', 'id': id } %}
     </details>
 {% endif %}
+

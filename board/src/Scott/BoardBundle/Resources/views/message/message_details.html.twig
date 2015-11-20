@@ -3,7 +3,8 @@
     Time: {{ message.time }}<br>
     Message: {{ message.msg }}<br>
 
-    <form action="/message/update">
+    <form action="{{ path('update') }}" method="POST">
+        <input type="hidden" name="_method" value="PUT">
         <input type="hidden" name="id" value={{ message.id }} />
         <input
             type="text"
@@ -18,7 +19,8 @@
         <input type="submit" name="button" value="Update" />
     </form>
 
-    <form action="/message/delete">
+    <form action="{{ path('delete') }}" method="POST">
+        <input type="hidden" name="_method" value="DELETE">
         <input type="hidden" name="id" value={{ message.id }} />
         <input type="submit" name="button" value="Delete" />
     </form>

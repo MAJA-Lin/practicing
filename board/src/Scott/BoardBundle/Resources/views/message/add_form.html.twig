@@ -1,10 +1,10 @@
 {% block form %}
 <div name="new_form">
     {% if table == 'message' %}
-        <form action="/message/add">
+        <form action="{{ path('add') }}" method="POST">
             <h2><strong>Leave new message here: </strong></h2>
     {% elseif table == 'reply' %}
-        <form action="/message/reply/add">
+        <form action="{{ path('reply_add') }}" method="POST">
             <h4><strong>Reply to this message: </strong></h4>
             <input type="hidden" name="id" value="{{ id }}" />
     {% endif %}

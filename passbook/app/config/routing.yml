@@ -1,0 +1,8 @@
+scott_passbook:
+    resource: "@ScottPassbookBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation

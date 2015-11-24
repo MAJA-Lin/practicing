@@ -1,0 +1,9 @@
+{% extends 'ScottPassbookBundle:Default:base.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+    <a href="{{ path('signup') }}"><h3>Sign up</h3></a>
+{% endblock %}

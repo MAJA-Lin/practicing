@@ -1,0 +1,11 @@
+{% extends 'ScottPassbookBundle:Default:base.html.twig' %}
+
+{% block body %}
+    {% if error == "password" %}
+        <script>alert('Password should be the same!');
+                window.location.href=history.back();</script>
+    {% elseif error == "email" %}
+        <script>alert('This email has been used! Please try another one!');
+                window.location.href=history.back();</script>
+    {% endif %}
+{% endblock %}

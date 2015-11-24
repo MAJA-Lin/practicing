@@ -1,0 +1,26 @@
+{% extends 'ScottPassbookBundle:Default:base.html.twig' %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    {#}
+    <div>
+        {{ form_label(form.email) }}
+        {{ form_errors(form.email) }}
+        {{ form_widget(form.email) }}
+    </div>
+
+    <div>
+        {{ form_row(form.password.first, {
+            'attr': 'onchange="form.pwd2.pattern = this.value;"'
+            })
+        }}
+        {{ form_row(form.password.second) }}
+    </div>
+    #}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+    <a href="{{ path('login') }}"><h3>Log in</h3></a>
+
+{% endblock %}

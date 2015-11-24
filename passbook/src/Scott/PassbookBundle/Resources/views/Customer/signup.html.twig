@@ -1,0 +1,17 @@
+{% extends 'ScottPassbookBundle:Default:base.html.twig' %}
+
+{% block body %}
+    <h1>Sign up successfully!</h1>
+    <br>
+    <h2>Email: {{ customer.email }}</h2>
+    <h2>Currency: {{ account.currency }}</h2>
+    <h2>Balance: {{ account.balance }}</h2>
+    <br>
+    <br>
+    {{ dump(request) }}
+    <br>
+    {{ dump(account) }}
+    <br>
+    {{ dump(customer) }}
+    <a href="{{ path('login') }}"><h3>Click here to Log in</h3></a>
+{% endblock %}

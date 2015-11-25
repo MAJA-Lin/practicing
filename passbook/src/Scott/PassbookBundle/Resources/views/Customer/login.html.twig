@@ -3,6 +3,7 @@
     {% if login == 'successful' %}
         Hello, <h3><strong>{{ email }}</strong></h3> !!<br>
         <p>Do redirect</p>
+        {{ dump(request) }}
     {% else %}
         <strong>Sorry, your email or password is wrong.</strong><br>
         <p>Sign up or Log in again.</p>

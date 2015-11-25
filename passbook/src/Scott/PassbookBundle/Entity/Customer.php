@@ -4,6 +4,7 @@ namespace Scott\PassbookBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Customer
@@ -11,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Customer
+class Customer implements UserInterface, \Serializable
 {
     /**
      * @var integer
@@ -123,5 +124,49 @@ class Customer
     {
         return $this->email;
     }
-}
 
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->account,
+            // see section on salt below
+            // $this->salt,
+        ]);
+    }
+
+
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->account,
+            // see section on salt below
+            // $this->salt
+        ) = unserialize($serialized);
+    }
+}

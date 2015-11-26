@@ -20,6 +20,13 @@ class CustomerController extends Controller
      */
     public function loginAction(Request $request)
     {
+
+        $authenticationUtils = $this->get('security.authentication_utils');
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
+        // last username entered by the user
+        $lastEmail = $authenticationUtils->getLastUsername();
+
         $session = $request->getSession();
         $loginBefore = $session->get('customer');
 
@@ -33,8 +40,11 @@ class CustomerController extends Controller
                 ->setAction($this->generateUrl('login_check'))
                 ->add(
                     'email',
-                    'email',
-                    ['attr' => ['maxlength' => 40]
+                    'email', [
+                        'attr' => [
+                            'maxlength' => 40,
+                            'value' => $lastEmail,
+                        ]
                 ])
                 ->add(
                     'password',
@@ -51,6 +61,8 @@ class CustomerController extends Controller
             return $this->render('ScottPassbookBundle:Customer:login_form.html.twig', [
                 'form' => $form->createView(),
                 'session' => $loginBefore,
+                'last_email' => $lastEmail,
+                'error' => $error,
             ]);
         }
     }
@@ -62,11 +74,13 @@ class CustomerController extends Controller
      */
     public function loginCheckAction(Request $request)
     {
+        /*
         $this->denyAccessUnlessGranted(
             'IS_AUTHENTICATED_FULLY',
             null,
             'Unable to access this page!'
         );
+        */
 
         $form = $request->request->get('form');
         $email = $form['email'];
@@ -104,12 +118,19 @@ class CustomerController extends Controller
 
     /**
      * @Route("/logout", name="logout")
-     * @Method("POST")
+     *
      *
      */
     public function logoutAction(Request $request)
     {
+        $session = $request->getSession();
+        $session->remove('customer');
 
+        echo "<strong>Log out successfully!</strong>";
+
+        return $this->render('ScottPassbookBundle:Passbook:index.html.twig', [
+                'request' => $request,
+            ]);
     }
 
     /**

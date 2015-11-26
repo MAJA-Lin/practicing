@@ -2,4 +2,9 @@
 
 {% block body %}
     {{ dump(request) }}
+
+<br>
+<div>
+    <a href="{{ path('logout') }}">Log Out</a>
+</div>
 {% endblock %}

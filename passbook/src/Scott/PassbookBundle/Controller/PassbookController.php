@@ -19,13 +19,18 @@ class PassbookController extends Controller
     public function indexAction(Request $request)
     {
         // The second parameter is used to specify on what object the role is tested.
+        /*
         $this->denyAccessUnlessGranted(
             'IS_AUTHENTICATED_FULLY',
             null,
             'Unable to access this page!'
         );
+        */
 
-        echo "Hello";
+        $loginInfo = $request->getSession()->get('_security_main');
+        //$loginInfo = $session->get('_security_main');
+        $loginInfo = unserialize($loginInfo);
+        var_dump($loginInfo);
 
         return $this->render('ScottPassbookBundle:Passbook:index.html.twig', [
                 'request' => $request,

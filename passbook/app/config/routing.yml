@@ -3,6 +3,9 @@ scott_passbook:
     type:     annotation
     prefix:   /
 
+logout:
+    path: /logout
+
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation

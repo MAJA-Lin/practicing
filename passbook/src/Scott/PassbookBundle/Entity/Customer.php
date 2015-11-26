@@ -150,8 +150,8 @@ class Customer implements UserInterface, \Serializable
         return serialize([
             $this->id,
             $this->email,
-            $this->password,
             $this->account,
+            $this->password,
             // see section on salt below
             // $this->salt,
         ]);
@@ -163,8 +163,8 @@ class Customer implements UserInterface, \Serializable
         list (
             $this->id,
             $this->email,
-            $this->password,
             $this->account,
+            $this->password
             // see section on salt below
             // $this->salt
         ) = unserialize($serialized);

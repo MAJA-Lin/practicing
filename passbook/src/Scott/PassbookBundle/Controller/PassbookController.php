@@ -27,8 +27,8 @@ class PassbookController extends Controller
         );
         */
 
-        $loginInfo = $request->getSession()->get('_security_main');
-        //$loginInfo = $session->get('_security_main');
+        $session = $request->getSession();
+        $loginInfo = $session->get('_security_main');
         $loginInfo = unserialize($loginInfo);
         var_dump($loginInfo);
 

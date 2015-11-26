@@ -63,6 +63,7 @@ class CustomerController extends Controller
                 'session' => $loginBefore,
                 'last_email' => $lastEmail,
                 'error' => $error,
+                'request' => $request,
             ]);
         }
     }

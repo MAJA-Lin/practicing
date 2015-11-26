@@ -28,10 +28,16 @@ class PassbookController extends Controller
         */
 
         $session = $request->getSession();
-        $loginInfo = $session->get('_security_main');
-        $loginInfo = unserialize($loginInfo);
-        var_dump($loginInfo);
+        $customer = $session->get('_security_main');
+        $customer = unserialize($customer);
+        var_dump($customer);
+/*
+        $entityManager = $this->getDoctrine()->getManager();
+        $account = $entityManager->getRepository('ScottPassbookBundle:Account')
+                    ->findBy('customer', $customer->getId);
 
+        var_dump($account);
+*/
         return $this->render('ScottPassbookBundle:Passbook:index.html.twig', [
                 'request' => $request,
             ]);

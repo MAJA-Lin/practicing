@@ -5,7 +5,7 @@
         <script>alert('Password should be the same!');
                 window.location.href=history.back();</script>
     {% elseif error == "email" %}
-        <script>alert('This email has been used! Please try another one!');
+        <script>alert('This email is invalid! Please try again!');
                 window.location.href=history.back();</script>
     {% endif %}
 {% endblock %}

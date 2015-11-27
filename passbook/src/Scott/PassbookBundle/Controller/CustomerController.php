@@ -25,34 +25,35 @@ class CustomerController extends Controller
 
         if (isset($loginBefore) && !empty($loginBefore)) {
             return $this->redirectToRoute('index');
-        } else {
-            $customer = new Entity\Customer();
-
-            $form = $this->createFormBuilder($customer)
-                ->setMethod('POST')
-                ->setAction($this->generateUrl('login_check'))
-                ->add(
-                    'email',
-                    'email',
-                    ['attr' => ['maxlength' => 40]
-                ])
-                ->add(
-                    'password',
-                    'password',
-                    ['attr' => ['maxlength' => 16]
-                ])
-                ->add(
-                    'login',
-                    'submit',
-                    ['label' => 'Login']
-                )
-                ->getForm();
-
-            return $this->render('ScottPassbookBundle:Customer:login_form.html.twig', [
-                'form' => $form->createView(),
-                'session' => $loginBefore,
-            ]);
         }
+
+        $customer = new Entity\Customer();
+
+        $form = $this->createFormBuilder($customer)
+            ->setMethod('POST')
+            ->setAction($this->generateUrl('login_check'))
+            ->add(
+                'email',
+                'email',
+                ['attr' => ['maxlength' => 40]
+            ])
+            ->add(
+                'password',
+                'password',
+                ['attr' => ['maxlength' => 16]
+            ])
+            ->add(
+                'login',
+                'submit',
+                ['label' => 'Login']
+            )
+            ->getForm();
+
+        return $this->render('ScottPassbookBundle:Customer:login_form.html.twig', [
+            'form' => $form->createView(),
+            'session' => $loginBefore,
+        ]);
+
     }
 
     /**
@@ -80,11 +81,12 @@ class CustomerController extends Controller
             $session->set('customer', $customer);
 
             return $this->redirectToRoute('index');
-        } else {
-            return $this->render('ScottPassbookBundle:Customer:login_error.html.twig', [
-                'error' => 'login_failed',
-            ]);
         }
+
+        return $this->render('ScottPassbookBundle:Customer:login_error.html.twig', [
+            'error' => 'login_failed',
+        ]);
+
     }
 
     /**
@@ -106,7 +108,6 @@ class CustomerController extends Controller
      */
     public function signupAction(Request $request)
     {
-        //$signup = new Entity\Signup();
         $signup = [];
         $form = $this->createFormBuilder($signup)
             ->setMethod('POST')
@@ -158,25 +159,36 @@ class CustomerController extends Controller
      */
     public function signupCheckAction(Request $request)
     {
-        $form = $request->request->get('form');
 
-        if ($form['password']['first'] == $form['password']['second']) {
+        $form = $request->request->get('form');
+        $email = $form['email'];
+        $passwordFirst = $form['password']['first'];
+        $passwordSecond = $form['password']['second'];
+        $currency = $form['currency'];
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 40) {
+            return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
+                    'error' => 'email',
+            ]);
+        }
+
+        if ($passwordFirst == $passwordSecond && strlen($passwordFirst) <16) {
             $entityManager = $this->getDoctrine()->getManager();
             $customer = $entityManager
                 ->getRepository("ScottPassbookBundle:Customer")
-                ->findBy(['email' => $form['email']]);
+                ->findBy(['email' => $email]);
 
             if (empty($customer)) {
                 $customer = new Entity\Customer;
                 $account = new Entity\Account;
 
-                $customer->setEmail($form['email']);
-                $customer->setPassword($form['password']['first']);
+                $customer->setEmail($email);
+                $customer->setPassword($passwordFirst);
 
                 $entityManager->persist($customer);
                 $entityManager->flush();
 
-                $account->setCurrency($form['currency']);
+                $account->setCurrency($currency);
                 $account->addCustomer($customer);
                 $account->setBalance(0);
                 $customer->setAccount($account);

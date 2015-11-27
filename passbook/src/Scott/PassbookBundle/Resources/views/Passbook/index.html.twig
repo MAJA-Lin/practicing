@@ -1,12 +1,13 @@
 {% extends 'ScottPassbookBundle:Default:base.html.twig' %}
 
 {% block body %}
-    {#
+
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}
-    #}
+
     {{ dump(request) }}
+    {{ dump(response) }}
 
     <a href="{{ path('logout') }}">Log Out</a>
 {% endblock %}

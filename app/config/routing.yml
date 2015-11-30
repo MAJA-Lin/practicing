@@ -3,6 +3,11 @@ scott_passbook:
     type:     annotation
     prefix:   /
 
+scott_board:
+    resource: "@ScottBoardBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation

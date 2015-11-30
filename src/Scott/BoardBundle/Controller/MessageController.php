@@ -25,7 +25,7 @@ class MessageController extends Controller
 
         $pageLimit = 10;
 
-        $em =$this->getDoctrine()->getManager();
+        $em =$this->getDoctrine()->getManager('board');
         $total = $em->getRepository('ScottBoardBundle:Message')
             ->getTotalNumber();
 
@@ -81,7 +81,7 @@ class MessageController extends Controller
         $msg = $request->request->get('msg');
         $id = $request->request->get('id');
 
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->getDoctrine()->getManager('board');
 
         $insertQuery = new Entity\Message();
         $insertQuery->setName($name);
@@ -107,7 +107,7 @@ class MessageController extends Controller
         $msg = $request->request->get('msg');
         $id = $request->request->get('id');
 
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->getDoctrine()->getManager('board');
 
         $message = $entityManager->find(
             'ScottBoardBundle:Message',
@@ -145,7 +145,7 @@ class MessageController extends Controller
     {
         $id = $request->request->get('id');
 
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->getDoctrine()->getManager('board');
         $query = $entityManager->find('ScottBoardBundle:Message', $id);
 
         if ($query === null) {
@@ -173,7 +173,7 @@ class MessageController extends Controller
     {
         $id = $request->request->get('id');
 
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->getDoctrine()->getManager('board');
         $query = $entityManager->find('ScottBoardBundle:ReplyMessage', $id);
 
         if ($query === null) {
@@ -201,7 +201,7 @@ class MessageController extends Controller
         $id = $request->request->get('id');
         $msg = $request->request->get('msg');
 
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->getDoctrine()->getManager('board');
         $query = $entityManager->find('ScottBoardBundle:Message', $id);
 
         if ($query === null) {
@@ -230,7 +230,7 @@ class MessageController extends Controller
         $id = $request->request->get('id');
         $msg = $request->request->get('msg');
 
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->getDoctrine()->getManager('board');
         $query = $entityManager->find('ScottBoardBundle:ReplyMessage', $id);
 
         if ($query === null) {

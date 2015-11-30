@@ -31,16 +31,28 @@ class PassbookController extends Controller
         }
 
         $accountId = $customer[0]->getAccount();
-	$entityManager = $this->getDoctrine()->getManager();
+        $page = $request->attributes->get('page');
+
+        $entityManager = $this->getDoctrine()->getManager();
         $account = $entityManager
             ->find('ScottPassbookBundle:Account', $accountId);
 
-        $record = $entityManager
-            ->getRepository('ScottPassbookBundle:Record')
-            ->findBy(['account' => $account->getId()]);
+        if (empty($account)) {
+            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
+                'error' => "account",
+            ]);
+        }
 
-        $new_record = [];
-        $form = $this->createFormBuilder($new_record)
+        $result =  $this->pagination($page, $accountId);
+
+        if ($page > $result['total']) {
+            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
+                'error' => "page",
+            ]);
+        }
+
+        $newRecord = [];
+        $form = $this->createFormBuilder($newRecord)
             ->setMethod("POST")
             ->setAction($this->generateUrl('record_add'))
             ->add(
@@ -84,7 +96,8 @@ class PassbookController extends Controller
         return $this->render('ScottPassbookBundle:Passbook:index.html.twig', [
             'form' => $form->createView(),
             'account' => $account,
-            'record' => $record,
+            'record' => $result['record'],
+            'totalPages' => $result['total'],
         ]);
     }
 
@@ -133,7 +146,6 @@ class PassbookController extends Controller
             ]);
         }
 
-
         $balance = $updateAccount->getBalance();
         $record->setAccount($updateAccount);
         $record->setBalance($balance);
@@ -155,4 +167,36 @@ class PassbookController extends Controller
         return $this->redirectToRoute('index');
     }
 
+    function pagination($page, $accountId)
+    {
+        $pageLimit = 20;
+        if ($page == 1){
+            $offset = 0;
+        } else {
+            $offset = $pageLimit * ($page - 1);
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $record = $entityManager
+            ->getRepository('ScottPassbookBundle:Record')
+            ->getPages($offset, $pageLimit, $accountId);
+
+        $total = $entityManager
+            ->getRepository('ScottPassbookBundle:Record')
+            ->getCount($accountId);
+
+        $totalPage = floor($total / $pageLimit);
+        if (($total % $pageLimit) > 0) {
+            $totalPage++;
+        }
+
+        if ($total == 0) {
+            $totalPage =1;
+        }
+
+        return $result = [
+            'record' => $record,
+            'total' => $totalPage,
+        ];
+    }
 }

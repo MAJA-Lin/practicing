@@ -216,7 +216,6 @@ class CustomerController extends Controller
             ]);
         }
 
-
         $entityManager = $this->getDoctrine()->getManager();
         $customer = $entityManager
             ->getRepository("ScottPassbookBundle:Customer")
@@ -252,7 +251,4 @@ class CustomerController extends Controller
                 'account' => $account,
             ]);
     }
-
-
-
 }

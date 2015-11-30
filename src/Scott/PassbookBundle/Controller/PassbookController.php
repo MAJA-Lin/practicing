@@ -90,7 +90,6 @@ class PassbookController extends Controller
 
         return $this->render('ScottPassbookBundle:Passbook:index.html.twig', [
             'form' => $form->createView(),
-            'request' => $request,
             'account' => $account,
             'record' => $result['record'],
             'totalPages' => $result['total'],

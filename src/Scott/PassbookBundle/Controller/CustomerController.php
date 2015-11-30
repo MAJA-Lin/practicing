@@ -51,7 +51,6 @@ class CustomerController extends Controller
 
         return $this->render('ScottPassbookBundle:Customer:login_form.html.twig', [
             'form' => $form->createView(),
-            'session' => $loginBefore,
         ]);
 
     }
@@ -98,7 +97,6 @@ class CustomerController extends Controller
     {
         $session = $request->getSession();
         $session->clear();
-        //$cookie = $request->headers->clearCookie();
         return $this->redirectToRoute('login');
     }
 
@@ -209,7 +207,6 @@ class CustomerController extends Controller
         }
 
         return $this->render('ScottPassbookBundle:Customer:signup.html.twig', [
-                'request' => $request,
                 'customer' => $customer,
                 'account' => $account,
             ]);

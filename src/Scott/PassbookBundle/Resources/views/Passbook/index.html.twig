@@ -1,14 +1,21 @@
 {% extends 'ScottPassbookBundle:Default:base.html.twig' %}
 
 {% block body %}
-
+    <div name="record">
+    {{ dump(account) }}
+    {{ dump(record) }}
+    {{ dump(request) }}
+    </div>
+    <div name="page">
+        {% for i in 1..totalPages %}
+            <a href="{{ path('index', {'page': i})}}">Page {{ i }}</a>
+        {% endfor %}
+    </div>
+    <br><br>
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}
 
-    {{ dump(account) }}
-    {{ dump(record) }}
-    {{ dump(request) }}
 
     <a href="{{ path('logout') }}">Log Out</a>
 {% endblock %}

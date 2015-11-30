@@ -30,16 +30,17 @@ class PassbookController extends Controller
             return $this->redirectToRoute('login');
         }
 
+        $accountId = $customer[0]->getAccount();
+        $page = $request->attributes->get('page');
+
         $entityManager = $this->getDoctrine()->getManager();
         $account = $entityManager
-            ->find('ScottPassbookBundle:Account', $customer[0]->getAccount());
+            ->find('ScottPassbookBundle:Account', $accountId);
 
-        $record = $entityManager
-            ->getRepository('ScottPassbookBundle:Record')
-            ->findBy(['account' => $account->getId()]);
+        $result =  $this->pagination($page, $accountId);
 
-        $new_record = [];
-        $form = $this->createFormBuilder($new_record)
+        $newRecord = [];
+        $form = $this->createFormBuilder($newRecord)
             ->setMethod("POST")
             ->setAction($this->generateUrl('record_add'))
             ->add(
@@ -84,7 +85,8 @@ class PassbookController extends Controller
             'form' => $form->createView(),
             'request' => $request,
             'account' => $account,
-            'record' => $record,
+            'record' => $result['record'],
+            'totalPages' => $result['total'],
         ]);
     }
 
@@ -100,7 +102,7 @@ class PassbookController extends Controller
         $option =$form['option'];
         $amount = (float) $form['amount'];
         $memo = $form['memo'];
-        $account_id = $form['account_id'];
+        $accountId = $form['account_id'];
 
         if (strlen($form['amount']) > 12) {
 
@@ -113,7 +115,7 @@ class PassbookController extends Controller
         $entityManager = $this->getDoctrine()->getManager();
         $record = new Entity\Record();
         $updateAccount = $entityManager
-            ->find('ScottPassbookBundle:Account', $account_id);
+            ->find('ScottPassbookBundle:Account', $accountId);
         $balance = $updateAccount->getBalance();
 
         $record->setAccount($updateAccount);
@@ -136,4 +138,32 @@ class PassbookController extends Controller
         return $this->redirectToRoute('index');
     }
 
+    function pagination($page, $accountId)
+    {
+        $pageLimit = 20;
+        if ($page == 1){
+            $offset = 0;
+        } else {
+            $offset = $pageLimit * ($page - 1);
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $record = $entityManager
+            ->getRepository('ScottPassbookBundle:Record')
+            ->getPages($offset, $pageLimit, $accountId);
+
+        $total = $entityManager
+            ->getRepository('ScottPassbookBundle:Record')
+            ->getCount($accountId);
+
+        $totalPage = floor($total / $pageLimit);
+        if (($total % $pageLimit) > 0) {
+            $totalPage++;
+        }
+
+        return $result = [
+            'record' => $record,
+            'total' => $totalPage,
+        ];
+    }
 }

@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Cookie;
 use Scott\PassbookBundle\Entity as Entity;
@@ -14,8 +15,10 @@ use Scott\PassbookBundle\Entity as Entity;
 class PassbookController extends Controller
 {
     /**
-     * @Route("/index", name="index")
-     *
+     * @Route("/index/{page}",
+     *      name="index",
+     *      defaults={"page": 1},
+     *      requirements={"page": "\d+"})
      *
      */
     public function indexAction(Request $request)
@@ -25,12 +28,21 @@ class PassbookController extends Controller
 
         if (empty($customer) || is_null($customer)) {
             return $this->redirectToRoute('login');
-        } else {
-            return $this->render('ScottPassbookBundle:Passbook:index.html.twig', [
-                'request' => $customer,
-            ]);
         }
 
+        $entityManager = $this->getDoctrine()->getManager();
+        $account = $entityManager
+            ->find('ScottPassbookBundle:Account', $customer[0]->getAccount());
+
+        $record = $entityManager
+            ->getRepository('ScottPassbookBundle:Record')
+            ->findBy(['account' => $account->getId()]);
+
+        return $this->render('ScottPassbookBundle:Passbook:index.html.twig', [
+            'request' => $request,
+            'account' => $account,
+            'record' => $record,
+        ]);
     }
 
 }

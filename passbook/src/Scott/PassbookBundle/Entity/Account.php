@@ -36,8 +36,8 @@ class Account
     private $customer;
 
     /**
-     *
      * @ORM\OneToMany(targetEntity="Record", mappedBy="account")
+     * @ORM\JoinColumn(name="record_id", referencedColumnName="id")
      */
     private $record;
 

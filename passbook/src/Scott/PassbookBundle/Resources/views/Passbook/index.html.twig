@@ -2,6 +2,10 @@
 
 {% block body %}
 
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
     {{ dump(account) }}
     {{ dump(record) }}
     {{ dump(request) }}

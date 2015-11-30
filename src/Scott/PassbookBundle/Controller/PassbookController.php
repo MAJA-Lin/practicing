@@ -81,6 +81,13 @@ class PassbookController extends Controller
                 ])
             ->getForm();
 
+        if ($page > $result['total']) {
+            return $this->render('ScottPassbookBundle:Passbook:error.html.twig', [
+                'request' => $request,
+                'error' => "page",
+            ]);
+        }
+
         return $this->render('ScottPassbookBundle:Passbook:index.html.twig', [
             'form' => $form->createView(),
             'request' => $request,
@@ -159,6 +166,10 @@ class PassbookController extends Controller
         $totalPage = floor($total / $pageLimit);
         if (($total % $pageLimit) > 0) {
             $totalPage++;
+        }
+
+        if ($total == 0) {
+            $totalPage =1;
         }
 
         return $result = [

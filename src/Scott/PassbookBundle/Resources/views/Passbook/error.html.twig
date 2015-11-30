@@ -2,16 +2,16 @@
 
 {% block body %}
     {% if error == "amount" %}
-        {#
         <script>alert('Amount is invalid!');
                 window.location.href=history.back();</script>
-        #}
         {{ dump(request) }}
-        {{ dump(value) }}
-    {#
+
     {% elseif error == "email" %}
         <script>alert('This email is invalid! Please try again!');
                 window.location.href=history.back();</script>
-                #}
+
+    {% elseif error == "page" %}
+        <script>alert('Not a invalid page! Please try again!');
+                window.location.href=history.back();</script>
     {% endif %}
 {% endblock %}

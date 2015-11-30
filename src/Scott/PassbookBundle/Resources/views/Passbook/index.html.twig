@@ -2,9 +2,43 @@
 
 {% block body %}
     <div name="record">
-    {{ dump(account) }}
-    {{ dump(record) }}
-    {{ dump(request) }}
+        <table width="30%" border="1">
+            <strong><h3>Account</h3></strong>
+            <tr>
+                <td>Account ID</td>
+                <td>Currency</td>
+                <td>Balance</td>
+            </tr>
+            <tr>
+                <td>{{ account.id }}</td>
+                <td>{{ account.currency }}</td>
+                <td>{{ account.balance }}</td>
+            </tr>
+        </table>
+        <br>
+        <table width="60%" border="1">
+            <strong><h3>Records</h3></strong>
+            <tr>
+                <td>Time</td>
+                <td>Amount</td>
+                <td>Memo</td>
+                <td>Balance</td>
+            </tr>
+            {% for records in record %}
+                <tr>
+                    <td>{{ records.create_time }}</td>
+                    <td>{{ records.amount }}</td>
+                    <td>{{ records.memo }}</td>
+                    <td>{{ records.balance }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>The Latest data</td>
+                <td>0</td>
+                <td>Your current balance</td>
+                <td><strong><h3>{{ account.balance }}</h3></strong></td>
+            </tr>
+        </table>
     </div>
     <div name="page">
         {% for i in 1..totalPages %}
@@ -15,7 +49,6 @@
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}
-
-
+    <br><br>
     <a href="{{ path('logout') }}">Log Out</a>
 {% endblock %}

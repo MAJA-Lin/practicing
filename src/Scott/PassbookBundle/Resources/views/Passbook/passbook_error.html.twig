@@ -1,0 +1,23 @@
+{% extends 'ScottPassbookBundle:Default:base.html.twig' %}
+
+{% block body %}
+    {% if error == "amount" %}
+        {% if detail == "length" %}
+            <script>alert('The length of amount should be less than 12! Please try again!');
+                    window.location.href=history.back();</script>
+        {% elseif detail == "number" %}
+            <script>alert('The amount should be a positive number!');
+                    window.location.href=history.back();</script>
+        {% endif %}
+
+    {% elseif error == "page" %}
+        <script>alert('Not a invalid page! Please try again!');
+                window.location.href=history.back();</script>
+    {% elseif error == "memo" %}
+        <script>alert('The length of Memo should be less than 50! Please try again!');
+                window.location.href=history.back();</script>
+    {% elseif error == "account" %}
+        <script>alert('Something went wrong! Please login again!');
+                window.location.href="{{ path('logout') }}";</script>
+    {% endif %}
+{% endblock %}

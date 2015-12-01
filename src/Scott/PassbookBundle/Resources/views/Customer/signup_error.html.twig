@@ -2,10 +2,34 @@
 
 {% block body %}
     {% if error == "password" %}
-        <script>alert('Password should be the same!');
+        {% if detail == "repeat" %}
+            <script>alert('Password confirmed doesn\'t match! Please try again!');
                 window.location.href=history.back();</script>
+        {% elseif detail == "length" %}
+            <script>alert('The length of password should be less than 16! Please try again!');
+                window.location.href=history.back();</script>
+        {% elseif detail == "format" %}
+            <script>alert('The available characters for password are : numbers, alphabets and @ _ . - ');
+                window.location.href=history.back();</script>
+        {% endif %}
+
     {% elseif error == "email" %}
-        <script>alert('This email is invalid! Please try again!');
-                window.location.href=history.back();</script>
+        {% if detail == "format" %}
+            <script>alert('The format of email is invalid! Please try again!');
+                    window.location.href=history.back();</script>
+        {% elseif detail == "length" %}
+            <script>alert('The length of email should be less than 50! Please try again!');
+                    window.location.href=history.back();</script>
+        {% elseif detail == "character" %}
+            <script>alert('The format of email is invalid! The available characters are: numbers, alphabets and @ _ . - ');
+                    window.location.href=history.back();</script>
+        {% elseif detail == "existed" %}
+            <script>alert('The email has been registered! Please try another one!');
+                    window.location.href=history.back();</script>
+        {% endif %}
+
+    {% elseif error == "currency" %}
+        <script>alert('The currency you select is invalid! Please try again!');
+                    window.location.href=history.back();</script>
     {% endif %}
 {% endblock %}

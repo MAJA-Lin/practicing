@@ -37,7 +37,19 @@ class PassbookController extends Controller
         $account = $entityManager
             ->find('ScottPassbookBundle:Account', $accountId);
 
+        if (empty($account)) {
+            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
+                'error' => "account",
+            ]);
+        }
+
         $result =  $this->pagination($page, $accountId);
+
+        if ($page > $result['total']) {
+            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
+                'error' => "page",
+            ]);
+        }
 
         $newRecord = [];
         $form = $this->createFormBuilder($newRecord)
@@ -81,13 +93,6 @@ class PassbookController extends Controller
                 ])
             ->getForm();
 
-        if ($page > $result['total']) {
-            return $this->render('ScottPassbookBundle:Passbook:error.html.twig', [
-                'request' => $request,
-                'error' => "page",
-            ]);
-        }
-
         return $this->render('ScottPassbookBundle:Passbook:index.html.twig', [
             'form' => $form->createView(),
             'account' => $account,
@@ -111,10 +116,22 @@ class PassbookController extends Controller
         $accountId = $form['account_id'];
 
         if (strlen($form['amount']) > 12) {
-
-            return $this->render('ScottPassbookBundle:Passbook:error.html.twig', [
-                'request' => $request,
+            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
                 'error' => "amount",
+                'detail' => "length",
+            ]);
+        }
+
+        if (!preg_match("/^\d+(\.\d+)?$/", $form['amount'])) {
+            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
+                'error' => "amount",
+                'detail' => "number",
+            ]);
+        }
+
+        if (strlen($memo) > 50) {
+            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
+                'error' => "memo",
             ]);
         }
 
@@ -122,8 +139,15 @@ class PassbookController extends Controller
         $record = new Entity\Record();
         $updateAccount = $entityManager
             ->find('ScottPassbookBundle:Account', $accountId);
-        $balance = $updateAccount->getBalance();
 
+        if (empty($updateAccount)) {
+            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
+                'error' => "account",
+            ]);
+        }
+
+
+        $balance = $updateAccount->getBalance();
         $record->setAccount($updateAccount);
         $record->setBalance($balance);
         $record->setCreateTime(new \DateTime());

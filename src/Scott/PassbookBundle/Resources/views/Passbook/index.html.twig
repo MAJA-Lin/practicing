@@ -40,15 +40,55 @@
             </tr>
         </table>
     </div>
+
     <div name="page">
         {% for i in 1..totalPages %}
             <a href="{{ path('index', {'page': i})}}">Page {{ i }}</a>
         {% endfor %}
     </div>
     <br><br>
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
+    <form name="form" method="post" action="{{ path('record_add') }}">
+        <div id="form">
+            <input
+                type="hidden"
+                id="form_account_id"
+                name="form[account_id]"
+                value="{{ account.id }}"
+            />
+            <div>
+                <label for="form_option" class="required">Option</label>
+                <select id="form_option" name="form[option]">
+                    <option value="Save" >Save</option>
+                    <option value="Withdraw" >Withdraw</option>
+                </select>
+            </div>
+            <div>
+                <label for="form_amount" class="required">Amount</label>
+                <input
+                    type="text"
+                    id="form_amount"
+                    name="form[amount]"
+                    required="required"
+                    maxlength="12"
+                    pattern="([0-9]*\.[0-9]+|[0-9]+)"
+                    title="Must be an integer or float"
+                />
+            </div>
+            <div>
+                <label for="form_memo" class="required">Memo</label>
+                <input
+                    type="text"
+                    id="form_memo"
+                    name="form[memo]"
+                    required="required"
+                    maxlength="50"
+                />
+            </div>
+            <div>
+                <button type="submit" id="form_add" name="form[add]">Add New Record</button>
+            </div>
+        </div>
+    </form>
     <br><br>
     <a href="{{ path('logout') }}">Log Out</a>
 {% endblock %}

@@ -51,50 +51,7 @@ class PassbookController extends Controller
             ]);
         }
 
-        $newRecord = [];
-        $form = $this->createFormBuilder($newRecord)
-            ->setMethod("POST")
-            ->setAction($this->generateUrl('record_add'))
-            ->add(
-                'account_id',
-                'hidden', [
-                    'attr' => [
-                        'value' => $account->getId()
-                    ]
-                ])
-            ->add(
-                'option',
-                'choice', [
-                    'choices' => [
-                        'Save' => 'Save',
-                        'Withdraw' => 'Withdraw',
-                    ]
-                ])
-            ->add(
-                'amount',
-                'number', [
-                    'attr' => [
-                        'maxlength' => 12,
-                        'pattern' => '([0-9]*\.[0-9]+|[0-9]+)',
-                        'title' => 'Must be an integer or float',
-                    ]
-                ])
-            ->add(
-                'memo',
-                'text', [
-                    'attr' => [
-                        'maxlength' => 50
-                    ]
-                ])
-            ->add(
-                'signup',
-                'submit', [
-                    'label' => 'Add New Record'
-                ])
-            ->getForm();
-
         return $this->render('ScottPassbookBundle:Passbook:index.html.twig', [
-            'form' => $form->createView(),
             'account' => $account,
             'record' => $result['record'],
             'totalPages' => $result['total'],

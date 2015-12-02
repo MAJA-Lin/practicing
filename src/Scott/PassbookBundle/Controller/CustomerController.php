@@ -26,32 +26,7 @@ class CustomerController extends Controller
             return $this->redirectToRoute('index');
         }
 
-        $customer = new Entity\Customer();
-
-        $form = $this->createFormBuilder($customer)
-            ->setMethod('POST')
-            ->setAction($this->generateUrl('login_check'))
-            ->add(
-                'email',
-                'email',
-                ['attr' => ['maxlength' => 40]
-            ])
-            ->add(
-                'password',
-                'password',
-                ['attr' => ['maxlength' => 16]
-            ])
-            ->add(
-                'login',
-                'submit',
-                ['label' => 'Login']
-            )
-            ->getForm();
-
-        return $this->render('ScottPassbookBundle:Customer:login_form.html.twig', [
-            'form' => $form->createView(),
-        ]);
-
+        return $this->render('ScottPassbookBundle:Customer:login_form.html.twig');
     }
 
     /**
@@ -105,48 +80,7 @@ class CustomerController extends Controller
      */
     public function signupAction(Request $request)
     {
-        $signup = [];
-        $form = $this->createFormBuilder($signup)
-            ->setMethod('POST')
-            ->setAction($this->generateUrl('signup_check'))
-            ->add(
-                'email',
-                'email', [
-                    'attr' => ['maxlength' => 40]
-                ])
-            ->add(
-                'password',
-                'repeated', [
-                    'type' => 'password',
-                    'invalid_message' => 'The password fields must match.',
-                    'options' => ['attr' => [
-                        'class' => 'password-field',
-                        'maxlength' => 16
-                    ]],
-                    'required' => true,
-                    'first_options' => ['label' => 'Password'],
-                    'second_options' => ['label' => 'Repeat Password'],
-                ])
-            ->add(
-                'currency',
-                'choice', [
-                    'choices' => [
-                        'NTD' => 'NTD',
-                        'USD' => 'USD',
-                        'JPY' => 'JPY',
-                        'EUR' => 'EUR',
-                    ]
-            ])
-            ->add(
-                'signup',
-                'submit',
-                ['label' => 'Sign up']
-            )
-            ->getForm();
-
-        return $this->render('ScottPassbookBundle:Customer:signup_form.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->render('ScottPassbookBundle:Customer:signup_form.html.twig');
     }
 
     /**

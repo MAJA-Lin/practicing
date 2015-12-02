@@ -1,9 +1,32 @@
 {% extends 'ScottPassbookBundle:Default:base.html.twig' %}
 
 {% block body %}
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
-
+    <form name="form" method="post" action="{{ path('login_check') }}">
+        <div id="form">
+            <div>
+                <label for="form_email" class="required">Email</label>
+                <input
+                    type="email"
+                    id="form_email"
+                    name="form[email]"
+                    required="required"
+                    maxlength="40"
+                />
+            </div>
+            <div>
+                <label for="form_password" class="required">Password</label>
+                <input
+                    type="password"
+                    id="form_password"
+                    name="form[password]"
+                    required="required"
+                    maxlength="16"
+                />
+            </div>
+            <div>
+                <button type="submit" id="form_login" name="form[login]">Login</button>
+            </div>
+        </div>
+    </form>
     <a href="{{ path('signup') }}"><h3>Sign up</h3></a>
 {% endblock %}

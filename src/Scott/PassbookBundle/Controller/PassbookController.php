@@ -127,6 +127,11 @@ class PassbookController extends Controller
     function pagination($page, $accountId)
     {
         $pageLimit = 20;
+
+        if ($page <= 0) {
+            $page = 1;
+        }
+
         if ($page == 1){
             $offset = 0;
         } else {

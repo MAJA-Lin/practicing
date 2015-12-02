@@ -8,8 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Cookie;
 use Scott\PassbookBundle\Entity as Entity;
 
 class PassbookController extends Controller
@@ -23,26 +21,26 @@ class PassbookController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $session = $request->getSession();
-        $customer = $session->get('customer');
+        $customerId = $request->query->get('customerId');
+        $page = $request->attributes->get('page');
+        $request->attributes->set('customerId', $customerId);
 
-        if (empty($customer) || is_null($customer)) {
+        if (empty($customerId) || is_null($customerId)) {
             return $this->redirectToRoute('login');
         }
 
-        $accountId = $customer[0]->getAccount();
-        $page = $request->attributes->get('page');
-
+        $customerId = base64_decode($customerId);
         $entityManager = $this->getDoctrine()->getManager();
         $account = $entityManager
-            ->find('ScottPassbookBundle:Account', $accountId);
+            ->getRepository('ScottPassbookBundle:Account')
+            ->findBy(["customer" => $customerId]);
 
         if (empty($account)) {
             return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
                 'error' => "account",
             ]);
         }
-
+        $accountId = $account[0]->getId();
         $result =  $this->pagination($page, $accountId);
 
         if ($page > $result['total']) {
@@ -52,7 +50,8 @@ class PassbookController extends Controller
         }
 
         return $this->render('ScottPassbookBundle:Passbook:index.html.twig', [
-            'account' => $account,
+            'account' => $account[0],
+            'customerId' => base64_encode($customerId),
             'record' => $result['record'],
             'totalPages' => $result['total'],
         ]);
@@ -71,6 +70,7 @@ class PassbookController extends Controller
         $amount = (float) $form['amount'];
         $memo = $form['memo'];
         $accountId = $form['account_id'];
+        $customerId = $form['customerId'];
 
         if (strlen($form['amount']) > 12) {
             return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
@@ -121,7 +121,9 @@ class PassbookController extends Controller
         $entityManager->persist($updateAccount);
         $entityManager->flush();
 
-        return $this->redirectToRoute('index');
+        return $this->redirectToRoute('index', [
+            'customerId' => $customerId,
+        ]);
     }
 
     function pagination($page, $accountId)

@@ -6,8 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Response;
 use Scott\PassbookBundle\Entity as Entity;
 
 class CustomerController extends Controller
@@ -19,13 +18,6 @@ class CustomerController extends Controller
      */
     public function loginAction(Request $request)
     {
-        $session = $request->getSession();
-        $loginBefore = $session->get('customer');
-
-        if (isset($loginBefore) && !empty($loginBefore)) {
-            return $this->redirectToRoute('index');
-        }
-
         return $this->render('ScottPassbookBundle:Customer:login_form.html.twig');
     }
 
@@ -50,10 +42,13 @@ class CustomerController extends Controller
             ]);
 
         if (!empty($customer)) {
-            $session = $request->getSession();
-            $session->set('customer', $customer);
+            $customerId = $customer[0]->getId();
+            $request->attributes->set('customerId', $customerId);
 
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('index', [
+                'page' => 1,
+                'customerId' => base64_encode($customerId),
+            ]);
         }
 
         return $this->render('ScottPassbookBundle:Customer:login_error.html.twig', [
@@ -69,8 +64,7 @@ class CustomerController extends Controller
      */
     public function logoutAction(Request $request)
     {
-        $session = $request->getSession();
-        $session->clear();
+        $request->query->remove('customerId');
         return $this->redirectToRoute('login');
     }
 

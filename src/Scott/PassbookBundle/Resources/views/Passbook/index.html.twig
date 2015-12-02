@@ -43,7 +43,9 @@
 
     <div name="page">
         {% for i in 1..totalPages %}
-            <a href="{{ path('index', {'page': i})}}">Page {{ i }}</a>
+            <a href="{{ path('index', {'page': i, 'customerId': customerId}) }}">
+                Page {{ i }}
+            </a>
         {% endfor %}
     </div>
     <br><br>
@@ -54,6 +56,12 @@
                 id="form_account_id"
                 name="form[account_id]"
                 value="{{ account.id }}"
+            />
+            <input
+                type="hidden"
+                id="form_customer_id"
+                name="form[customerId]"
+                value="{{ customerId }}"
             />
             <div>
                 <label for="form_option" class="required">Option</label>

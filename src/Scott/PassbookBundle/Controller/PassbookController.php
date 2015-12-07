@@ -143,7 +143,7 @@ class PassbookController extends Controller
         $entityManager = $this->getDoctrine()->getManager();
         $record = $entityManager
             ->getRepository('ScottPassbookBundle:Record')
-            ->getPages($offset, $pageLimit, $accountId);
+            ->getPages($accountId, $offset, $pageLimit);
 
         $total = $entityManager
             ->getRepository('ScottPassbookBundle:Record')

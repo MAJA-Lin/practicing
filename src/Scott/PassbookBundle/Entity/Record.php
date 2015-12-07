@@ -111,7 +111,7 @@ class Record
      */
     public function getCreateTime()
     {
-        return $this->$create_time;
+        return $this->create_time;
     }
 
     /**

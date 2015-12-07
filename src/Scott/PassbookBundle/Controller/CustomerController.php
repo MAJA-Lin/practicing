@@ -85,6 +85,8 @@ class CustomerController extends Controller
     public function signupCheckAction(Request $request)
     {
 
+        $currencyArray = ["NTD", "USD", "JPY", "EUR"];
+
         $form = $request->request->get('form');
         $email = $form['email'];
         $passwordFirst = $form['password']['first'];
@@ -133,12 +135,7 @@ class CustomerController extends Controller
             ]);
         }
 
-        if (
-            $currency != "NTD" &&
-            $currency != "USD" &&
-            $currency != "JPY" &&
-            $currency != "EUR"
-        ) {
+        if (!in_array($currency, $currencyArray)) {
             return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
                     'error' => 'currency',
             ]);
@@ -149,31 +146,29 @@ class CustomerController extends Controller
             ->getRepository("ScottPassbookBundle:Customer")
             ->findBy(['email' => $email]);
 
-        if (empty($customer)) {
-            $customer = new Entity\Customer;
-            $account = new Entity\Account;
-
-            $customer->setEmail($email);
-            $customer->setPassword($passwordFirst);
-
-            $entityManager->persist($customer);
-            $entityManager->flush();
-
-            $account->setCurrency($currency);
-            $account->addCustomer($customer);
-            $account->setBalance(0);
-            $customer->setAccount($account);
-
-            $entityManager->persist($account);
-            $entityManager->persist($customer);
-            $entityManager->flush();
-
-        } else {
+        if (!empty($customer)) {
             return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
                 'error' => 'email',
                 'detail' => 'existed',
             ]);
         }
+
+        $customer = new Entity\Customer;
+        $account = new Entity\Accoun;
+
+        $customer->setEmail($email);
+        $customer->setPassword($passwordFirst);
+
+        $entityManager->persist($customer);
+        $entityManager->flush();
+
+        $account->setCurrency($currency);
+        $account->setBalance(0);
+        $customer->setAccount($account);
+
+        $entityManager->persist($account);
+        $entityManager->persist($customer);
+        $entityManager->flush();
 
         return $this->render('ScottPassbookBundle:Customer:signup.html.twig', [
                 'customer' => $customer,

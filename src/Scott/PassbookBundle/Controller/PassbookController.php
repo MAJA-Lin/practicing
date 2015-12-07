@@ -134,9 +134,11 @@ class PassbookController extends Controller
             $page = 1;
         }
 
-        if ($page == 1){
+        if ($page == 1) {
             $offset = 0;
-        } else {
+        }
+
+        if ($page != 1) {
             $offset = $pageLimit * ($page - 1);
         }
 

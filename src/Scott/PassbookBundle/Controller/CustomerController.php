@@ -164,7 +164,8 @@ class CustomerController extends Controller
             $account->setBalance(0);
             $customer->setAccount($account);
 
-            $entityManager->persist($account, $customer);
+            $entityManager->persist($account);
+            $entityManager->persist($customer);
             $entityManager->flush();
 
         } else {

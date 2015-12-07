@@ -6,7 +6,16 @@
             <script>alert('The length of amount should be less than 12! Please try again!');
                     window.location.href=history.back();</script>
         {% elseif detail == "number" %}
-            <script>alert('The amount should be a positive number!');
+            <script>alert('The amount should be a float number or integer!');
+                    window.location.href=history.back();</script>
+        {% elseif detail == "empty" %}
+            <script>alert('The amount should not be empty or 0 !');
+                    window.location.href=history.back();</script>
+        {% elseif detail == "bankrupt" %}
+            <script>alert('The amount you are trying to withdraw is bigger than your saving. Try again!');
+                    window.location.href=history.back();</script>
+        {% elseif detail == "zero" %}
+            <script>alert('One does not simply save or withdraw 0 dollar. Try again!');
                     window.location.href=history.back();</script>
         {% endif %}
 

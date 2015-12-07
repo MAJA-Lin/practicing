@@ -64,13 +64,6 @@
                 value="{{ customerId }}"
             />
             <div>
-                <label for="form_option" class="required">Option</label>
-                <select id="form_option" name="form[option]">
-                    <option value="Save" >Save</option>
-                    <option value="Withdraw" >Withdraw</option>
-                </select>
-            </div>
-            <div>
                 <label for="form_amount" class="required">Amount</label>
                 <input
                     type="text"
@@ -78,7 +71,7 @@
                     name="form[amount]"
                     required="required"
                     maxlength="12"
-                    pattern="([0-9]*\.[0-9]+|[0-9]+)"
+                    pattern="(^[-+]?\d*\.?\d*$)"
                     title="Must be an integer or float"
                 />
             </div>

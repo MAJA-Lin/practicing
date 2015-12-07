@@ -66,7 +66,6 @@ class PassbookController extends Controller
     {
 
         $form = $request->request->get('form');
-        $option =$form['option'];
         $amount = (float) $form['amount'];
         $memo = $form['memo'];
         $accountId = $form['account_id'];
@@ -79,10 +78,24 @@ class PassbookController extends Controller
             ]);
         }
 
-        if (!preg_match("/^\d+(\.\d+)?$/", $form['amount'])) {
+        if (!preg_match("/^[-+]?\d*\.?\d*$/", $form['amount'])) {
             return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
                 'error' => "amount",
                 'detail' => "number",
+            ]);
+        }
+
+        if (empty($form['amount'])) {
+            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
+                'error' => "amount",
+                'detail' => "empty",
+            ]);
+        }
+
+        if ($form['amount'] == 0) {
+            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
+                'error' => "amount",
+                'detail' => "zero",
             ]);
         }
 
@@ -109,13 +122,15 @@ class PassbookController extends Controller
         $record->setCreateTime(new \DateTime());
         $record->setMemo($memo);
 
-        if ($option == "Save") {
-            $amount = abs($amount);
-        } else {
-            $amount = -1 * abs($amount);
-        }
         $record->setAmount($amount);
         $updateAccount->setBalance($balance + $amount);
+
+        if ($balance+$amount < 0) {
+            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
+                'error' => "amount",
+                'detail' => "bankrupt",
+            ]);
+        }
 
         $entityManager->persist($record);
         $entityManager->persist($updateAccount);

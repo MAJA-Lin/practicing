@@ -7,7 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Scott\PassbookBundle\Entity as Entity;
+use Scott\PassbookBundle\Entity\Account;
+use Scott\PassbookBundle\Entity\Customer;
 
 class CustomerController extends Controller
 {
@@ -153,8 +154,8 @@ class CustomerController extends Controller
             ]);
         }
 
-        $customer = new Entity\Customer;
-        $account = new Entity\Accoun;
+        $customer = new Customer();
+        $account = new Account();
 
         $customer->setEmail($email);
         $customer->setPassword($passwordFirst);

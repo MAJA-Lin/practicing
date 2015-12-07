@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Scott\PassbookBundle\Entity as Entity;
+use Scott\PassbookBundle\Entity\Record;
 
 class PassbookController extends Controller
 {
@@ -93,7 +93,7 @@ class PassbookController extends Controller
         }
 
         $entityManager = $this->getDoctrine()->getManager();
-        $record = new Entity\Record();
+        $record = new Record();
         $updateAccount = $entityManager
             ->find('ScottPassbookBundle:Account', $accountId);
 

@@ -38,14 +38,14 @@ class Record
     /**
      * @var float
      *
-     * @ORM\Column(name="balance", type="float", nullable=false)
+     * @ORM\Column(name="balance", type="decimal", precision=15, scale=2, nullable=false)
      */
     private $balance;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="amount", type="float", nullable=false)
+     * @ORM\Column(name="amount", type="decimal", precision=15, scale=2, nullable=false)
      */
     private $amount;
 

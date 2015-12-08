@@ -51,7 +51,12 @@ class Account
     /**
      * @var float
      *
-     * @ORM\Column(name="balance", type="float")
+     * @ORM\Column(
+     *      name="balance",
+     *      type="decimal",
+     *      precision=15,
+     *      scale=2
+     *      )
      */
     private $balance;
 

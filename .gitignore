@@ -14,4 +14,4 @@ composer.phar
 /composer.phar
 /vendor/
 /web/bundles/
-
+/phpunit-report/

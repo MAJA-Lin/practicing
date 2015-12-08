@@ -22,9 +22,13 @@ class Record
     private $id;
 
     /**
-     *
      * @ORM\ManyToOne(targetEntity="Account", inversedBy="record")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     * @ORM\JoinColumn(
+     *      name="account_id",
+     *      referencedColumnName="id",
+     *      onDelete="CASCADE",
+     *      nullable=false
+     *      )
      */
     private $account;
 

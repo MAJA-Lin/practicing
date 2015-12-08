@@ -84,7 +84,6 @@ doctrine:
             default:
                 connection: default
                 mappings:
-                    AppBundle:  ~
                     ScottPassbookBundle: ~
                 naming_strategy: doctrine.orm.naming_strategy.underscore
                 auto_mapping: true

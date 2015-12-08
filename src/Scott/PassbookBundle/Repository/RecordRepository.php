@@ -8,7 +8,7 @@ class RecordRepository extends EntityRepository
 {
     /**
      * 取得資料總筆數
-     *
+     * @param int $accountId 搜尋目標的account id
      * @return string $total 資料總數
      */
     public function getCount($accountId)

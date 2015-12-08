@@ -33,10 +33,9 @@ class LoadAccountData extends AbstractFixture implements OrderedFixtureInterface
         $account[4]->setBalance(333000);
 
         for ($i=0; $i < 5; $i++) {
-
             $account[$i]->addCustomer($this->getReference("customer$i"));
             $customer[$i] = $manager->getRepository('ScottPassbookBundle:Customer')
-                                ->findBy(['id' => $account[$i]->getCustomer()]);
+                ->findBy(['id' => $account[$i]->getCustomer()]);
 
             $customer[$i][0]->setAccount($account[$i]);
 

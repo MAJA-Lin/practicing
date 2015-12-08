@@ -13,14 +13,15 @@ class RecordRepository extends EntityRepository
      */
     public function getCount($accountId)
     {
-        $dql = "SELECT count(r.id) FROM ScottPassbookBundle:Record r 
-            WHERE r.account = ?1";
-        $query = $this
-            ->_em
+        $dql = "SELECT count(r.id) FROM ScottPassbookBundle:Record r WHERE r.account = ?1";
+
+        $query = $this->_em
             ->createQuery($dql)
             ->setParameter(1, $accountId)
             ->getSingleResult();
+
         $total = $query[1];
+
         return $total;
     }
 
@@ -35,12 +36,14 @@ class RecordRepository extends EntityRepository
     {
         $dql = "SELECT r.id, IDENTITY(r.account), r.create_time, r.memo, r.amount, r.balance
             FROM ScottPassbookBundle:Record r WHERE r.account = ?1";
+
         $query = $this->_em
             ->createQuery($dql)
             ->setParameter(1, $accountId)
             ->setFirstResult($offset)
             ->setMaxResults($pageLimit)
             ->getScalarResult();
+
         return $query;
     }
 

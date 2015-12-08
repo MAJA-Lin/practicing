@@ -17,6 +17,7 @@ class PassbookController extends Controller
      *      name="index",
      *      defaults={"page": 1},
      *      requirements={"page": "\d+"})
+     *
      * @Method("GET")
      */
     public function indexAction(Request $request)
@@ -31,8 +32,7 @@ class PassbookController extends Controller
 
         $customerId = base64_decode($customerId);
         $entityManager = $this->getDoctrine()->getManager();
-        $account = $entityManager
-            ->getRepository('ScottPassbookBundle:Account')
+        $account = $entityManager->getRepository('ScottPassbookBundle:Account')
             ->findOneBy(["customer" => $customerId]);
 
         if (empty($account)) {
@@ -40,6 +40,7 @@ class PassbookController extends Controller
                 'error' => "account",
             ]);
         }
+
         $accountId = $account->getId();
         $result =  $this->pagination($page, $accountId);
 
@@ -49,18 +50,19 @@ class PassbookController extends Controller
             ]);
         }
 
-        return $this->render('ScottPassbookBundle:Passbook:index.html.twig', [
+        $indexOutput = [
             'account' => $account,
             'customerId' => base64_encode($customerId),
             'record' => $result['record'],
             'totalPages' => $result['total'],
-        ]);
+        ];
+        return $this->render('ScottPassbookBundle:Passbook:index.html.twig', $indexOutput);
     }
 
     /**
      * @Route("/reocrd/add", name="record_add")
-     * @Method("POST")
      *
+     * @Method("POST")
      */
     public function recordAddAction(Request $request)
     {
@@ -107,8 +109,7 @@ class PassbookController extends Controller
 
         $entityManager = $this->getDoctrine()->getManager();
         $record = new Record();
-        $updateAccount = $entityManager
-            ->find('ScottPassbookBundle:Account', $accountId);
+        $updateAccount = $entityManager->find('ScottPassbookBundle:Account', $accountId);
 
         if (empty($updateAccount)) {
             return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
@@ -136,9 +137,7 @@ class PassbookController extends Controller
         $entityManager->persist($updateAccount);
         $entityManager->flush();
 
-        return $this->redirectToRoute('index', [
-            'customerId' => $customerId,
-        ]);
+        return $this->redirectToRoute('index', ['customerId' => $customerId]);
     }
 
     function pagination($page, $accountId)
@@ -158,12 +157,10 @@ class PassbookController extends Controller
         }
 
         $entityManager = $this->getDoctrine()->getManager();
-        $record = $entityManager
-            ->getRepository('ScottPassbookBundle:Record')
+        $record = $entityManager->getRepository('ScottPassbookBundle:Record')
             ->getPages($accountId, $offset, $pageLimit);
 
-        $total = $entityManager
-            ->getRepository('ScottPassbookBundle:Record')
+        $total = $entityManager->getRepository('ScottPassbookBundle:Record')
             ->getCount($accountId);
 
         $totalPage = floor($total / $pageLimit);

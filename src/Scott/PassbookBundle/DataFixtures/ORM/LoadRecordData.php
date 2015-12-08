@@ -11,8 +11,7 @@ class LoadRecordData extends AbstractFixture implements OrderedFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        $account = $manager->getRepository('ScottPassbookBundle:Account')
-                        ->findALL();
+        $account = $manager->getRepository('ScottPassbookBundle:Account')->findALL();
         $date = new \DateTime('2015-12-05');
         $date->setTime(12, 30, 30);
 

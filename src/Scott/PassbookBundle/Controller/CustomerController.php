@@ -14,8 +14,8 @@ class CustomerController extends Controller
 {
     /**
      * @Route("/login", name="login")
-     * @Method("GET")
      *
+     * @Method("GET")
      */
     public function loginAction(Request $request)
     {
@@ -24,8 +24,8 @@ class CustomerController extends Controller
 
     /**
      * @Route("/login/check", name="login_check")
-     * @Method("POST")
      *
+     * @Method("POST")
      */
     public function loginCheckAction(Request $request)
     {
@@ -34,13 +34,13 @@ class CustomerController extends Controller
         $email = $form['email'];
         $password = $form['password'];
 
+        $criteria = [
+            'email' => $email,
+            'password' => $password,
+        ];
         $entityManager = $this->getDoctrine()->getManager();
-        $customer = $entityManager
-            ->getRepository("ScottPassbookBundle:Customer")
-            ->findOneBy([
-                'email' => $email,
-                'password' => $password,
-            ]);
+        $customer = $entityManager->getRepository("ScottPassbookBundle:Customer")
+            ->findOneBy($criteria);
 
         if (!empty($customer)) {
             $customerId = $customer->getId();
@@ -60,17 +60,19 @@ class CustomerController extends Controller
 
     /**
      * @Route("/logout", name="logout")
-     * @Method("GET")
      *
+     * @Method("GET")
      */
     public function logoutAction(Request $request)
     {
         $request->query->remove('customerId');
+
         return $this->redirectToRoute('login');
     }
 
     /**
      * @Route("/signup", name="signup")
+     *
      * @Method("GET")
      */
     public function signupAction(Request $request)
@@ -80,8 +82,8 @@ class CustomerController extends Controller
 
     /**
      * @Route("/signup/check", name="signup_check")
-     * @Method("POST")
      *
+     * @Method("POST")
      */
     public function signupCheckAction(Request $request)
     {
@@ -96,55 +98,54 @@ class CustomerController extends Controller
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
-                    'error' => 'email',
-                    'detail' => 'format',
+                'error' => 'email',
+                'detail' => 'format',
             ]);
         }
 
         if (strlen($email) > 40) {
             return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
-                    'error' => 'email',
-                    'detail' => 'length',
+                'error' => 'email',
+                'detail' => 'length',
             ]);
         }
 
         if (!preg_match("/^[a-zA-Z0-9@_.-]*$/", $email)) {
             return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
-                    'error' => 'email',
-                    'detail' => 'character',
+                'error' => 'email',
+                'detail' => 'character',
             ]);
         }
 
         if ($passwordFirst != $passwordSecond) {
             return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
-                    'error' => 'password',
-                    'detail' => 'repeat',
+                'error' => 'password',
+                'detail' => 'repeat',
             ]);
         }
 
         if (strlen($passwordFirst) > 16) {
             return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
-                    'error' => 'password',
-                    'detail' => 'length',
+                'error' => 'password',
+                'detail' => 'length',
             ]);
         }
 
         if (!preg_match("/^[a-zA-Z0-9@_.-]*$/", $passwordFirst)) {
             return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
-                    'error' => 'password',
-                    'detail' => 'format',
+                'error' => 'password',
+                'detail' => 'format',
             ]);
         }
 
         if (!in_array($currency, $currencyArray)) {
             return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
-                    'error' => 'currency',
+                'error' => 'currency',
             ]);
         }
 
         $entityManager = $this->getDoctrine()->getManager();
-        $customer = $entityManager
-            ->getRepository("ScottPassbookBundle:Customer")
+        $customer = $entityManager->getRepository("ScottPassbookBundle:Customer")
             ->findOneBy(['email' => $email]);
 
         if (!empty($customer)) {
@@ -171,8 +172,8 @@ class CustomerController extends Controller
         $entityManager->flush();
 
         return $this->render('ScottPassbookBundle:Customer:signup.html.twig', [
-                'customer' => $customer,
-                'account' => $account,
-            ]);
+            'customer' => $customer,
+            'account' => $account,
+        ]);
     }
 }

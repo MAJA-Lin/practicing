@@ -22,6 +22,8 @@ class Record
     private $id;
 
     /**
+     * @var Account
+     *
      * @ORM\ManyToOne(targetEntity="Account", inversedBy="record")
      * @ORM\JoinColumn(
      *      name="account_id",
@@ -73,7 +75,7 @@ class Record
     /**
      * Set account
      *
-     * @param \stdClass $account
+     * @param Account $account
      *
      * @return Record
      */

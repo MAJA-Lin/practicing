@@ -17,7 +17,7 @@ class PassbookController extends Controller
      *      name="index",
      *      defaults={"page": 1},
      *      requirements={"page": "\d+"})
-     *
+     * @Method("GET")
      */
     public function indexAction(Request $request)
     {

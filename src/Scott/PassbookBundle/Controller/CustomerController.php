@@ -14,7 +14,7 @@ class CustomerController extends Controller
 {
     /**
      * @Route("/login", name="login")
-     *
+     * @Method("GET")
      *
      */
     public function loginAction(Request $request)
@@ -60,7 +60,7 @@ class CustomerController extends Controller
 
     /**
      * @Route("/logout", name="logout")
-     *
+     * @Method("GET")
      *
      */
     public function logoutAction(Request $request)
@@ -71,7 +71,7 @@ class CustomerController extends Controller
 
     /**
      * @Route("/signup", name="signup")
-     *
+     * @Method("GET")
      */
     public function signupAction(Request $request)
     {

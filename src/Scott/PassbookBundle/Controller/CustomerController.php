@@ -164,7 +164,6 @@ class CustomerController extends Controller
         $entityManager->flush();
 
         $account->setCurrency($currency);
-        $account->setBalance(0);
         $customer->setAccount($account);
 
         $entityManager->persist($account);

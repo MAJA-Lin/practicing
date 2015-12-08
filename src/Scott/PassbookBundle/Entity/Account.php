@@ -63,6 +63,7 @@ class Account
     public function __construct()
     {
         $this->record = new ArrayCollection();
+        $this->balance = 0;
     }
 
     /**

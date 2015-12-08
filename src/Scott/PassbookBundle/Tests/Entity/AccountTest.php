@@ -45,6 +45,7 @@ class AccountTest extends WebTestCase
 
     public function testBalance()
     {
+        $this->assertEquals(0, $this->fixture->getBalance(), 'Default value is not 0');
         $this->fixture->setBalance("12345");
         $this->assertEquals('12345', $this->fixture->getBalance());
     }

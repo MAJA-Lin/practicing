@@ -33,14 +33,14 @@ class PassbookController extends Controller
         $entityManager = $this->getDoctrine()->getManager();
         $account = $entityManager
             ->getRepository('ScottPassbookBundle:Account')
-            ->findBy(["customer" => $customerId]);
+            ->findOneBy(["customer" => $customerId]);
 
         if (empty($account)) {
             return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
                 'error' => "account",
             ]);
         }
-        $accountId = $account[0]->getId();
+        $accountId = $account->getId();
         $result =  $this->pagination($page, $accountId);
 
         if ($page > $result['total']) {
@@ -50,7 +50,7 @@ class PassbookController extends Controller
         }
 
         return $this->render('ScottPassbookBundle:Passbook:index.html.twig', [
-            'account' => $account[0],
+            'account' => $account,
             'customerId' => base64_encode($customerId),
             'record' => $result['record'],
             'totalPages' => $result['total'],

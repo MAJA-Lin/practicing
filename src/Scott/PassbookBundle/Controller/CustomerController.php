@@ -37,13 +37,13 @@ class CustomerController extends Controller
         $entityManager = $this->getDoctrine()->getManager();
         $customer = $entityManager
             ->getRepository("ScottPassbookBundle:Customer")
-            ->findBy([
+            ->findOneBy([
                 'email' => $email,
                 'password' => $password,
             ]);
 
         if (!empty($customer)) {
-            $customerId = $customer[0]->getId();
+            $customerId = $customer->getId();
             $request->attributes->set('customerId', $customerId);
 
             return $this->redirectToRoute('index', [
@@ -145,7 +145,7 @@ class CustomerController extends Controller
         $entityManager = $this->getDoctrine()->getManager();
         $customer = $entityManager
             ->getRepository("ScottPassbookBundle:Customer")
-            ->findBy(['email' => $email]);
+            ->findOneBy(['email' => $email]);
 
         if (!empty($customer)) {
             return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [

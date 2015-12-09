@@ -107,7 +107,7 @@ class PassbookController extends Controller
             ]);
         }
 
-        if (!preg_match("/^[-+]?\d*\.?\d*$/", $form['amount'])) {
+        if (!preg_match("/^[-+]?\d*\.?\d{1,2}?$/", $form['amount'])) {
             return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
                 'error' => "amount",
                 'detail' => "number",

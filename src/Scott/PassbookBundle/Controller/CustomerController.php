@@ -65,8 +65,6 @@ class CustomerController extends Controller
      */
     public function logoutAction(Request $request)
     {
-        $request->query->remove('customerId');
-
         return $this->redirectToRoute('login');
     }
 

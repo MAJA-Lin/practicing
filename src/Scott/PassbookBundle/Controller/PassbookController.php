@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Scott\PassbookBundle\Entity\Record;
+use \Exception;
 
 class PassbookController extends Controller
 {
@@ -35,9 +36,13 @@ class PassbookController extends Controller
         $account = $entityManager->getRepository('ScottPassbookBundle:Account')
             ->findOneBy(["customer" => $customerId]);
 
-        if (empty($account)) {
+        try {
+            if (empty($account)) {
+                throw new Exception("Something went wrong! Please login again!");
+            }
+        } catch (Exception $e) {
             return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
-                'error' => "account",
+                'error' => $e,
             ]);
         }
 
@@ -71,10 +76,12 @@ class PassbookController extends Controller
             $totalPage =1;
         }
 
-        if ($page > $totalPage) {
-            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
-                'error' => "page",
-            ]);
+        try {
+            if ($page > $totalPage) {
+                 throw new Exception("Not a invalid page! Please try again!");
+            }
+        } catch (Exception $e) {
+            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', ['error' => $e]);
         }
 
         $indexOutput = [
@@ -100,48 +107,40 @@ class PassbookController extends Controller
         $accountId = $form['account_id'];
         $customerId = $form['customerId'];
 
-        if (strlen($form['amount']) > 12) {
-            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
-                'error' => "amount",
-                'detail' => "length",
-            ]);
-        }
+        try {
+            if (strlen($form['amount']) > 12) {
+                throw new Exception("Length of amount must be less than 12! Try again!");
+            }
 
-        if (!preg_match("/^[-+]?\d*\.?\d{1,2}?$/", $form['amount'])) {
-            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
-                'error' => "amount",
-                'detail' => "number",
-            ]);
-        }
+            if (!preg_match("/^[-+]?\d*\.?\d{1,2}?$/", $form['amount'])) {
+                throw new Exception("The amount must be a float and digits after decimal point must be less than 2!");
+            }
 
-        if (empty($form['amount'])) {
-            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
-                'error' => "amount",
-                'detail' => "empty",
-            ]);
-        }
+            if (empty($form['amount'])) {
+                throw new Exception("The amount should not be empty or 0 !");
+            }
 
-        if ($form['amount'] == 0) {
-            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
-                'error' => "amount",
-                'detail' => "zero",
-            ]);
-        }
+            if ($form['amount'] == 0) {
+                throw new Exception("One does not simply save or withdraw 0 dollar.");
+            }
 
-        if (strlen($memo) > 50) {
-            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
-                'error' => "memo",
-            ]);
+            if (strlen($memo) > 50) {
+                throw new Exception("The length of Memo should be less than 50!");
+            }
+        } catch (Exception $e) {
+            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', ['error' => $e]);
         }
 
         $entityManager = $this->getDoctrine()->getManager();
         $record = new Record();
         $updateAccount = $entityManager->find('ScottPassbookBundle:Account', $accountId);
 
-        if (empty($updateAccount)) {
-            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
-                'error' => "account",
-            ]);
+        try {
+            if (empty($updateAccount)) {
+                throw new Exception("Something went wrong! Please login again!");
+            }
+        } catch (Exception $e) {
+            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', ['error' => $e]);
         }
 
         $balance = $updateAccount->getBalance();
@@ -153,11 +152,12 @@ class PassbookController extends Controller
         $record->setAmount($amount);
         $updateAccount->setBalance($balance + $amount);
 
-        if ($balance+$amount < 0) {
-            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
-                'error' => "amount",
-                'detail' => "bankrupt",
-            ]);
+        try {
+            if ($balance+$amount < 0) {
+                throw new Exception("The number you are withdrawing is too big!");
+            }
+        } catch (Exception $e) {
+            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', ['error' => $e]);
         }
 
         $entityManager->persist($record);

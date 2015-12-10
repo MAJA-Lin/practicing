@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Scott\PassbookBundle\Entity\Account;
 use Scott\PassbookBundle\Entity\Customer;
+use \Exception;
 
 class CustomerController extends Controller
 {
@@ -42,20 +43,21 @@ class CustomerController extends Controller
         $customer = $entityManager->getRepository("ScottPassbookBundle:Customer")
             ->findOneBy($criteria);
 
-        if (!empty($customer)) {
-            $customerId = $customer->getId();
-            $request->attributes->set('customerId', $customerId);
-
-            return $this->redirectToRoute('index', [
-                'page' => 1,
-                'customerId' => base64_encode($customerId),
-            ]);
+        try {
+            if (empty($customer)) {
+                throw new Exception("Sorry, your email or password is wrong.");
+            }
+        } catch (Exception $e) {
+            return $this->render('ScottPassbookBundle:Customer:login_error.html.twig', ['error' => $e]);
         }
 
-        return $this->render('ScottPassbookBundle:Customer:login_error.html.twig', [
-            'error' => 'login_failed',
-        ]);
+        $customerId = $customer->getId();
+        $request->attributes->set('customerId', $customerId);
 
+        return $this->redirectToRoute('index', [
+            'page' => 1,
+            'customerId' => base64_encode($customerId),
+        ]);
     }
 
     /**
@@ -94,63 +96,48 @@ class CustomerController extends Controller
         $passwordSecond = $form['password']['second'];
         $currency = $form['currency'];
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
-                'error' => 'email',
-                'detail' => 'format',
-            ]);
-        }
+        try {
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                throw new Exception("The format of email is invalid! Try again!");
+            }
 
-        if (strlen($email) > 40) {
-            return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
-                'error' => 'email',
-                'detail' => 'length',
-            ]);
-        }
+            if (strlen($email) > 40) {
+                throw new Exception("The length of email should be less than 50!");
+            }
 
-        if (!preg_match("/^[a-zA-Z0-9@_.-]*$/", $email)) {
-            return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
-                'error' => 'email',
-                'detail' => 'character',
-            ]);
-        }
+            if (!preg_match("/^[a-zA-Z0-9@_.-]*$/", $email)) {
+                throw new Exception("Available characters are: numbers, alphabets and @_.-");
+            }
 
-        if ($passwordFirst != $passwordSecond) {
-            return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
-                'error' => 'password',
-                'detail' => 'repeat',
-            ]);
-        }
+            if ($passwordFirst != $passwordSecond) {
+                throw new Exception("Passwords do not match! Please try again!");
+            }
 
-        if (strlen($passwordFirst) > 16) {
-            return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
-                'error' => 'password',
-                'detail' => 'length',
-            ]);
-        }
+            if (strlen($passwordFirst) > 16) {
+                throw new Exception("The length of password should be less than 16!");
+            }
 
-        if (!preg_match("/^[a-zA-Z0-9@_.-]*$/", $passwordFirst)) {
-            return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
-                'error' => 'password',
-                'detail' => 'format',
-            ]);
-        }
+            if (!preg_match("/^[a-zA-Z0-9@_.-]*$/", $passwordFirst)) {
+                throw new Exception("Available characters: numbers, alphabets and @_.-!");
+            }
 
-        if (!in_array($currency, $currencyArray)) {
-            return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
-                'error' => 'currency',
-            ]);
+            if (!in_array($currency, $currencyArray)) {
+                throw new Exception("The currency you select is invalid! Please try again!");
+            }
+        } catch (Exception $e) {
+            return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', ['error' => $e]);
         }
 
         $entityManager = $this->getDoctrine()->getManager();
         $customer = $entityManager->getRepository("ScottPassbookBundle:Customer")
             ->findOneBy(['email' => $email]);
 
-        if (!empty($customer)) {
-            return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', [
-                'error' => 'email',
-                'detail' => 'existed',
-            ]);
+        try {
+            if (!empty($customer)) {
+                throw new Exception("The email has been registered! Try another one!");
+            }
+        } catch (Exception $e) {
+            return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', ['error' => $e]);
         }
 
         $customer = new Customer();

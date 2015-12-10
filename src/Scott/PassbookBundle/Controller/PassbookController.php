@@ -41,9 +41,7 @@ class PassbookController extends Controller
                 throw new Exception("Something went wrong! Please login again!");
             }
         } catch (Exception $e) {
-            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', [
-                'error' => $e,
-            ]);
+            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['error' => $e]);
         }
 
         $accountId = $account->getId();
@@ -81,7 +79,7 @@ class PassbookController extends Controller
                  throw new Exception("Not a invalid page! Please try again!");
             }
         } catch (Exception $e) {
-            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', ['error' => $e]);
+            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['error' => $e]);
         }
 
         $indexOutput = [
@@ -128,7 +126,7 @@ class PassbookController extends Controller
                 throw new Exception("The length of Memo should be less than 50!");
             }
         } catch (Exception $e) {
-            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', ['error' => $e]);
+            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['error' => $e]);
         }
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -140,7 +138,7 @@ class PassbookController extends Controller
                 throw new Exception("Something went wrong! Please login again!");
             }
         } catch (Exception $e) {
-            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', ['error' => $e]);
+            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['error' => $e]);
         }
 
         $balance = $updateAccount->getBalance();
@@ -157,7 +155,7 @@ class PassbookController extends Controller
                 throw new Exception("The number you are withdrawing is too big!");
             }
         } catch (Exception $e) {
-            return $this->render('ScottPassbookBundle:Passbook:passbook_error.html.twig', ['error' => $e]);
+            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['error' => $e]);
         }
 
         $entityManager->persist($record);

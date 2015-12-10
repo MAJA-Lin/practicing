@@ -125,7 +125,7 @@ class CustomerController extends Controller
                 throw new Exception("The currency you select is invalid! Please try again!");
             }
         } catch (Exception $e) {
-            return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', ['error' => $e]);
+            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['error' => $e]);
         }
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -137,7 +137,7 @@ class CustomerController extends Controller
                 throw new Exception("The email has been registered! Try another one!");
             }
         } catch (Exception $e) {
-            return $this->render('ScottPassbookBundle:Customer:signup_error.html.twig', ['error' => $e]);
+            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['error' => $e]);
         }
 
         $customer = new Customer();

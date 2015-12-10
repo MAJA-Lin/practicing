@@ -4,6 +4,11 @@ parameters:
 #    parameter_name: value
 
 services:
+    scott_passbook.twig.extension.vars_extension:
+        class: Scott\PassbookBundle\Resources\Twig\Extension\VarsExtension
+        arguments: [@service_container]
+        tags:
+            - { name: 'twig.extension' }
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]

@@ -1,6 +1,7 @@
 {% extends 'ScottPassbookBundle:Default:base.html.twig' %}
 
 {% block body %}
+    {% set var = result | json_decode_array %}
     <div name="record">
         <table width="30%" border="1">
             <strong><h3>Account</h3></strong>
@@ -10,9 +11,9 @@
                 <td>Balance</td>
             </tr>
             <tr>
-                <td>{{ account.id }}</td>
-                <td>{{ account.currency }}</td>
-                <td>{{ account.balance }}</td>
+                <td>{{ var.data.account.id }}</td>
+                <td>{{ var.data.account.currency }}</td>
+                <td>{{ var.data.account.balance }}</td>
             </tr>
         </table>
         <br>
@@ -24,7 +25,7 @@
                 <td>Memo</td>
                 <td>Balance</td>
             </tr>
-            {% for records in record %}
+            {% for records in var.data.record %}
                 <tr>
                     <td>{{ records.create_time }}</td>
                     <td>{{ records.amount }}</td>
@@ -36,14 +37,14 @@
                 <td>The Latest data</td>
                 <td>0</td>
                 <td>Your current balance</td>
-                <td><strong><h3>{{ account.balance }}</h3></strong></td>
+                <td><strong><h3>{{ var.data.account.balance }}</h3></strong></td>
             </tr>
         </table>
     </div>
 
     <div name="page">
-        {% for i in 1..totalPages %}
-            <a href="{{ path('index', {'page': i, 'customerId': customerId}) }}">
+        {% for i in 1..var.data.totalPages %}
+            <a href="{{ path('index', {'page': i, 'customerId': var.data.customerId}) }}">
                 Page {{ i }}
             </a>
         {% endfor %}
@@ -55,13 +56,13 @@
                 type="hidden"
                 id="form_account_id"
                 name="form[account_id]"
-                value="{{ account.id }}"
+                value="{{ var.data.account.id }}"
             />
             <input
                 type="hidden"
                 id="form_customer_id"
                 name="form[customerId]"
-                value="{{ customerId }}"
+                value="{{ var.data.customerId }}"
             />
             <div>
                 <label for="form_amount" class="required">Amount</label>

@@ -62,8 +62,8 @@ class CustomerController extends Controller
         $request->attributes->set('customerId', $customerId);
 
         return $this->redirectToRoute('index', [
-            'page' => 1,
-            'customerId' => base64_encode($customerId),
+            'page' => json_encode(1),
+            'customerId' => json_encode(base64_encode($customerId)),
         ]);
     }
 

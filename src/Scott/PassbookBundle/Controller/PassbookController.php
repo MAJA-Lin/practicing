@@ -23,8 +23,8 @@ class PassbookController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $customerId = $request->query->get('customerId');
-        $page = $request->attributes->get('page');
+        $customerId = json_decode($request->query->get('customerId'));
+        $page = json_decode($request->attributes->get('page'));
         $request->attributes->set('customerId', $customerId);
 
         if (empty($customerId) || is_null($customerId)) {
@@ -202,7 +202,7 @@ class PassbookController extends Controller
         $entityManager->persist($updateAccount);
         $entityManager->flush();
 
-        return $this->redirectToRoute('index', ['customerId' => $customerId]);
+        return $this->redirectToRoute('index', ['customerId' => json_encode($customerId)]);
     }
 
 }

@@ -199,7 +199,7 @@ class Record
      */
     public function toArray()
     {
-        $arr = [
+        $array = [
             'id' => $this->id,
             'accountId' => $this->account->getId(),
             'create_time' => $this->create_time,
@@ -208,7 +208,7 @@ class Record
             'memo' => $this->memo,
         ];
 
-        return $arr;
+        return $array;
     }
 }
 

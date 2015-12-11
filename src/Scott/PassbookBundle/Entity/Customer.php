@@ -131,14 +131,14 @@ class Customer
      */
     public function toArray()
     {
-        $arr = [
+        $array = [
             'id' => $this->id,
             'accountId' => $this->account->getId(),
             'password' => $this->password,
             'email' => $this->email,
         ];
 
-        return $arr;
+        return $array;
     }
 }
 

@@ -150,13 +150,13 @@ class Account
      */
     public function toArray()
     {
-        $arr = [
+        $array = [
             'id' => $this->id,
             'customerId' => $this->customer->getId(),
             'currency' => $this->currency,
             'balance' => $this->balance,
         ];
 
-        return $arr;
+        return $array;
     }
 }

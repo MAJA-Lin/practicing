@@ -143,4 +143,20 @@ class Account
         return $this->balance;
     }
 
+    /**
+     * Return array
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $arr = [
+            'id' => $this->id,
+            'customerId' => $this->customer->getId(),
+            'currency' => $this->currency,
+            'balance' => $this->balance,
+        ];
+
+        return $arr;
+    }
 }

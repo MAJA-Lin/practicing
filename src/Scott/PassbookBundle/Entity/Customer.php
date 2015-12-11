@@ -123,5 +123,22 @@ class Customer
     {
         return $this->email;
     }
+
+    /**
+     * Return array
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $arr = [
+            'id' => $this->id,
+            'accountId' => $this->account->getId(),
+            'password' => $this->password,
+            'email' => $this->email,
+        ];
+
+        return $arr;
+    }
 }
 

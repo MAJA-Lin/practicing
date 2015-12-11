@@ -23,8 +23,8 @@ class PassbookController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $customerId = $request->query->get('customerId');
-        $page = $request->attributes->get('page');
+        $customerId = json_decode($request->query->get('customerId'));
+        $page = json_decode($request->attributes->get('page'));
         $request->attributes->set('customerId', $customerId);
 
         if (empty($customerId) || is_null($customerId)) {
@@ -41,7 +41,14 @@ class PassbookController extends Controller
                 throw new Exception("Something went wrong! Please login again!");
             }
         } catch (Exception $e) {
-            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['error' => $e]);
+            $result = [
+                'status' => 'failed',
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
+                ]
+            ];
+            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
         }
 
         $accountId = $account->getId();
@@ -79,16 +86,28 @@ class PassbookController extends Controller
                  throw new Exception("Not a invalid page! Please try again!");
             }
         } catch (Exception $e) {
-            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['error' => $e]);
+            $result = [
+                'status' => 'failed',
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
+                ]
+            ];
+            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
         }
 
-        $indexOutput = [
-            'account' => $account,
-            'customerId' => base64_encode($customerId),
-            'record' => $record,
-            'totalPages' => $totalPage,
+        $account = $account->toArray();
+        $result = [
+            'status' => 'successful',
+            'data' => [
+                'account' => $account,
+                'customerId' => base64_encode($customerId),
+                'record' => $record,
+                'totalPages' => $totalPage,
+            ],
         ];
-        return $this->render('ScottPassbookBundle:Passbook:index.html.twig', $indexOutput);
+
+        return $this->render('ScottPassbookBundle:Passbook:index.html.twig', ['result' => json_encode($result)]);
     }
 
     /**
@@ -126,7 +145,14 @@ class PassbookController extends Controller
                 throw new Exception("The length of Memo should be less than 50!");
             }
         } catch (Exception $e) {
-            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['error' => $e]);
+            $result = [
+                'status' => 'failed',
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
+                ]
+            ];
+            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
         }
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -138,7 +164,14 @@ class PassbookController extends Controller
                 throw new Exception("Something went wrong! Please login again!");
             }
         } catch (Exception $e) {
-            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['error' => $e]);
+            $result = [
+                'status' => 'failed',
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
+                ]
+            ];
+            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
         }
 
         $balance = $updateAccount->getBalance();
@@ -155,14 +188,21 @@ class PassbookController extends Controller
                 throw new Exception("The number you are withdrawing is too big!");
             }
         } catch (Exception $e) {
-            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['error' => $e]);
+            $result = [
+                'status' => 'failed',
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
+                ]
+            ];
+            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
         }
 
         $entityManager->persist($record);
         $entityManager->persist($updateAccount);
         $entityManager->flush();
 
-        return $this->redirectToRoute('index', ['customerId' => $customerId]);
+        return $this->redirectToRoute('index', ['customerId' => json_encode($customerId)]);
     }
 
 }

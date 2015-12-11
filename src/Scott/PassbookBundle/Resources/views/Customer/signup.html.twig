@@ -3,9 +3,10 @@
 {% block body %}
     <h1>Sign up successfully!</h1>
     <br>
-    <h2>Your Email: {{ customer.email }}</h2>
-    <h2>Currency: {{ account.currency }}</h2>
-    <h2>Balance: {{ account.balance }}</h2>
+    {% set var = result | json_decode_array %}
+    <h2>Your Email: {{ var.data.customer.email }}</h2>
+    <h2>Currency: {{ var.data.account.currency }}</h2>
+    <h2>Balance: {{ var.data.account.balance }}</h2>
     <br>
     <a href="{{ path('login') }}"><h3>Click here to Log in</h3></a>
 {% endblock %}

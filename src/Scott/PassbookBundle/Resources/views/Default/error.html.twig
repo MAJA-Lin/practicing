@@ -1,11 +1,12 @@
 {% extends 'ScottPassbookBundle:Default:base.html.twig' %}
 
 {% block body %}
-    {% if error.message == "Something went wrong! Please login again!" %}
-         <script>alert('{{ error.message }}');
+    {% set var = result | json_decode_array %}
+    {% if var.error.message == "Something went wrong! Please login again!" %}
+         <script>alert('{{ var.error.message }}');
                 window.location.href="{{ path('logout') }}";</script>
     {% endif %}
 
-    <script>alert('{{ error.message }}');
+    <script>alert('{{ var.error.message }}');
         window.location.href=history.back();</script>
 {% endblock %}

@@ -2,11 +2,11 @@
 
 {% block body %}
     {% set var = result | json_decode_array %}
-    {% if var.data.error.message == "Something went wrong! Please login again!" %}
-         <script>alert('{{ var.data.error.message }}');
+    {% if var.error.message == "Something went wrong! Please login again!" %}
+         <script>alert('{{ var.error.message }}');
                 window.location.href="{{ path('logout') }}";</script>
     {% endif %}
 
-    <script>alert('{{ var.data.error.message }}');
+    <script>alert('{{ var.error.message }}');
         window.location.href=history.back();</script>
 {% endblock %}

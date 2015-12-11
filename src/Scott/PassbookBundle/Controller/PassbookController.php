@@ -43,12 +43,9 @@ class PassbookController extends Controller
         } catch (Exception $e) {
             $result = [
                 'status' => 'failed',
-                'action' => 'index',
-                'data' => [
-                    'error' => [
-                        'message' => $e->getMessage(),
-                        'code' => $e->getCode(),
-                    ]
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
                 ]
             ];
             return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
@@ -91,12 +88,9 @@ class PassbookController extends Controller
         } catch (Exception $e) {
             $result = [
                 'status' => 'failed',
-                'action' => 'index',
-                'data' => [
-                    'error' => [
-                        'message' => $e->getMessage(),
-                        'code' => $e->getCode(),
-                    ]
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
                 ]
             ];
             return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
@@ -105,7 +99,6 @@ class PassbookController extends Controller
         $account = $account->toArray();
         $result = [
             'status' => 'successful',
-            'action' => 'index',
             'data' => [
                 'account' => $account,
                 'customerId' => base64_encode($customerId),
@@ -154,12 +147,9 @@ class PassbookController extends Controller
         } catch (Exception $e) {
             $result = [
                 'status' => 'failed',
-                'action' => 'recordAdd',
-                'data' => [
-                    'error' => [
-                        'message' => $e->getMessage(),
-                        'code' => $e->getCode(),
-                    ]
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
                 ]
             ];
             return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
@@ -176,12 +166,9 @@ class PassbookController extends Controller
         } catch (Exception $e) {
             $result = [
                 'status' => 'failed',
-                'action' => 'recordAdd',
-                'data' => [
-                    'error' => [
-                        'message' => $e->getMessage(),
-                        'code' => $e->getCode(),
-                    ]
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
                 ]
             ];
             return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
@@ -203,12 +190,9 @@ class PassbookController extends Controller
         } catch (Exception $e) {
             $result = [
                 'status' => 'failed',
-                'action' => 'recordAdd',
-                'data' => [
-                    'error' => [
-                        'message' => $e->getMessage(),
-                        'code' => $e->getCode(),
-                    ]
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
                 ]
             ];
             return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);

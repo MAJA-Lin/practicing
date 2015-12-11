@@ -50,12 +50,9 @@ class CustomerController extends Controller
         } catch (Exception $e) {
             $result = [
                 'status' => 'failed',
-                'action' => 'login',
-                'data' => [
-                    'error' => [
-                        'message' => $e->getMessage(),
-                        'code' => $e->getCode(),
-                    ]
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
                 ]
             ];
             return $this->render('ScottPassbookBundle:Customer:login_error.html.twig', ['result' => json_encode($result)]);
@@ -137,12 +134,9 @@ class CustomerController extends Controller
         } catch (Exception $e) {
             $result = [
                 'status' => 'failed',
-                'action' => 'signup',
-                'data' => [
-                    'error' => [
-                        'message' => $e->getMessage(),
-                        'code' => $e->getCode(),
-                    ]
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
                 ]
             ];
             return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
@@ -159,12 +153,9 @@ class CustomerController extends Controller
         } catch (Exception $e) {
             $result = [
                 'status' => 'failed',
-                'action' => 'signup',
-                'data' => [
-                    'error' => [
-                        'message' => $e->getMessage(),
-                        'code' => $e->getCode(),
-                    ]
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode(),
                 ]
             ];
             return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
@@ -191,7 +182,6 @@ class CustomerController extends Controller
 
         $result = [
             'status' => "successful",
-            'action' => "signup",
             'data' => [
                 'customer' => $customer,
                 'account' => $account,

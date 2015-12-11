@@ -1,6 +1,6 @@
 {% extends 'ScottPassbookBundle:Default:base.html.twig' %}
 {% block body %}
     {% set var = result | json_decode_array %}
-    <h2><strong>{{ var.data.error.message }}</strong></h2><br>
+    <h2><strong>{{ var.error.message }}</strong></h2><br>
     <h3><a href="{{ path('login') }}">Try again</a> or <a href="{{ path('signup') }}">Sign up</a></h3>
 {% endblock %}

@@ -192,5 +192,23 @@ class Record
         return $this->memo;
     }
 
+    /**
+     * Return array
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $array = [
+            'id' => $this->id,
+            'accountId' => $this->account->getId(),
+            'create_time' => $this->create_time,
+            'balance' => $this->balance,
+            'amount' => $this->amount,
+            'memo' => $this->memo,
+        ];
+
+        return $array;
+    }
 }
 

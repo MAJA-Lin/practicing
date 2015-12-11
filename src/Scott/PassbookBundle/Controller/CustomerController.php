@@ -109,7 +109,7 @@ class CustomerController extends Controller
             }
 
             if (strlen($email) > 40) {
-                throw new Exception("The length of email should be less than 50!");
+                throw new Exception("The length of email should be less than 40!");
             }
 
             if (!preg_match("/^[a-zA-Z0-9@_.-]*$/", $email)) {

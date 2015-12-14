@@ -117,7 +117,6 @@ class PassbookController extends Controller
      */
     public function recordAddAction(Request $request)
     {
-
         $form = $request->request->get('form');
         $amount = (float) $form['amount'];
         $memo = $form['memo'];

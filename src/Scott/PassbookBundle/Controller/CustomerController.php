@@ -30,7 +30,6 @@ class CustomerController extends Controller
      */
     public function loginCheckAction(Request $request)
     {
-
         $form = $request->request->get('form');
         $email = $form['email'];
         $password = $form['password'];
@@ -94,7 +93,6 @@ class CustomerController extends Controller
      */
     public function signupCheckAction(Request $request)
     {
-
         $currencyArray = ["NTD", "USD", "JPY", "EUR"];
 
         $form = $request->request->get('form');

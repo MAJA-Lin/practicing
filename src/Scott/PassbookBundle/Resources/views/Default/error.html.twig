@@ -3,8 +3,8 @@
 {% block body %}
     {% set var = result | json_decode_array %}
     {% if var.error.message == "Something went wrong! Please login again!" %}
-         <script>alert('{{ var.error.message }}');
-                window.location.href="{{ path('logout') }}";</script>
+        <script>alert('{{ var.error.message }}');
+            window.location.href="{{ path('logout') }}";</script>
     {% endif %}
 
     <script>alert('{{ var.error.message }}');

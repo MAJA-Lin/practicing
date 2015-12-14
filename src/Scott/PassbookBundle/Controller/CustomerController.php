@@ -55,7 +55,7 @@ class CustomerController extends Controller
                     'code' => $e->getCode(),
                 ]
             ];
-            return $this->render('ScottPassbookBundle:Customer:login_error.html.twig', ['result' => json_encode($result)]);
+            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
         }
 
         $customerId = $customer->getId();

@@ -5,64 +5,56 @@ namespace Scott\PassbookBundle\Tests\Entity;
 use Scott\PassbookBundle\Entity\Record;
 use Scott\PassbookBundle\Entity\Account;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class RecordTest extends WebTestCase
 {
-    protected $fixture;
-
-    protected function setUp()
-    {
-        $this->fixture = new Record();
-        $this->fixtureAccount = new Account();
-    }
-
     public function testGetId()
     {
-        $testId = 15;
-
-        $reflector = new \ReflectionClass('Scott\PassbookBundle\Entity\Record');
-        $property = $reflector->getProperty('id');
-        $property->setAccessible(true);
-        $property->setValue($this->fixture, $testId);
-
-        $this->assertEquals($testId, $this->fixture->getId());
+        $record = new Record();
+        $this->assertEquals(null, $record->getId());
     }
 
     public function testAccount()
     {
-        $this->fixture->setAccount($this->fixtureAccount);
-        $this->assertSame($this->fixtureAccount, $this->fixture->getAccount());
+        $record = new Record();
+        $account = new Account();
+
+        $record->setAccount($account);
+        $this->assertEquals($account, $record->getAccount());
     }
 
     public function testCreateTime()
     {
+        $record = new Record();
         $time = new \DateTime();
-        $this->fixture->setCreateTime($time);
-        $this->assertEquals($time, $this->fixture->getCreateTime());
+
+        $record->setCreateTime($time);
+        $this->assertEquals($time, $record->getCreateTime());
     }
 
     public function testBalance()
     {
-        $this->fixture->setBalance("12345");
-        $this->assertEquals('12345', $this->fixture->getBalance());
+        $record = new Record();
+
+        $record->setBalance("12345");
+        $this->assertEquals('12345', $record->getBalance());
     }
 
     public function testAmount()
     {
-        $this->fixture->setAmount("81000");
-        $this->assertEquals("81000", $this->fixture->getAmount());
+        $record = new Record();
+
+        $record->setAmount("81000");
+        $this->assertEquals("81000", $record->getAmount());
     }
 
     public function testMemo()
     {
-        $this->fixture->setMemo("What ever you want");
-        $this->assertEquals("What ever you want", $this->fixture->getMemo());
+        $record = new Record();
+
+        $record->setMemo("What ever you want");
+        $this->assertEquals("What ever you want", $record->getMemo());
     }
 
-    protected function tearDown()
-    {
-        unset($this->fixture);
-    }
 }

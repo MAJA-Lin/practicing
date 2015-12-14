@@ -57,4 +57,31 @@ class RecordTest extends WebTestCase
         $this->assertEquals("What ever you want", $record->getMemo());
     }
 
+    public function testToArray()
+    {
+        $time = new \DateTime('2015-12-05');
+        $time->setTime(12, 30, 30);
+
+        $expectedResult = [
+            'id' => null,
+            'accountId' => null,
+            'create_time' => $time,
+            'balance' => "25000",
+            'amount' => "6000",
+            'memo' => "Save money",
+        ];
+
+        $record = new Record();
+        $account = new Account();
+
+        $record->setAccount($account);
+        $record->setCreateTime($time);
+        $record->setBalance("25000");
+        $record->setAmount("6000");
+        $record->setMemo("Save money");
+        $result = $record->toArray();
+
+        $this->assertEquals($expectedResult, $result, "toArray failed!");
+    }
+
 }

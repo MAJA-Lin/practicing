@@ -40,4 +40,24 @@ class CustomerTest extends WebTestCase
         $this->assertEquals('LOL@omg.com', $customer->getEmail());
     }
 
+    public function testToArray()
+    {
+        $expectedResult = [
+            'id' => null,
+            'accountId' => null,
+            'email' => "NTD@test.org",
+            'password' => "2000QQ2000"
+        ];
+
+        $customer = new Customer();
+        $account = new Account();
+
+        $customer->setAccount($account);
+        $customer->setEmail("NTD@test.org");
+        $customer->setPassword("2000QQ2000");
+        $result = $customer->toArray();
+
+        $this->assertEquals($expectedResult, $result, "toArray failed!");
+    }
+
 }

@@ -42,4 +42,24 @@ class AccountTest extends WebTestCase
         $this->assertEquals('12345', $account->getBalance());
     }
 
+    public function testToArray()
+    {
+        $expectedResult = [
+            'id' => null,
+            'customerId' => null,
+            'currency' => "NTD",
+            'balance' => "2000"
+        ];
+
+        $account = new Account();
+        $customer = new Customer();
+
+        $account->addCustomer($customer);
+        $account->setCurrency("NTD");
+        $account->setBalance("2000");
+        $result = $account->toArray();
+
+        $this->assertEquals($expectedResult, $result, "toArray failed!");
+    }
+
 }

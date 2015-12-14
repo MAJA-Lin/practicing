@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Scott\PassbookBundle\Entity\Record;
-use \Exception;
 
 class PassbookController extends Controller
 {
@@ -38,9 +37,9 @@ class PassbookController extends Controller
 
         try {
             if (empty($account)) {
-                throw new Exception("Something went wrong! Please login again!");
+                throw new \Exception("Something went wrong! Please login again!");
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = [
                 'status' => 'failed',
                 'error' => [
@@ -83,9 +82,9 @@ class PassbookController extends Controller
 
         try {
             if ($page > $totalPage) {
-                 throw new Exception("Not a invalid page! Please try again!");
+                 throw new \Exception("Not a invalid page! Please try again!");
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = [
                 'status' => 'failed',
                 'error' => [
@@ -125,25 +124,25 @@ class PassbookController extends Controller
 
         try {
             if (strlen($form['amount']) > 12) {
-                throw new Exception("Length of amount must be less than 12! Try again!");
+                throw new \Exception("Length of amount must be less than 12! Try again!");
             }
 
             if (!preg_match("/^[-+]?\d*\.?\d{1,2}?$/", $form['amount'])) {
-                throw new Exception("The amount must be a float and digits after decimal point must be less than 2!");
+                throw new \Exception("The amount must be a float and digits after decimal point must be less than 2!");
             }
 
             if (empty($form['amount'])) {
-                throw new Exception("The amount should not be empty or 0 !");
+                throw new \Exception("The amount should not be empty or 0 !");
             }
 
             if ($form['amount'] == 0) {
-                throw new Exception("One does not simply save or withdraw 0 dollar.");
+                throw new \Exception("One does not simply save or withdraw 0 dollar.");
             }
 
             if (strlen($memo) > 50) {
-                throw new Exception("The length of Memo should be less than 50!");
+                throw new \Exception("The length of Memo should be less than 50!");
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = [
                 'status' => 'failed',
                 'error' => [
@@ -160,9 +159,9 @@ class PassbookController extends Controller
 
         try {
             if (empty($updateAccount)) {
-                throw new Exception("Something went wrong! Please login again!");
+                throw new \Exception("Something went wrong! Please login again!");
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = [
                 'status' => 'failed',
                 'error' => [
@@ -184,9 +183,9 @@ class PassbookController extends Controller
 
         try {
             if ($balance+$amount < 0) {
-                throw new Exception("The number you are withdrawing is too big!");
+                throw new \Exception("The number you are withdrawing is too big!");
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = [
                 'status' => 'failed',
                 'error' => [

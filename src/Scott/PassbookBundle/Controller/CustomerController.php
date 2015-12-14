@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Scott\PassbookBundle\Entity\Account;
 use Scott\PassbookBundle\Entity\Customer;
-use \Exception;
 
 class CustomerController extends Controller
 {
@@ -44,9 +43,9 @@ class CustomerController extends Controller
 
         try {
             if (empty($customer)) {
-                throw new Exception("Sorry, your email or password is wrong.");
+                throw new \Exception("Sorry, your email or password is wrong.");
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = [
                 'status' => 'failed',
                 'error' => [
@@ -103,33 +102,33 @@ class CustomerController extends Controller
 
         try {
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                throw new Exception("The format of email is invalid! Try again!");
+                throw new \Exception("The format of email is invalid! Try again!");
             }
 
             if (strlen($email) > 40) {
-                throw new Exception("The length of email should be less than 40!");
+                throw new \Exception("The length of email should be less than 40!");
             }
 
             if (!preg_match("/^[a-zA-Z0-9@_.-]*$/", $email)) {
-                throw new Exception("Available characters are: numbers, alphabets and @_.-");
+                throw new \Exception("Available characters are: numbers, alphabets and @_.-");
             }
 
             if ($passwordFirst != $passwordSecond) {
-                throw new Exception("Passwords do not match! Please try again!");
+                throw new \Exception("Passwords do not match! Please try again!");
             }
 
             if (strlen($passwordFirst) > 16) {
-                throw new Exception("The length of password should be less than 16!");
+                throw new \Exception("The length of password should be less than 16!");
             }
 
             if (!preg_match("/^[a-zA-Z0-9@_.-]*$/", $passwordFirst)) {
-                throw new Exception("Available characters: numbers, alphabets and @_.-!");
+                throw new \Exception("Available characters: numbers, alphabets and @_.-!");
             }
 
             if (!in_array($currency, $currencyArray)) {
-                throw new Exception("The currency you select is invalid! Please try again!");
+                throw new \Exception("The currency you select is invalid! Please try again!");
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = [
                 'status' => 'failed',
                 'error' => [
@@ -146,9 +145,9 @@ class CustomerController extends Controller
 
         try {
             if (!empty($customer)) {
-                throw new Exception("The email has been registered! Try another one!");
+                throw new \Exception("The email has been registered! Try another one!");
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = [
                 'status' => 'failed',
                 'error' => [

@@ -30,60 +30,62 @@ class PassbookController extends Controller
             return $this->redirectToRoute('login');
         }
 
-        $customerId = base64_decode($customerId);
-        $entityManager = $this->getDoctrine()->getManager();
-        $account = $entityManager->getRepository('ScottPassbookBundle:Account')
-            ->findOneBy(["customer" => $customerId]);
-
         try {
+            $customerId = base64_decode($customerId);
+            $entityManager = $this->getDoctrine()->getManager();
+            $account = $entityManager->getRepository('ScottPassbookBundle:Account')
+                ->findOneBy(["customer" => $customerId]);
+
             if (empty($account)) {
                 throw new \Exception("Something went wrong! Please login again!");
             }
-        } catch (\Exception $e) {
-            $result = [
-                'status' => 'failed',
-                'error' => [
-                    'message' => $e->getMessage(),
-                    'code' => $e->getCode(),
-                ]
-            ];
-            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
-        }
 
-        $accountId = $account->getId();
-        $pageLimit = 20;
+            $accountId = $account->getId();
+            $pageLimit = 20;
 
-        if ($page <= 0) {
-            $page = 1;
-        }
+            if ($page <= 0) {
+                $page = 1;
+            }
 
-        if ($page == 1) {
-            $offset = 0;
-        }
+            if ($page == 1) {
+                $offset = 0;
+            }
 
-        if ($page != 1) {
-            $offset = $pageLimit * ($page - 1);
-        }
+            if ($page != 1) {
+                $offset = $pageLimit * ($page - 1);
+            }
 
-        $record = $entityManager->getRepository('ScottPassbookBundle:Record')
-            ->getPages($accountId, $offset, $pageLimit);
+            $record = $entityManager->getRepository('ScottPassbookBundle:Record')
+                ->getPages($accountId, $offset, $pageLimit);
 
-        $total = $entityManager->getRepository('ScottPassbookBundle:Record')
-            ->getCount($accountId);
+            $total = $entityManager->getRepository('ScottPassbookBundle:Record')
+                ->getCount($accountId);
 
-        $totalPage = floor($total / $pageLimit);
-        if (($total % $pageLimit) > 0) {
-            $totalPage++;
-        }
+            $totalPage = floor($total / $pageLimit);
+            if (($total % $pageLimit) > 0) {
+                $totalPage++;
+            }
 
-        if ($total == 0) {
-            $totalPage =1;
-        }
+            if ($total == 0) {
+                $totalPage =1;
+            }
 
-        try {
             if ($page > $totalPage) {
                  throw new \Exception("Not a invalid page! Please try again!");
             }
+
+            $account = $account->toArray();
+            $result = [
+                'status' => 'successful',
+                'data' => [
+                    'account' => $account,
+                    'customerId' => base64_encode($customerId),
+                    'record' => $record,
+                    'totalPages' => $totalPage,
+                ],
+            ];
+            return $this->render('ScottPassbookBundle:Passbook:index.html.twig', ['result' => json_encode($result)]);
+
         } catch (\Exception $e) {
             $result = [
                 'status' => 'failed',
@@ -94,19 +96,6 @@ class PassbookController extends Controller
             ];
             return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
         }
-
-        $account = $account->toArray();
-        $result = [
-            'status' => 'successful',
-            'data' => [
-                'account' => $account,
-                'customerId' => base64_encode($customerId),
-                'record' => $record,
-                'totalPages' => $totalPage,
-            ],
-        ];
-
-        return $this->render('ScottPassbookBundle:Passbook:index.html.twig', ['result' => json_encode($result)]);
     }
 
     /**
@@ -142,49 +131,34 @@ class PassbookController extends Controller
             if (strlen($memo) > 50) {
                 throw new \Exception("The length of Memo should be less than 50!");
             }
-        } catch (\Exception $e) {
-            $result = [
-                'status' => 'failed',
-                'error' => [
-                    'message' => $e->getMessage(),
-                    'code' => $e->getCode(),
-                ]
-            ];
-            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
-        }
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $record = new Record();
-        $updateAccount = $entityManager->find('ScottPassbookBundle:Account', $accountId);
+            $entityManager = $this->getDoctrine()->getManager();
+            $record = new Record();
+            $updateAccount = $entityManager->find('ScottPassbookBundle:Account', $accountId);
 
-        try {
             if (empty($updateAccount)) {
                 throw new \Exception("Something went wrong! Please login again!");
             }
-        } catch (\Exception $e) {
-            $result = [
-                'status' => 'failed',
-                'error' => [
-                    'message' => $e->getMessage(),
-                    'code' => $e->getCode(),
-                ]
-            ];
-            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
-        }
 
-        $balance = $updateAccount->getBalance();
-        $record->setAccount($updateAccount);
-        $record->setBalance($balance);
-        $record->setCreateTime(new \DateTime());
-        $record->setMemo($memo);
+            $balance = $updateAccount->getBalance();
+            $record->setAccount($updateAccount);
+            $record->setBalance($balance);
+            $record->setCreateTime(new \DateTime());
+            $record->setMemo($memo);
 
-        $record->setAmount($amount);
-        $updateAccount->setBalance($balance + $amount);
+            $record->setAmount($amount);
+            $updateAccount->setBalance($balance + $amount);
 
-        try {
             if ($balance+$amount < 0) {
                 throw new \Exception("The number you are withdrawing is too big!");
             }
+
+            $entityManager->persist($record);
+            $entityManager->persist($updateAccount);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('index', ['customerId' => json_encode($customerId)]);
+
         } catch (\Exception $e) {
             $result = [
                 'status' => 'failed',
@@ -195,12 +169,6 @@ class PassbookController extends Controller
             ];
             return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
         }
-
-        $entityManager->persist($record);
-        $entityManager->persist($updateAccount);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('index', ['customerId' => json_encode($customerId)]);
     }
 
 }

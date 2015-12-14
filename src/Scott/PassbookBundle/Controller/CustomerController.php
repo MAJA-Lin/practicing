@@ -128,25 +128,44 @@ class CustomerController extends Controller
             if (!in_array($currency, $currencyArray)) {
                 throw new \Exception("The currency you select is invalid! Please try again!");
             }
-        } catch (\Exception $e) {
-            $result = [
-                'status' => 'failed',
-                'error' => [
-                    'message' => $e->getMessage(),
-                    'code' => $e->getCode(),
-                ]
-            ];
-            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
-        }
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $customer = $entityManager->getRepository("ScottPassbookBundle:Customer")
-            ->findOneBy(['email' => $email]);
+            $entityManager = $this->getDoctrine()->getManager();
+            $customer = $entityManager->getRepository("ScottPassbookBundle:Customer")
+                ->findOneBy(['email' => $email]);
 
-        try {
             if (!empty($customer)) {
                 throw new \Exception("The email has been registered! Try another one!");
             }
+
+            $customer = new Customer();
+            $account = new Account();
+
+            $customer->setEmail($email);
+            $customer->setPassword($passwordFirst);
+
+            $entityManager->persist($customer);
+            $entityManager->flush();
+
+            $account->setCurrency($currency);
+            $customer->setAccount($account);
+
+            $entityManager->persist($account);
+            $entityManager->persist($customer);
+            $entityManager->flush();
+
+            $customer = $customer->toArray();
+            $account = $account->toArray();
+
+            $result = [
+                'status' => "successful",
+                'data' => [
+                    'customer' => $customer,
+                    'account' => $account,
+                ]
+            ];
+
+            return $this->render('ScottPassbookBundle:Customer:signup.html.twig', ['result' => json_encode($result)]);
+
         } catch (\Exception $e) {
             $result = [
                 'status' => 'failed',
@@ -157,34 +176,6 @@ class CustomerController extends Controller
             ];
             return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
         }
-
-        $customer = new Customer();
-        $account = new Account();
-
-        $customer->setEmail($email);
-        $customer->setPassword($passwordFirst);
-
-        $entityManager->persist($customer);
-        $entityManager->flush();
-
-        $account->setCurrency($currency);
-        $customer->setAccount($account);
-
-        $entityManager->persist($account);
-        $entityManager->persist($customer);
-        $entityManager->flush();
-
-        $customer = $customer->toArray();
-        $account = $account->toArray();
-
-        $result = [
-            'status' => "successful",
-            'data' => [
-                'customer' => $customer,
-                'account' => $account,
-            ]
-        ];
-
-        return $this->render('ScottPassbookBundle:Customer:signup.html.twig', ['result' => json_encode($result)]);
     }
+
 }

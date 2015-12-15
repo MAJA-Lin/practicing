@@ -29,9 +29,8 @@ class CustomerController extends Controller
      */
     public function loginCheckAction(Request $request)
     {
-        $form = $request->request->get('form');
-        $email = $form['email'];
-        $password = $form['password'];
+        $email = $request->request->get('email');
+        $password = $request->request->get('password');
 
         $criteria = [
             'email' => $email,
@@ -45,6 +44,11 @@ class CustomerController extends Controller
             if (empty($customer)) {
                 throw new \Exception("Sorry, your email or password is wrong.");
             }
+
+            $result = [
+                'status' => 'successful',
+                'data' => ['customerId' => $customer->getId()]
+            ];
         } catch (\Exception $e) {
             $result = [
                 'status' => 'failed',
@@ -53,16 +57,8 @@ class CustomerController extends Controller
                     'code' => $e->getCode(),
                 ]
             ];
-            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
         }
-
-        $customerId = $customer->getId();
-        $request->attributes->set('customerId', $customerId);
-
-        return $this->redirectToRoute('index', [
-            'page' => json_encode(1),
-            'customerId' => json_encode(base64_encode($customerId)),
-        ]);
+        return new Response(json_encode($result));
     }
 
     /**

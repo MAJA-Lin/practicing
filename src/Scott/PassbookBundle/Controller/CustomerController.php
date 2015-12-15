@@ -52,16 +52,6 @@ class CustomerController extends Controller
     }
 
     /**
-     * @Route("/signup", name="signup")
-     *
-     * @Method("GET")
-     */
-    public function signupAction(Request $request)
-    {
-        return $this->render('ScottPassbookBundle:Customer:signup_form.html.twig');
-    }
-
-    /**
      * @Route("/signup/check", name="signup_check")
      *
      * @Method("POST")

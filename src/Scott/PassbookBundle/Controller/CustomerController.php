@@ -70,11 +70,10 @@ class CustomerController extends Controller
     {
         $currencyArray = ["NTD", "USD", "JPY", "EUR"];
 
-        $form = $request->request->get('form');
-        $email = $form['email'];
-        $passwordFirst = $form['password']['first'];
-        $passwordSecond = $form['password']['second'];
-        $currency = $form['currency'];
+        $email = $request->request->get('email');
+        $passwordFirst = $request->request->get('passwordFirst');
+        $passwordSecond =$request->request->get('passwordSecond');
+        $currency = $request->request->get('currency');
 
         try {
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -139,9 +138,6 @@ class CustomerController extends Controller
                     'account' => $account,
                 ]
             ];
-
-            return $this->render('ScottPassbookBundle:Customer:signup.html.twig', ['result' => json_encode($result)]);
-
         } catch (\Exception $e) {
             $result = [
                 'status' => 'failed',
@@ -150,8 +146,9 @@ class CustomerController extends Controller
                     'code' => $e->getCode(),
                 ]
             ];
-            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
         }
+
+        return new Response(json_encode($result));
     }
 
 }

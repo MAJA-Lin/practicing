@@ -26,11 +26,11 @@ class PassbookController extends Controller
         $page = json_decode($request->attributes->get('page'));
         $request->attributes->set('customerId', $customerId);
 
-        if (empty($customerId) || is_null($customerId)) {
-            return $this->redirectToRoute('login');
-        }
-
         try {
+            if (empty($customerId) || is_null($customerId)) {
+                throw new \Exception("Something went wrong! Please login again!");
+            }
+
             $customerId = base64_decode($customerId);
             $entityManager = $this->getDoctrine()->getManager();
             $account = $entityManager->getRepository('ScottPassbookBundle:Account')

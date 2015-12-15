@@ -4,7 +4,7 @@
     {% set var = result | json_decode_array %}
     {% if var.error.message == "Something went wrong! Please login again!" %}
         <script>alert('{{ var.error.message }}');
-            window.location.href="{{ path('logout') }}";</script>
+            window.location.href=history.back();</script>
     {% endif %}
 
     <script>alert('{{ var.error.message }}');

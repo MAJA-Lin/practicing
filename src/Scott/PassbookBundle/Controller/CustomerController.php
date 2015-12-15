@@ -13,16 +13,6 @@ use Scott\PassbookBundle\Entity\Customer;
 class CustomerController extends Controller
 {
     /**
-     * @Route("/login", name="login")
-     *
-     * @Method("GET")
-     */
-    public function loginAction(Request $request)
-    {
-        return $this->render('ScottPassbookBundle:Customer:login_form.html.twig');
-    }
-
-    /**
      * @Route("/login/check", name="login_check")
      *
      * @Method("POST")
@@ -59,16 +49,6 @@ class CustomerController extends Controller
             ];
         }
         return new Response(json_encode($result));
-    }
-
-    /**
-     * @Route("/logout", name="logout")
-     *
-     * @Method("GET")
-     */
-    public function logoutAction(Request $request)
-    {
-        return $this->redirectToRoute('login');
     }
 
     /**

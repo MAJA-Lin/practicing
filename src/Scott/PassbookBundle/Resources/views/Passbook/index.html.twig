@@ -44,7 +44,7 @@
 
     <div name="page">
         {% for i in 1..var.data.totalPages %}
-            <a href="{{ path('index', {'page': i, 'customerId': var.data.customerId | json_encode}) }}">
+            <a href="/account/{{ var.data.account.id }}/record?page={{i}}&customerId={{var.data.customerId}}">
                 Page {{ i }}
             </a>
         {% endfor %}

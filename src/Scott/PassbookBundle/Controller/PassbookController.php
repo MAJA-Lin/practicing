@@ -13,34 +13,28 @@ use Scott\PassbookBundle\Entity\Record;
 class PassbookController extends Controller
 {
     /**
-     * @Route("/index/{page}",
-     *      name="index",
-     *      defaults={"page": 1},
-     *      requirements={"page": "\d+"})
+     * @Route("/account/{accountId}/record",
+     *      name="record_list",
+     *      requirements={"accountId": "\d+"})
+     *
+     * @param int $accountId
      *
      * @Method("GET")
      */
-    public function indexAction(Request $request)
+    public function recordListAction(Request $request, $accountId)
     {
-        $customerId = json_decode($request->query->get('customerId'));
-        $page = json_decode($request->attributes->get('page'));
-        $request->attributes->set('customerId', $customerId);
+        $customerId = $request->query->get('customerId');
+        $page = $request->query->get('page');
 
         try {
-            if (empty($customerId) || is_null($customerId)) {
-                throw new \Exception("Something went wrong! Please login again!");
-            }
-
-            $customerId = base64_decode($customerId);
             $entityManager = $this->getDoctrine()->getManager();
             $account = $entityManager->getRepository('ScottPassbookBundle:Account')
                 ->findOneBy(["customer" => $customerId]);
 
             if (empty($account)) {
-                throw new \Exception("Something went wrong! Please login again!");
+                throw new \Exception("The account is invalid. Please try again!");
             }
 
-            $accountId = $account->getId();
             $pageLimit = 20;
 
             if ($page <= 0) {
@@ -79,7 +73,7 @@ class PassbookController extends Controller
                 'status' => 'successful',
                 'data' => [
                     'account' => $account,
-                    'customerId' => base64_encode($customerId),
+                    'customerId' => $customerId,
                     'record' => $record,
                     'totalPages' => $totalPage,
                 ],
@@ -137,7 +131,7 @@ class PassbookController extends Controller
             $updateAccount = $entityManager->find('ScottPassbookBundle:Account', $accountId);
 
             if (empty($updateAccount)) {
-                throw new \Exception("Something went wrong! Please login again!");
+                throw new \Exception("The account is invalid. Please try again!");
             }
 
             $balance = $updateAccount->getBalance();
@@ -157,7 +151,7 @@ class PassbookController extends Controller
             $entityManager->persist($updateAccount);
             $entityManager->flush();
 
-            return $this->redirectToRoute('index', ['customerId' => json_encode($customerId)]);
+            return $this->redirect('/account/' . $accountId . '/record?customerId=' . $customerId);
 
         } catch (\Exception $e) {
             $result = [

@@ -347,6 +347,228 @@ class PassbookControllerTest extends WebTestCase
         $this->assertEquals($expectedError, $response['error']);
     }
 
+    public function testRecordAddByValidData()
+    {
+        $validAccountId = 4;
+        $validData = [
+            'amount' => 81000,
+            'memo' => 'First Bill'
+        ];
+
+        $this->client->request('POST', '/account/'. $validAccountId .'/record', $validData);
+        $expectedTime = new \DateTime();
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+
+        $expectedStatus = "successful";
+        $expectedAccount = [
+            'id' => 4,
+            'customerId' => 4,
+            'currency' => 'JPY',
+            'balance' => 81000
+        ];
+        $expectedRecord = [
+            'id' => 6,
+            'accountId' => 4,
+            'create_time' => get_object_vars($expectedTime),
+            'balance' => 0,
+            'amount' => 81000,
+            'memo' => 'First Bill'
+        ];
+
+        $this->assertEquals($expectedStatus, $response['status']);
+        $this->assertEquals($expectedAccount, $response['data']['account']);
+        $this->assertEquals($expectedRecord, $response['data']['record']);
+    }
+
+    public function testRecordAddByInvalidAmountLength()
+    {
+        $validAccountId = 4;
+        $invalidData = [
+            'amount' => 160049006894200.42,
+            'memo' => 'Save'
+        ];
+
+        $this->client->request('POST', '/account/'. $validAccountId .'/record', $invalidData);
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+
+        $expectedStatus = "failed";
+        $expectedError = [
+            'message' => 'Length of amount must be less than 12! Try again!',
+            'code' => 0
+        ];
+
+        $this->assertEquals($expectedStatus, $response['status']);
+        $this->assertEquals($expectedError, $response['error']);
+    }
+
+    public function testRecordAddByInvalidAmountFormat()
+    {
+        $validAccountId = 4;
+        $invalidData = [
+            'amount' => 3.14159,
+            'memo' => 'pi'
+        ];
+
+        $this->client->request('POST', '/account/'. $validAccountId .'/record', $invalidData);
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+
+        $expectedStatus = "failed";
+        $expectedError = [
+            'message' => 'The amount must be a float and digits after decimal point must be less than 2!',
+            'code' => 0
+        ];
+
+        $this->assertEquals($expectedStatus, $response['status']);
+        $this->assertEquals($expectedError, $response['error']);
+    }
+
+    public function testRecordAddByInvalidCharacterAmount()
+    {
+        $validAccountId = 4;
+        $invalidData = [
+            'amount' => 'No money',
+            'memo' => 'pi'
+        ];
+
+        $this->client->request('POST', '/account/'. $validAccountId .'/record', $invalidData);
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+
+        $expectedStatus = "failed";
+        $expectedError = [
+            'message' => 'The amount must be a float and digits after decimal point must be less than 2!',
+            'code' => 0
+        ];
+
+        $this->assertEquals($expectedStatus, $response['status']);
+        $this->assertEquals($expectedError, $response['error']);
+    }
+
+    public function testRecordAddByInvalidNullAmount()
+    {
+        $validAccountId = 4;
+        $invalidData = [
+            'amount' => null,
+            'memo' => 'test'
+        ];
+
+        $this->client->request('POST', '/account/'. $validAccountId .'/record', $invalidData);
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+
+        $expectedStatus = "failed";
+        $expectedError = [
+            'message' => 'The amount must be a float and digits after decimal point must be less than 2!',
+            'code' => 0
+        ];
+
+        $this->assertEquals($expectedStatus, $response['status']);
+        $this->assertEquals($expectedError, $response['error']);
+    }
+
+    public function testRecordAddByInvalidEmptyAmount()
+    {
+        $validAccountId = 4;
+        $invalidData = [
+            'amount' => '',
+            'memo' => 'test'
+        ];
+
+        $this->client->request('POST', '/account/'. $validAccountId .'/record', $invalidData);
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+
+        $expectedStatus = "failed";
+        $expectedError = [
+            'message' => 'The amount must be a float and digits after decimal point must be less than 2!',
+            'code' => 0
+        ];
+
+        $this->assertEquals($expectedStatus, $response['status']);
+        $this->assertEquals($expectedError, $response['error']);
+    }
+
+    public function testRecordAddByInvalidZeroAmount()
+    {
+        $validAccountId = 4;
+        $invalidData = [
+            'amount' => '0.0',
+            'memo' => 'test'
+        ];
+
+        $this->client->request('POST', '/account/'. $validAccountId .'/record', $invalidData);
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+
+        $expectedStatus = "failed";
+        $expectedError = [
+            'message' => 'One does not simply save or withdraw 0 dollar.',
+            'code' => 0
+        ];
+
+        $this->assertEquals($expectedStatus, $response['status']);
+        $this->assertEquals($expectedError, $response['error']);
+    }
+
+    public function testRecordAddByInvalidMemoLength()
+    {
+        $validAccountId = 4;
+        $invalidData = [
+            'amount' => '500',
+            'memo' => '臣亮言：先帝創業未半，而中道崩殂。今天下三分，益州 疲弊，此誠危急存亡之秋也。'
+        ];
+
+        $this->client->request('POST', '/account/'. $validAccountId .'/record', $invalidData);
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+
+        $expectedStatus = "failed";
+        $expectedError = [
+            'message' => 'The length of Memo should be less than 50!',
+            'code' => 0
+        ];
+
+        $this->assertEquals($expectedStatus, $response['status']);
+        $this->assertEquals($expectedError, $response['error']);
+    }
+
+    public function testRecordAddByInvalidAccountId()
+    {
+        $invalidAccountId = 40;
+        $validData = [
+            'amount' => -1600,
+            'memo' => 'Withdrawing'
+        ];
+
+        $this->client->request('POST', '/account/'. $invalidAccountId .'/record', $validData);
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+
+        $expectedStatus = "failed";
+        $expectedError = [
+            'message' => 'The account is invalid. Please try again!',
+            'code' => 0
+        ];
+
+        $this->assertEquals($expectedStatus, $response['status']);
+        $this->assertEquals($expectedError, $response['error']);
+    }
+
+    public function testRecordAddByInvalidWithdrawing()
+    {
+        $validAccountId = 4;
+        $invalidData = [
+            'amount' => -1600000,
+            'memo' => 'Withdrawing'
+        ];
+
+        $this->client->request('POST', '/account/'. $validAccountId .'/record', $invalidData);
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+
+        $expectedStatus = "failed";
+        $expectedError = [
+            'message' => 'The number you are withdrawing is too big!',
+            'code' => 0
+        ];
+
+        $this->assertEquals($expectedStatus, $response['status']);
+        $this->assertEquals($expectedError, $response['error']);
+    }
+
     /**
      * {@inheritDoc}
      */

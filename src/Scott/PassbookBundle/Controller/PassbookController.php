@@ -155,12 +155,15 @@ class PassbookController extends Controller
             $entityManager->persist($updateAccount);
             $entityManager->flush();
 
+            $record = $record->toArray();
+            $updateAccount = $updateAccount->toArray();
             $result = [
-                'accountId' => $accountId,
-                'record' => $record,
+                'status' => 'successful',
+                'data' => [
+                    'account' => $updateAccount,
+                    'record' => $record,
+                ]
             ];
-
-            return new Response($result);
 
         } catch (\Exception $e) {
             $result = [
@@ -170,8 +173,8 @@ class PassbookController extends Controller
                     'code' => $e->getCode(),
                 ]
             ];
-            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
         }
+        return new Response(json_encode($result));
     }
 
 }

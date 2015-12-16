@@ -118,10 +118,6 @@ class PassbookController extends Controller
                 throw new \Exception("The amount must be a float and digits after decimal point must be less than 2!");
             }
 
-            if (empty($amount)) {
-                throw new \Exception("The amount should not be empty or 0 !");
-            }
-
             if ($amount == 0) {
                 throw new \Exception("One does not simply save or withdraw 0 dollar.");
             }

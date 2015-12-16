@@ -24,6 +24,7 @@ class PassbookController extends Controller
     public function recordListAction(Request $request, $accountId)
     {
         $page = $request->query->get('page');
+        $pageLimit = $request->query->get('pageLimit');
 
         try {
             $entityManager = $this->getDoctrine()->getManager();
@@ -33,7 +34,13 @@ class PassbookController extends Controller
                 throw new \Exception("The account is invalid. Please try again!");
             }
 
-            $pageLimit = 20;
+            if (!preg_match('/^[0-9]*[1-9][0-9]*$/', $pageLimit)) {
+                throw new \Exception("The page limit should be an integer!");
+            }
+
+            if ($pageLimit > 100) {
+                throw new \Exception("The page limit should be less than 100. Try again!");
+            }
 
             if ($page <= 0) {
                 $page = 1;

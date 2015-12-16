@@ -96,32 +96,33 @@ class PassbookController extends Controller
     }
 
     /**
-     * @Route("/reocrd/add", name="record_add")
+     * @Route("/account/{accountId}/record",
+     *      name="record_add",
+     *      requirements={"accountId": "\d+"})
+     *
+     * @param int $accountId
      *
      * @Method("POST")
      */
-    public function recordAddAction(Request $request)
+    public function recordAddAction(Request $request, $accountId)
     {
-        $form = $request->request->get('form');
-        $amount = (float) $form['amount'];
-        $memo = $form['memo'];
-        $accountId = $form['account_id'];
-        $customerId = $form['customerId'];
+        $amount = $request->request->get('amount');
+        $memo = $request->request->get('memo');
 
         try {
-            if (strlen($form['amount']) > 12) {
+            if (strlen($amount) > 12) {
                 throw new \Exception("Length of amount must be less than 12! Try again!");
             }
 
-            if (!preg_match("/^[-+]?\d*\.?\d{1,2}?$/", $form['amount'])) {
+            if (!preg_match("/^[-+]?\d*\.?\d{1,2}?$/", $amount)) {
                 throw new \Exception("The amount must be a float and digits after decimal point must be less than 2!");
             }
 
-            if (empty($form['amount'])) {
+            if (empty($amount)) {
                 throw new \Exception("The amount should not be empty or 0 !");
             }
 
-            if ($form['amount'] == 0) {
+            if ($amount == 0) {
                 throw new \Exception("One does not simply save or withdraw 0 dollar.");
             }
 

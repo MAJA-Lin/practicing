@@ -23,13 +23,11 @@ class PassbookController extends Controller
      */
     public function recordListAction(Request $request, $accountId)
     {
-        $customerId = $request->query->get('customerId');
         $page = $request->query->get('page');
 
         try {
             $entityManager = $this->getDoctrine()->getManager();
-            $account = $entityManager->getRepository('ScottPassbookBundle:Account')
-                ->findOneBy(["customer" => $customerId]);
+            $account = $entityManager->find('ScottPassbookBundle:Account', $accountId);
 
             if (empty($account)) {
                 throw new \Exception("The account is invalid. Please try again!");
@@ -73,13 +71,10 @@ class PassbookController extends Controller
                 'status' => 'successful',
                 'data' => [
                     'account' => $account,
-                    'customerId' => $customerId,
                     'record' => $record,
                     'totalPages' => $totalPage,
                 ],
             ];
-            return $this->render('ScottPassbookBundle:Passbook:index.html.twig', ['result' => json_encode($result)]);
-
         } catch (\Exception $e) {
             $result = [
                 'status' => 'failed',
@@ -88,8 +83,9 @@ class PassbookController extends Controller
                     'code' => $e->getCode(),
                 ]
             ];
-            return $this->render('ScottPassbookBundle:Default:error.html.twig', ['result' => json_encode($result)]);
         }
+
+        return new Response(json_encode($result));
     }
 
     /**
@@ -151,7 +147,12 @@ class PassbookController extends Controller
             $entityManager->persist($updateAccount);
             $entityManager->flush();
 
-            return $this->redirect('/account/' . $accountId . '/record?customerId=' . $customerId);
+            $result = [
+                'accountId' => $accountId,
+                'record' => $record,
+            ];
+
+            return new Response($result);
 
         } catch (\Exception $e) {
             $result = [

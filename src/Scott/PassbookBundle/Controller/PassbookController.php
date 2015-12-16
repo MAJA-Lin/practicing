@@ -59,7 +59,7 @@ class PassbookController extends Controller
             }
 
             if ($total == 0) {
-                $totalPage =1;
+                $totalPage = 1;
             }
 
             if ($page > $totalPage) {

@@ -4,7 +4,6 @@ namespace Scott\PassbookBundle\Tests\Entity;
 
 use Scott\PassbookBundle\Entity\Customer;
 use Scott\PassbookBundle\Entity\Account;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CustomerTest extends WebTestCase

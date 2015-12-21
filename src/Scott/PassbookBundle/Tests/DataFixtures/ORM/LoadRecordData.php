@@ -1,71 +1,75 @@
 <?php
 namespace Scott\PassbookBundle\Tests\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Scott\PassbookBundle\Entity\Record;
 
-class LoadRecordData extends AbstractFixture implements OrderedFixtureInterface
+class LoadRecordData extends AbstractFixture implements DependentFixtureInterface
 {
-
     public function load(ObjectManager $manager)
     {
-        $account = $manager->getRepository('ScottPassbookBundle:Account')->findALL();
-        $date = new \DateTime('2015-12-05');
-        $date->setTime(12, 30, 30);
+        $date = new \DateTime('2015-12-05 12:30:30');
 
-        $record[0] = new Record();
-        $record[0]->setAmount(5000);
-        $record[0]->setMemo("Transaction #1");
-        $record[0]->setCreateTime($date);
-        $record[0]->setAccount($account[0]);
-        $record[0]->setBalance($account[0]->getBalance());
-        $account[0]->setBalance($account[0]->getBalance() + $record[0]->getAmount());
+        $account1 = $manager->find('ScottPassbookBundle:Account', 1);
+        $account2 = $manager->find('ScottPassbookBundle:Account', 2);
 
-        $record[1] = new Record();
-        $record[1]->setAmount(12000);
-        $record[1]->setMemo("Transaction #2");
-        $record[1]->setCreateTime($date);
-        $record[1]->setAccount($account[0]);
-        $record[1]->setBalance($account[0]->getBalance());
-        $account[0]->setBalance($account[0]->getBalance() + $record[1]->getAmount());
+        $record = new Record();
+        $record->setAmount(5000);
+        $record->setMemo("Transaction #1");
+        $record->setCreateTime($date);
+        $record->setAccount($account1);
+        $record->setBalance($account1->getBalance());
+        $account1->setBalance($account1->getBalance() + $record->getAmount());
+        $manager->persist($record);
+        $manager->persist($account1);
 
-        $record[2] = new Record();
-        $record[2]->setAmount(12000);
-        $record[2]->setMemo("Transaction #3");
-        $record[2]->setCreateTime($date);
-        $record[2]->setAccount($account[0]);
-        $record[2]->setBalance($account[0]->getBalance());
-        $account[0]->setBalance($account[0]->getBalance() + $record[2]->getAmount());
+        $record = new Record();
+        $record->setAmount(12000);
+        $record->setMemo("Transaction #2");
+        $record->setCreateTime($date);
+        $record->setAccount($account1);
+        $record->setBalance($account1->getBalance());
+        $account1->setBalance($account1->getBalance() + $record->getAmount());
+        $manager->persist($record);
+        $manager->persist($account1);
 
-        $record[3] = new Record();
-        $record[3]->setAmount(7000);
-        $record[3]->setMemo("What Bank?");
-        $record[3]->setCreateTime($date);
-        $record[3]->setAccount($account[1]);
-        $record[3]->setBalance($account[1]->getBalance());
-        $account[1]->setBalance($account[1]->getBalance() + $record[3]->getAmount());
+        $record = new Record();
+        $record->setAmount(12000);
+        $record->setMemo("Transaction #3");
+        $record->setCreateTime($date);
+        $record->setAccount($account1);
+        $record->setBalance($account1->getBalance());
+        $account1->setBalance($account1->getBalance() + $record->getAmount());
+        $manager->persist($record);
+        $manager->persist($account1);
 
-        $record[4] = new Record();
-        $record[4]->setAmount(-2000);
-        $record[4]->setMemo("Withdraw");
-        $record[4]->setCreateTime($date);
-        $record[4]->setAccount($account[1]);
-        $record[4]->setBalance($account[1]->getBalance());
-        $account[1]->setBalance($account[1]->getBalance() + $record[4]->getAmount());
+        $record = new Record();
+        $record->setAmount(7000);
+        $record->setMemo("What Bank?");
+        $record->setCreateTime($date);
+        $record->setAccount($account2);
+        $record->setBalance($account2->getBalance());
+        $account2->setBalance($account2->getBalance() + $record->getAmount());
+        $manager->persist($record);
+        $manager->persist($account2);
 
-        for ($i=0; $i < 5; $i++) {
-            $manager->persist($record[$i]);
-            $manager->persist($account[$i]);
-            $this->addReference("record$i", $record[$i]);
-        }
+        $record = new Record();
+        $record->setAmount(-2000);
+        $record->setMemo("Withdraw");
+        $record->setCreateTime($date);
+        $record->setAccount($account2);
+        $record->setBalance($account2->getBalance());
+        $account2->setBalance($account2->getBalance() + $record->getAmount());
+        $manager->persist($record);
+        $manager->persist($account2);
 
         $manager->flush();
     }
 
-    public function getOrder()
+    public function getDependencies()
     {
-        return 3;
+        return ['Scott\PassbookBundle\Tests\DataFixtures\ORM\LoadAccountData'];
     }
 }

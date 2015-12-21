@@ -63,6 +63,20 @@ class Record
     private $memo;
 
     /**
+     * @param Account $account
+     * @param \DateTime $create_time
+     * @param float $balance
+     * @param float $amount
+     */
+    public function __construct(Account $account, \DateTime $create_time, $balance, $amount)
+    {
+        $this->account = $account;
+        $this->create_time = $create_time;
+        $this->balance = $balance;
+        $this->amount = $amount;
+    }
+
+    /**
      * Get id
      *
      * @return integer
@@ -70,20 +84,6 @@ class Record
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set account
-     *
-     * @param Account $account
-     *
-     * @return Record
-     */
-    public function setAccount($account)
-    {
-        $this->account = $account;
-
-        return $this;
     }
 
     /**
@@ -97,20 +97,6 @@ class Record
     }
 
     /**
-     * Set create_time
-     *
-     * @param \DateTime $create_time
-     *
-     * @return Record
-     */
-    public function setCreateTime($create_time)
-    {
-        $this->create_time = $create_time;
-
-        return $this;
-    }
-
-    /**
      * Get create_time
      *
      * @return \DateTime
@@ -121,20 +107,6 @@ class Record
     }
 
     /**
-     * Set balance
-     *
-     * @param float $balance
-     *
-     * @return Record
-     */
-    public function setBalance($balance)
-    {
-        $this->balance = $balance;
-
-        return $this;
-    }
-
-    /**
      * Get balance
      *
      * @return float
@@ -142,20 +114,6 @@ class Record
     public function getBalance()
     {
         return $this->balance;
-    }
-
-    /**
-     * Set amount
-     *
-     * @param float $amount
-     *
-     * @return Record
-     */
-    public function setAmount($amount)
-    {
-        $this->amount = $amount;
-
-        return $this;
     }
 
     /**

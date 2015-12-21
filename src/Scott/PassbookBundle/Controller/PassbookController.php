@@ -127,7 +127,6 @@ class PassbookController extends Controller
             }
 
             $entityManager = $this->getDoctrine()->getManager();
-            $record = new Record();
             $updateAccount = $entityManager->find('ScottPassbookBundle:Account', $accountId);
 
             if (empty($updateAccount)) {
@@ -135,12 +134,9 @@ class PassbookController extends Controller
             }
 
             $balance = $updateAccount->getBalance();
-            $record->setAccount($updateAccount);
-            $record->setBalance($balance);
-            $record->setCreateTime(new \DateTime());
+            $record = new Record($updateAccount,new \DateTime(), $balance, $amount);
             $record->setMemo($memo);
 
-            $record->setAmount($amount);
             $updateAccount->setBalance($balance + $amount);
 
             if ($balance+$amount < 0) {

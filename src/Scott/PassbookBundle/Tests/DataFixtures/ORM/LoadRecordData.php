@@ -15,52 +15,32 @@ class LoadRecordData extends AbstractFixture implements DependentFixtureInterfac
         $account1 = $manager->find('ScottPassbookBundle:Account', 1);
         $account2 = $manager->find('ScottPassbookBundle:Account', 2);
 
-        $record = new Record();
-        $record->setAmount(5000);
+        $record = new Record($account1, $date, $account1->getBalance(), 5000);
         $record->setMemo("Transaction #1");
-        $record->setCreateTime($date);
-        $record->setAccount($account1);
-        $record->setBalance($account1->getBalance());
         $account1->setBalance($account1->getBalance() + $record->getAmount());
         $manager->persist($record);
         $manager->persist($account1);
 
-        $record = new Record();
-        $record->setAmount(12000);
+        $record = new Record($account1, $date, $account1->getBalance(), 12000);
         $record->setMemo("Transaction #2");
-        $record->setCreateTime($date);
-        $record->setAccount($account1);
-        $record->setBalance($account1->getBalance());
         $account1->setBalance($account1->getBalance() + $record->getAmount());
         $manager->persist($record);
         $manager->persist($account1);
 
-        $record = new Record();
-        $record->setAmount(12000);
+        $record = new Record($account1, $date, $account1->getBalance(), 12000);
         $record->setMemo("Transaction #3");
-        $record->setCreateTime($date);
-        $record->setAccount($account1);
-        $record->setBalance($account1->getBalance());
         $account1->setBalance($account1->getBalance() + $record->getAmount());
         $manager->persist($record);
         $manager->persist($account1);
 
-        $record = new Record();
-        $record->setAmount(7000);
+        $record = new Record($account2, $date, $account2->getBalance(), 7000);
         $record->setMemo("What Bank?");
-        $record->setCreateTime($date);
-        $record->setAccount($account2);
-        $record->setBalance($account2->getBalance());
         $account2->setBalance($account2->getBalance() + $record->getAmount());
         $manager->persist($record);
         $manager->persist($account2);
 
-        $record = new Record();
-        $record->setAmount(-2000);
+        $record = new Record($account2, $date, $account2->getBalance(), -2000);
         $record->setMemo("Withdraw");
-        $record->setCreateTime($date);
-        $record->setAccount($account2);
-        $record->setBalance($account2->getBalance());
         $account2->setBalance($account2->getBalance() + $record->getAmount());
         $manager->persist($record);
         $manager->persist($account2);

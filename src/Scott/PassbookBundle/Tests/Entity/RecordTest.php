@@ -10,47 +10,54 @@ class RecordTest extends WebTestCase
 {
     public function testGetId()
     {
-        $record = new Record();
+        $account = new Account();
+        $time = new \DateTime();
+        $record = new Record($account, $time, 12345, 8000);
+
         $this->assertEquals(null, $record->getId());
     }
 
-    public function testAccount()
+    public function testConstructor()
     {
-        $record = new Record();
         $account = new Account();
+        $time = new \DateTime();
+        $record = new Record($account, $time, 12345, 8000);
 
-        $record->setAccount($account);
         $this->assertEquals($account, $record->getAccount());
     }
 
     public function testCreateTime()
     {
-        $record = new Record();
+        $account = new Account();
         $time = new \DateTime();
+        $record = new Record($account, $time, 12345, 8000);
 
-        $record->setCreateTime($time);
         $this->assertEquals($time, $record->getCreateTime());
     }
 
     public function testBalance()
     {
-        $record = new Record();
+        $account = new Account();
+        $time = new \DateTime();
+        $record = new Record($account, $time, 12345, 8000);
 
-        $record->setBalance("12345");
         $this->assertEquals('12345', $record->getBalance());
     }
 
     public function testAmount()
     {
-        $record = new Record();
+        $account = new Account();
+        $time = new \DateTime();
+        $record = new Record($account, $time, 12345, 81000);
 
-        $record->setAmount("81000");
         $this->assertEquals("81000", $record->getAmount());
     }
 
     public function testMemo()
     {
-        $record = new Record();
+        $account = new Account();
+        $time = new \DateTime();
+        $record = new Record($account, $time, 12345, 8000);
 
         $record->setMemo("What ever you want");
         $this->assertEquals("What ever you want", $record->getMemo());
@@ -58,8 +65,7 @@ class RecordTest extends WebTestCase
 
     public function testToArray()
     {
-        $time = new \DateTime('2015-12-05');
-        $time->setTime(12, 30, 30);
+        $time = new \DateTime('2015-12-05 12:30:30');
 
         $expectedResult = [
             'id' => null,
@@ -70,13 +76,9 @@ class RecordTest extends WebTestCase
             'memo' => "Save money",
         ];
 
-        $record = new Record();
         $account = new Account();
+        $record = new Record($account, $time, 25000, 6000);
 
-        $record->setAccount($account);
-        $record->setCreateTime($time);
-        $record->setBalance("25000");
-        $record->setAmount("6000");
         $record->setMemo("Save money");
         $result = $record->toArray();
 

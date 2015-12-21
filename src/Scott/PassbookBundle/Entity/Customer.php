@@ -33,16 +33,16 @@ class Customer
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=16)
+     * @ORM\Column(name="email", type="string", length=40, unique=true)
      */
-    private $password;
+    private $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=40, unique=true)
+     * @ORM\Column(name="password", type="string", length=16)
      */
-    private $email;
+    private $password;
 
     /**
      * Get id
@@ -77,30 +77,6 @@ class Customer
     }
 
     /**
-     * Set password
-     *
-     * @param string $password
-     *
-     * @return Customer
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Get password
-     *
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
      * Set email
      *
      * @param string $email
@@ -122,6 +98,30 @@ class Customer
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     *
+     * @return Customer
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Get password
+     *
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
     }
 
     /**

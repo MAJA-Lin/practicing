@@ -19,9 +19,9 @@ class CustomerControllerTest extends WebTestCase
         $this->client = static::makeClient();
 
         $this->loadFixtures([
-            'Scott\PassbookBundle\DataFixtures\ORM\LoadCustomerData',
-            'Scott\PassbookBundle\DataFixtures\ORM\LoadAccountData',
-            'Scott\PassbookBundle\DataFixtures\ORM\LoadRecordData'
+            'Scott\PassbookBundle\Tests\DataFixtures\ORM\LoadCustomerData',
+            'Scott\PassbookBundle\Tests\DataFixtures\ORM\LoadAccountData',
+            'Scott\PassbookBundle\Tests\DataFixtures\ORM\LoadRecordData'
         ]);
     }
 

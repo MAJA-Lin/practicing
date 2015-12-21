@@ -1,5 +1,5 @@
 <?php
-namespace Scott\PassbookBundle\DataFixtures\ORM;
+namespace Scott\PassbookBundle\Tests\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;

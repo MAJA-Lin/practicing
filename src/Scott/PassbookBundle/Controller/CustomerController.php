@@ -102,12 +102,8 @@ class CustomerController extends Controller
                 throw new \Exception("The email has been registered! Try another one!");
             }
 
-            $customer = new Customer();
             $account = new Account();
-
-            $customer->setEmail($email);
-            $customer->setPassword($passwordFirst);
-
+            $customer = new Customer($email, $passwordFirst);
             $entityManager->persist($customer);
             $entityManager->flush();
 
@@ -115,7 +111,6 @@ class CustomerController extends Controller
             $customer->setAccount($account);
 
             $entityManager->persist($account);
-            $entityManager->persist($customer);
             $entityManager->flush();
 
             $customer = $customer->toArray();

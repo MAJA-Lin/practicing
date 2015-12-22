@@ -10,14 +10,14 @@ class CustomerTest extends WebTestCase
 {
     public function testGetId()
     {
-        $customer = new Customer();
+        $customer = new Customer('user5566', 'qq1234');
         $this->assertEquals(null, $customer->getId());
     }
 
     public function testAccount()
     {
-        $customer = new Customer();
         $account = new Account();
+        $customer = new Customer('user5566', 'qq1234');
 
         $customer->setAccount($account);
         $this->assertEquals($account, $customer->getAccount());
@@ -25,7 +25,8 @@ class CustomerTest extends WebTestCase
 
     public function testPassword()
     {
-        $customer = new Customer();
+        $customer = new Customer('user5566', 'qq1234');
+        $this->assertEquals('qq1234', $customer->getPassword());
 
         $customer->setPassword("Test12345");
         $this->assertEquals('Test12345', $customer->getPassword());
@@ -33,9 +34,8 @@ class CustomerTest extends WebTestCase
 
     public function testEmail()
     {
-        $customer = new Customer();
+        $customer = new Customer('LOL@omg.com', 'wow');
 
-        $customer->setEmail("LOL@omg.com");
         $this->assertEquals('LOL@omg.com', $customer->getEmail());
     }
 
@@ -48,12 +48,9 @@ class CustomerTest extends WebTestCase
             'password' => "2000QQ2000"
         ];
 
-        $customer = new Customer();
+        $customer = new Customer("NTD@test.org", "2000QQ2000");
         $account = new Account();
-
         $customer->setAccount($account);
-        $customer->setEmail("NTD@test.org");
-        $customer->setPassword("2000QQ2000");
         $result = $customer->toArray();
 
         $this->assertEquals($expectedResult, $result, "toArray failed!");

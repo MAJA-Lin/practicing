@@ -17,7 +17,7 @@ class AccountTest extends WebTestCase
     public function testCustomer()
     {
         $account = new Account();
-        $customer = new Customer();
+        $customer = new Customer('hohoho@christmas.en', 'jinglebell');
 
         $account->addCustomer($customer);
         $this->assertEquals($customer, $account->getCustomer());
@@ -50,9 +50,8 @@ class AccountTest extends WebTestCase
             'balance' => "2000"
         ];
 
-        $account = new Account();
-        $customer = new Customer();
-
+	$account = new Account();
+        $customer = new Customer('hohoho@christmas.en', 'jinglebell');
         $account->addCustomer($customer);
         $account->setCurrency("NTD");
         $account->setBalance("2000");

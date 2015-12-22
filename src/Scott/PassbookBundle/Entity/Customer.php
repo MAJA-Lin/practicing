@@ -45,6 +45,18 @@ class Customer
     private $password;
 
     /**
+     * 設置email與password
+     *
+     * @param string email
+     * @param string password
+     */
+    public function __construct($email, $password)
+    {
+        $this->email = $email;
+        $this->password = $password;
+    }
+
+    /**
      * Get id
      *
      * @return integer
@@ -74,20 +86,6 @@ class Customer
     {
         $account->addCustomer($this);
         $this->account = $account;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return Customer
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
     }
 
     /**

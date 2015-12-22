@@ -23,6 +23,14 @@ class AccountTest extends WebTestCase
         $this->assertEquals($customer, $account->getCustomer());
     }
 
+    public function testVersion()
+    {
+        $customer = new Customer('hohoho@christmas.en', 'jinglebell');
+        $account = new Account($customer, 'NTD');
+
+        $this->assertEquals(null, $account->getversion());
+    }
+
     public function testCurrency()
     {
         $customer = new Customer('hohoho@christmas.en', 'jinglebell');

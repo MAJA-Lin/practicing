@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Scott\PassbookBundle\Entity\Record;
+use Doctrine\DBAL\LockMode;
 
 class PassbookController extends Controller
 {
@@ -127,32 +128,29 @@ class PassbookController extends Controller
             }
 
             $entityManager = $this->getDoctrine()->getManager();
-            $updateAccount = $entityManager->find('ScottPassbookBundle:Account', $accountId);
+            $account = $entityManager->find('ScottPassbookBundle:Account', $accountId, LockMode::OPTIMISTIC);
 
-            if (empty($updateAccount)) {
-                throw new \Exception("The account is invalid. Please try again!");
-            }
-
-            $balance = $updateAccount->getBalance();
-            $record = new Record($updateAccount,new \DateTime(), $balance, $amount);
+            $balance = $account->getBalance();
+            $record = new Record($account,new \DateTime(), $balance, $amount);
             $record->setMemo($memo);
+            $account->setBalance($balance + $amount);
 
-            $updateAccount->setBalance($balance + $amount);
-
-            if ($balance+$amount < 0) {
+            if ($balance + $amount < 0) {
                 throw new \Exception("The number you are withdrawing is too big!");
             }
 
+            $entityManager->persist($account);
+            $entityManager->flush();
+
             $entityManager->persist($record);
-            $entityManager->persist($updateAccount);
             $entityManager->flush();
 
             $record = $record->toArray();
-            $updateAccount = $updateAccount->toArray();
+            $account = $account->toArray();
             $result = [
                 'status' => 'successful',
                 'data' => [
-                    'account' => $updateAccount,
+                    'account' => $account,
                     'record' => $record,
                 ]
             ];
@@ -165,6 +163,10 @@ class PassbookController extends Controller
                     'code' => $e->getCode(),
                 ]
             ];
+
+            if ($e->getMessage() == "No entity passed to UnitOfWork#lock().") {
+                $result['error']['message'] = "The account is invalid. Please try again!";
+            }
         }
         return new Response(json_encode($result));
     }

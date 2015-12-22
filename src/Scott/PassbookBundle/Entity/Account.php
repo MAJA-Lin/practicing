@@ -42,6 +42,12 @@ class Account
     private $record;
 
     /**
+     * @ORM\Version
+     * @ORM\Column(type="integer")
+     */
+     private $version;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="currency", type="string", length=10)
@@ -80,6 +86,16 @@ class Account
     {
         return $this->id;
     }
+
+    /**
+     * Get version
+     *
+     * @return integer
+     */
+     public function getVersion()
+     {
+         return $this->version;
+     }
 
     /**
      * Get customer

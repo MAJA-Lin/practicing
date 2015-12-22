@@ -128,7 +128,12 @@ class PassbookController extends Controller
             }
 
             $entityManager = $this->getDoctrine()->getManager();
-            $account = $entityManager->find('ScottPassbookBundle:Account', $accountId, LockMode::OPTIMISTIC);
+            $entityManager->getConnection()->beginTransaction();
+            $account = $entityManager->find('ScottPassbookBundle:Account', $accountId, LockMode::PESSIMISTIC_WRITE);
+
+            if (empty($account)) {
+                throw new \Exception("The account is invalid. Please try again!");
+            }
 
             $balance = $account->getBalance();
             $record = new Record($account,new \DateTime(), $balance, $amount);
@@ -144,6 +149,7 @@ class PassbookController extends Controller
 
             $entityManager->persist($record);
             $entityManager->flush();
+            $entityManager->getConnection()->commit();
 
             $record = $record->toArray();
             $account = $account->toArray();
@@ -156,6 +162,9 @@ class PassbookController extends Controller
             ];
 
         } catch (\Exception $e) {
+            $entityManager->getConnection()->rollback();
+            $entityManager->close();
+
             $result = [
                 'status' => 'failed',
                 'error' => [
@@ -163,10 +172,6 @@ class PassbookController extends Controller
                     'code' => $e->getCode(),
                 ]
             ];
-
-            if ($e->getMessage() == "No entity passed to UnitOfWork#lock().") {
-                $result['error']['message'] = "The account is invalid. Please try again!";
-            }
         }
         return new Response(json_encode($result));
     }

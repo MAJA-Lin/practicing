@@ -84,7 +84,6 @@ class Customer
      */
     public function setAccount($account)
     {
-        $account->addCustomer($this);
         $this->account = $account;
     }
 

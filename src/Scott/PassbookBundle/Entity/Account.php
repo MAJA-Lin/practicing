@@ -55,8 +55,18 @@ class Account
      */
     private $balance;
 
-    public function __construct()
+    /**
+     * 設置customer與currency, 並設置balance的初始值為0
+     *
+     * @param Customer $customer
+     * @param string $currency
+     */
+    public function __construct(Customer $customer, $currency)
     {
+        $this->customer = $customer;
+        $customer->setAccount($this);
+
+        $this->currency = $currency;
         $this->record = new ArrayCollection();
         $this->balance = 0;
     }
@@ -72,20 +82,6 @@ class Account
     }
 
     /**
-     * Set customer
-     *
-     * @param Customer $customer
-     *
-     * @return Account
-     */
-    public function addCustomer($customer)
-    {
-        $this->customer = $customer;
-
-        return $this;
-    }
-
-    /**
      * Get customer
      *
      * @return Customer
@@ -93,20 +89,6 @@ class Account
     public function getCustomer()
     {
         return $this->customer;
-    }
-
-    /**
-     * Set currency
-     *
-     * @param string $currency
-     *
-     * @return Account
-     */
-    public function setCurrency($currency)
-    {
-        $this->currency = $currency;
-
-        return $this;
     }
 
     /**

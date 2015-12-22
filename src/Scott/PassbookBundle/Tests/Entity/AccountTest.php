@@ -10,30 +10,31 @@ class AccountTest extends WebTestCase
 {
     public function testGetId()
     {
-        $account = new Account();
+        $customer = new Customer('hohoho@christmas.en', 'jinglebell');
+        $account = new Account($customer, 'NTD');
         $this->assertEquals(null, $account->getId());
     }
 
     public function testCustomer()
     {
-        $account = new Account();
         $customer = new Customer('hohoho@christmas.en', 'jinglebell');
+        $account = new Account($customer, 'NTD');
 
-        $account->addCustomer($customer);
         $this->assertEquals($customer, $account->getCustomer());
     }
 
     public function testCurrency()
     {
-        $account = new Account();
+        $customer = new Customer('hohoho@christmas.en', 'jinglebell');
+        $account = new Account($customer, 'NTD');
 
-        $account->setCurrency("NTD");
         $this->assertEquals("NTD", $account->getCurrency());
     }
 
     public function testBalance()
     {
-        $account = new Account();
+        $customer = new Customer('hohoho@christmas.en', 'jinglebell');
+        $account = new Account($customer, 'NTD');
 
         $this->assertEquals(0, $account->getBalance(), 'Default value is not 0');
 
@@ -50,10 +51,8 @@ class AccountTest extends WebTestCase
             'balance' => "2000"
         ];
 
-	$account = new Account();
         $customer = new Customer('hohoho@christmas.en', 'jinglebell');
-        $account->addCustomer($customer);
-        $account->setCurrency("NTD");
+        $account = new Account($customer, 'NTD');
         $account->setBalance("2000");
         $result = $account->toArray();
 

@@ -4,13 +4,15 @@ namespace Scott\PassbookBundle\Tests\Entity;
 
 use Scott\PassbookBundle\Entity\Record;
 use Scott\PassbookBundle\Entity\Account;
+use Scott\PassbookBundle\Entity\Customer;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class RecordTest extends WebTestCase
 {
     public function testGetId()
     {
-        $account = new Account();
+        $customer = new Customer('hahaha1027@WTF.com', 'passwordPW');
+        $account = new Account($customer, 'USD');
         $time = new \DateTime();
         $record = new Record($account, $time, 12345, 8000);
 
@@ -19,7 +21,8 @@ class RecordTest extends WebTestCase
 
     public function testConstructor()
     {
-        $account = new Account();
+        $customer = new Customer('hahaha1027@WTF.com', 'passwordPW');
+        $account = new Account($customer, 'USD');
         $time = new \DateTime();
         $record = new Record($account, $time, 12345, 8000);
 
@@ -28,7 +31,8 @@ class RecordTest extends WebTestCase
 
     public function testCreateTime()
     {
-        $account = new Account();
+        $customer = new Customer('hahaha1027@WTF.com', 'passwordPW');
+        $account = new Account($customer, 'USD');
         $time = new \DateTime();
         $record = new Record($account, $time, 12345, 8000);
 
@@ -37,7 +41,8 @@ class RecordTest extends WebTestCase
 
     public function testBalance()
     {
-        $account = new Account();
+        $customer = new Customer('hahaha1027@WTF.com', 'passwordPW');
+        $account = new Account($customer, 'USD');
         $time = new \DateTime();
         $record = new Record($account, $time, 12345, 8000);
 
@@ -46,7 +51,8 @@ class RecordTest extends WebTestCase
 
     public function testAmount()
     {
-        $account = new Account();
+        $customer = new Customer('hahaha1027@WTF.com', 'passwordPW');
+        $account = new Account($customer, 'USD');
         $time = new \DateTime();
         $record = new Record($account, $time, 12345, 81000);
 
@@ -55,7 +61,8 @@ class RecordTest extends WebTestCase
 
     public function testMemo()
     {
-        $account = new Account();
+        $customer = new Customer('hahaha1027@WTF.com', 'passwordPW');
+        $account = new Account($customer, 'USD');
         $time = new \DateTime();
         $record = new Record($account, $time, 12345, 8000);
 
@@ -76,7 +83,8 @@ class RecordTest extends WebTestCase
             'memo' => "Save money",
         ];
 
-        $account = new Account();
+        $customer = new Customer('hahaha1027@WTF.com', 'passwordPW');
+        $account = new Account($customer, 'USD');
         $record = new Record($account, $time, 25000, 6000);
 
         $record->setMemo("Save money");

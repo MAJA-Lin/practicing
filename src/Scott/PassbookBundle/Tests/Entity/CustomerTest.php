@@ -16,10 +16,9 @@ class CustomerTest extends WebTestCase
 
     public function testAccount()
     {
-        $account = new Account();
         $customer = new Customer('user5566', 'qq1234');
+        $account = new Account($customer, 'JPY');
 
-        $customer->setAccount($account);
         $this->assertEquals($account, $customer->getAccount());
     }
 
@@ -49,8 +48,7 @@ class CustomerTest extends WebTestCase
         ];
 
         $customer = new Customer("NTD@test.org", "2000QQ2000");
-        $account = new Account();
-        $customer->setAccount($account);
+        $account = new Account($customer, 'USD');
         $result = $customer->toArray();
 
         $this->assertEquals($expectedResult, $result, "toArray failed!");

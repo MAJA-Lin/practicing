@@ -10,39 +10,29 @@ class LoadAccountData extends AbstractFixture implements DependentFixtureInterfa
 {
     public function load(ObjectManager $manager)
     {
-        $account = new Account();
-        $account->setCurrency('USD');
-        $account->setBalance(2000);
         $customer = $manager->find('ScottPassbookBundle:Customer', 1);
-        $customer->setAccount($account);
+        $account = new Account($customer, 'USD');
+        $account->setBalance(2000);
         $manager->persist($account);
 
-        $account = new Account();
-        $account->setCurrency('EUR');
-        $account->setBalance(600000);
         $customer = $manager->find('ScottPassbookBundle:Customer', 2);
-        $customer->setAccount($account);
+        $account = new Account($customer, 'EUR');
+        $account->setBalance(600000);
         $manager->persist($account);
 
-        $account = new Account();
-        $account->setCurrency('NTD');
-        $account->setBalance(22000);
         $customer = $manager->find('ScottPassbookBundle:Customer', 3);
-        $customer->setAccount($account);
+        $account = new Account($customer, 'NTD');
+        $account->setBalance(22000);
         $manager->persist($account);
 
-        $account = new Account();
-        $account->setCurrency('JPY');
-        $account->setBalance(0);
         $customer = $manager->find('ScottPassbookBundle:Customer', 4);
-        $customer->setAccount($account);
+        $account = new Account($customer, 'JPY');
+        $account->setBalance(0);
         $manager->persist($account);
 
-        $account = new Account();
-        $account->setCurrency('KRW');
-        $account->setBalance(333000);
         $customer = $manager->find('ScottPassbookBundle:Customer', 5);
-        $customer->setAccount($account);
+        $account = new Account($customer, 'KRW');
+        $account->setBalance(333000);
         $manager->persist($account);
 
         $manager->flush();

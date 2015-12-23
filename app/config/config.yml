@@ -56,19 +56,19 @@ doctrine:
         connections:
             default:
                 driver:   pdo_mysql
-                host:     "%database_host%"
-                port:     "%database_port%"
-                dbname:   "%database_name%"
-                user:     "%database_user%"
-                password: "%database_password%"
+                host:     "%database_host_passbook%"
+                port:     "%database_port_passbook%"
+                dbname:   "%database_name_passbook%"
+                user:     "%database_user_passbook%"
+                password: "%database_password_passbook%"
                 charset:  UTF8
             board:
                 driver:   pdo_mysql
-                host:     "%database_host2%"
-                port:     "%database_port2%"
-                dbname:   "%database_name2%"
-                user:     "%database_user2%"
-                password: "%database_password2%"
+                host:     "%database_host_board%"
+                port:     "%database_port_board%"
+                dbname:   "%database_name_board%"
+                user:     "%database_user_board%"
+                password: "%database_password_board%"
                 charset:  UTF8
         # if using pdo_sqlite as your database driver:
         #   1. add the path in parameters.yml
@@ -79,7 +79,7 @@ doctrine:
 
     orm:
         default_entity_manager: default
-        auto_generate_proxy_classes: "%kernel.debug%"       
+        auto_generate_proxy_classes: "%kernel.debug%"
         entity_managers:
             default:
                 connection: default

@@ -8,7 +8,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Scott\PassbookBundle\Entity\Record;
-use Doctrine\DBAL\LockMode;
+use Predis\Autoloader;
+use Predis\Client;
+use Predis\Replication\ReplicationStrategy;
+use Predis\Connection\Aggregate\MasterSlaveReplication;
 
 class PassbookController extends Controller
 {
@@ -103,6 +106,9 @@ class PassbookController extends Controller
      */
     public function recordAddAction(Request $request, $accountId)
     {
+        Autoloader::register();
+        $redis = new Client();
+
         $amount = $request->request->get('amount');
         $memo = $request->request->get('memo');
         $entityManager = $this->getDoctrine()->getManager();
@@ -127,35 +133,60 @@ class PassbookController extends Controller
             $account = $entityManager->find('ScottPassbookBundle:Account', $accountId);
 
             if (empty($account) || is_null($account)) {
+                $redis->del('account:' . $accountId);
                 throw new \Exception("The account is invalid. Please try again!");
             }
 
-            $account = $entityManager->find('ScottPassbookBundle:Account', $accountId, LockMode::OPTIMISTIC);
+            if ($redis->exists('account:' . $accountId)) {
+                $accountArray = $redis->hgetall('account:' . $accountId);
+            }
 
-            $time = new \DateTime('now');
-            $balance = $account->getBalance();
+            if (!$redis->exists('account:' . $accountId)) {
+                $accountArray = [
+                    'id' => $account->getId(),
+                    'balance' => $account->getBalance(),
+                    'version' => $account->getVersion()
+                ];
+                $redis->hmset('account:' . $accountId, $accountArray);
+            }
+
+            $redis->watch('account:' . $accountId);
+
+            $balance = $accountArray['balance'];
+            $version = $accountArray['version'];
             $newBalance = $balance + $amount;
-
             if ($newBalance < 0) {
                 throw new \Exception("The number you are withdrawing is too big!");
             }
 
-            $record = new Record($account, $time, $newBalance, $amount);
+            $redis->multi();
+            $redis->hincrby('account:' . $accountId, 'version', 1);
+            $redis->hincrbyfloat('account:' . $accountId, 'balance', $amount);
+            $result = $redis->exec();
+
+            if (is_null($result)) {
+                throw new \Exception("Transaction failed! Please try again!");
+            }
+
+            $time = new \DateTime('now');
+            $record = new Record($account, $time, $result[1], $amount);
             $record->setMemo($memo);
-            $account->setBalance($newBalance);
-
-            $entityManager->persist($account);
-            $entityManager->flush();
-
             $entityManager->persist($record);
             $entityManager->flush();
 
             $record = $record->toArray();
             $account = $account->toArray();
+            $accountResult = [
+                'id' => $account['id'],
+                'customerId' => $account['customerId'],
+                'currency' => $account['currency'],
+                'balance' => $redis->hget('account:' . $accountId, 'balance')
+            ];
+
             $result = [
                 'status' => 'successful',
                 'data' => [
-                    'account' => $account,
+                    'account' => $accountResult,
                     'record' => $record,
                 ]
             ];
@@ -170,5 +201,4 @@ class PassbookController extends Controller
         }
         return new JsonResponse($result);
     }
-
 }

@@ -6,6 +6,8 @@ use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Scott\PassbookBundle\Entity\Account;
 use Scott\PassbookBundle\Entity\Record;
 use Doctrine\Common\DataFixtures\Loader;
+use Predis\Autoloader;
+use Predis\Client;
 
 class PassbookControllerTest extends WebTestCase
 {
@@ -354,6 +356,10 @@ class PassbookControllerTest extends WebTestCase
             'amount' => 81000,
             'memo' => 'First Bill'
         ];
+
+        Autoloader::register();
+        $redis = new Client();
+        $redis->flushall();
 
         $this->client->request('POST', '/account/'. $validAccountId .'/record', $validData);
         $expectedTime = new \DateTime();

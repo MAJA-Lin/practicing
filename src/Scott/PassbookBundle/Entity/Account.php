@@ -41,7 +41,8 @@ class Account
     private $record;
 
     /**
-     * @ORM\Version
+     * @var integer
+     *
      * @ORM\Column(type="integer")
      */
      private $version;
@@ -61,7 +62,7 @@ class Account
     private $balance;
 
     /**
-     * 設置customer與currency, 並設置balance的初始值為0
+     * 設置customer與currency, 並設置balance的初始值為0, version的初始值為1
      *
      * @param Customer $customer
      * @param string $currency
@@ -74,6 +75,7 @@ class Account
         $this->currency = $currency;
         $this->record = new ArrayCollection();
         $this->balance = 0;
+        $this->version = 1;
     }
 
     /**
@@ -91,10 +93,24 @@ class Account
      *
      * @return integer
      */
-     public function getVersion()
-     {
-         return $this->version;
-     }
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set version
+     *
+     * @param integer version
+     *
+     * @return Account
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
 
     /**
      * Get customer

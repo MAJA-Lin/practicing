@@ -27,8 +27,10 @@ class AccountTest extends WebTestCase
     {
         $customer = new Customer('hohoho@christmas.en', 'jinglebell');
         $account = new Account($customer, 'NTD');
+        $this->assertEquals(1, $account->getVersion());
 
-        $this->assertEquals(null, $account->getversion());
+        $account->setVersion(3);
+        $this->assertEquals(3, $account->getVersion());
     }
 
     public function testCurrency()

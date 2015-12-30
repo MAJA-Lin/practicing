@@ -54,11 +54,9 @@ class PassbookController extends Controller
                 $offset = $pageLimit * ($page - 1);
             }
 
-            $record = $entityManager->getRepository('ScottPassbookBundle:Record')
-                ->getRecords($accountId, $offset, $pageLimit);
-
-            $total = $entityManager->getRepository('ScottPassbookBundle:Record')
-                ->getCount($accountId);
+            $recordRepo = $entityManager->getRepository('ScottPassbookBundle:Record');
+            $record = $recordRepo->getRecords($accountId, $offset, $pageLimit);
+            $total = $recordRepo->getCount($accountId);
 
             $totalPage = floor($total / $pageLimit);
             if (($total % $pageLimit) > 0) {

@@ -95,8 +95,8 @@ class CustomerController extends Controller
             }
 
             $entityManager = $this->getDoctrine()->getManager();
-            $customer = $entityManager->getRepository("ScottPassbookBundle:Customer")
-                ->findOneBy(['email' => $email]);
+            $customerRepo = $entityManager->getRepository("ScottPassbookBundle:Customer");
+            $customer = $customerRepo->findOneBy(['email' => $email]);
 
             if (!empty($customer)) {
                 throw new \Exception("The email has been registered! Try another one!");

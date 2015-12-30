@@ -129,8 +129,9 @@ class PassbookController extends Controller
             $entityManager = $this->getDoctrine()->getManager();
             $account = $entityManager->find('ScottPassbookBundle:Account', $accountId, LockMode::OPTIMISTIC);
 
+            $time = new \DateTime('now');
             $balance = $account->getBalance();
-            $record = new Record($account,new \DateTime(), $balance, $amount);
+            $record = new Record($account, $time, $balance, $amount);
             $record->setMemo($memo);
             $account->setBalance($balance + $amount);
 

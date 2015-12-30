@@ -49,7 +49,7 @@ class Account
     /**
      * @var string
      *
-     * @ORM\Column(name="currency", type="string", length=10)
+     * @ORM\Column(name="currency", type="string", length=3)
      */
     private $currency;
 

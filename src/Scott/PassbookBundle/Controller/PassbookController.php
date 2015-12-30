@@ -105,6 +105,7 @@ class PassbookController extends Controller
     {
         $amount = $request->request->get('amount');
         $memo = $request->request->get('memo');
+        $entityManager = $this->getDoctrine()->getManager();
 
         try {
             if (strlen($amount) > 12) {
@@ -123,7 +124,12 @@ class PassbookController extends Controller
                 throw new \Exception("The length of Memo should be less than 50!");
             }
 
-            $entityManager = $this->getDoctrine()->getManager();
+            $account = $entityManager->find('ScottPassbookBundle:Account', $accountId);
+
+            if (empty($account) || is_null($account)) {
+                throw new \Exception("The account is invalid. Please try again!");
+            }
+
             $account = $entityManager->find('ScottPassbookBundle:Account', $accountId, LockMode::OPTIMISTIC);
 
             $time = new \DateTime('now');
@@ -159,10 +165,6 @@ class PassbookController extends Controller
                     'code' => $e->getCode(),
                 ]
             ];
-
-            if ($e->getMessage() == "No entity passed to UnitOfWork#lock().") {
-                $result['error']['message'] = "The account is invalid. Please try again!";
-            }
         }
         return new JsonResponse($result);
     }

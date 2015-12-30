@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Record
  *
- * @ORM\Table()
  * @ORM\Entity(repositoryClass="Scott\PassbookBundle\Repository\RecordRepository")
  */
 class Record

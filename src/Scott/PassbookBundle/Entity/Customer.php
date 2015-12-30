@@ -3,12 +3,10 @@
 namespace Scott\PassbookBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Customer
  *
- * @ORM\Table()
  * @ORM\Entity
  */
 class Customer

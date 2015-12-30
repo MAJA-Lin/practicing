@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Account
  *
- * @ORM\Table()
  * @ORM\Entity
  */
 class Account

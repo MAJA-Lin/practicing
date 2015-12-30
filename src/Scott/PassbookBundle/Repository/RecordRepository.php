@@ -32,7 +32,7 @@ class RecordRepository extends EntityRepository
      * @param int $pageLimit 每頁最大數量資料
      * @return array $query select 搜尋完的結果
      */
-    public function getPages($accountId, $offset, $pageLimit)
+    public function getRecords($accountId, $offset, $pageLimit)
     {
         $dql = "SELECT r.id, IDENTITY(r.account), r.create_time, r.memo, r.amount, r.balance
             FROM ScottPassbookBundle:Record r WHERE r.account = ?1";

@@ -61,7 +61,7 @@ class RecordRepositoryTest extends WebTestCase
 
         $record = $this->em
             ->getRepository('ScottPassbookBundle:Record')
-            ->getPages($account[0]->getId(), $offset, $pageLimit);
+            ->getRecords($account[0]->getId(), $offset, $pageLimit);
 
         $expected = [
             0 => [

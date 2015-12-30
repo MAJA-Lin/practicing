@@ -5,9 +5,8 @@ namespace Scott\PassbookBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Scott\PassbookBundle\Entity\Record;
 use Doctrine\DBAL\LockMode;
 
@@ -93,7 +92,7 @@ class PassbookController extends Controller
             ];
         }
 
-        return new Response(json_encode($result));
+        return new JsonResponse($result);
     }
 
     /**
@@ -168,7 +167,7 @@ class PassbookController extends Controller
                 $result['error']['message'] = "The account is invalid. Please try again!";
             }
         }
-        return new Response(json_encode($result));
+        return new JsonResponse($result);
     }
 
 }

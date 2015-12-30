@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Scott\PassbookBundle\Entity\Account;
 use Scott\PassbookBundle\Entity\Customer;
 
@@ -48,7 +48,7 @@ class CustomerController extends Controller
                 ]
             ];
         }
-        return new Response(json_encode($result));
+        return new JsonResponse($result);
     }
 
     /**
@@ -130,7 +130,7 @@ class CustomerController extends Controller
             ];
         }
 
-        return new Response(json_encode($result));
+        return new JsonResponse($result);
     }
 
 }

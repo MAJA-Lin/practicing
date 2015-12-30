@@ -89,7 +89,6 @@ class PassbookController extends Controller
                 ]
             ];
         }
-
         return new JsonResponse($result);
     }
 
@@ -152,7 +151,6 @@ class PassbookController extends Controller
                     'record' => $record,
                 ]
             ];
-
         } catch (\Exception $e) {
             $result = [
                 'status' => 'failed',

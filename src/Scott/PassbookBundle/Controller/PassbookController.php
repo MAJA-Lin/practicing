@@ -155,13 +155,20 @@ class PassbookController extends Controller
             $balance = $accountArray['balance'];
             $version = $accountArray['version'];
             $newBalance = $balance + $amount;
+            $newVersion = $version + 1;
+
             if ($newBalance < 0) {
                 throw new \Exception("The number you are withdrawing is too big!");
             }
 
             $redis->multi();
+
             $redis->hincrby('account:' . $accountId, 'version', 1);
             $redis->hincrbyfloat('account:' . $accountId, 'balance', $amount);
+
+            $redis->hset('updateTable', 'balance:' . $accountId, $newBalance);
+            $redis->hset('updateTable', 'version:' . $accountId, $newVersion);
+
             $result = $redis->exec();
 
             if (is_null($result)) {
@@ -176,6 +183,7 @@ class PassbookController extends Controller
 
             $record = $record->toArray();
             $account = $account->toArray();
+
             $accountResult = [
                 'id' => $account['id'],
                 'customerId' => $account['customerId'],

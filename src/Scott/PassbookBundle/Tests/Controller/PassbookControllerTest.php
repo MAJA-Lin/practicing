@@ -8,6 +8,7 @@ use Scott\PassbookBundle\Entity\Record;
 use Doctrine\Common\DataFixtures\Loader;
 use Predis\Autoloader;
 use Predis\Client;
+use Scott\PassbookBundle\Controller\PassbookController;
 
 class PassbookControllerTest extends WebTestCase
 {
@@ -573,6 +574,61 @@ class PassbookControllerTest extends WebTestCase
 
         $this->assertEquals($expectedStatus, $response['status']);
         $this->assertEquals($expectedError, $response['error']);
+    }
+
+    public function testRecordAddWithFailedTransaction()
+    {
+        $validAccountId = 4;
+        $validData = [
+            'amount' => 50000,
+            'memo' => 'Withdrawing'
+        ];
+
+        $expectedStatus = "failed";
+        $expectedError = [
+            'message' => 'Transaction failed! Please try again!',
+            'code' => 0
+        ];
+        $expectedResponse = [
+            'status' => $expectedStatus,
+            'error' => $expectedError
+        ];
+
+        /*
+        $mock = $this->getMockFromWsdl(
+            'PassbookController.php', 'recordAdd'
+        );
+        */
+
+        $stub = $this->getMockBuilder('PassbookController')
+            ->setMethods(['recordAdd'])
+            ->getMock();
+
+        $stub->method('recordAdd')
+            ->willReturn($expectedResponse);
+
+        $this->assertEquals($expectedResponse, $stub->recordAdd());
+
+        /*
+        $stub = $this->getMockBuilder('PassbookController')->getMock('recordAdd');
+        $stub->method('recordAdd')
+            ->willReturn($expectedResponse);
+
+        $this->client->request('POST', '/account/'. $validAccountId .'/record', $validData);
+        $response = json_decode($this->client->getResponse()->getContent(), true);
+        */
+        /*
+        $stub = $this->getMockBuilder('client')->getMock();
+        $stub->method('request')
+            ->willReturn($expectedResponse);
+
+        $this->assertEquals($expectedResponse, $stub->request());
+        */
+        /*
+        $this->assertEquals($expectedStatus, $response['status']);
+        $this->assertEquals($expectedError, $response['error']);
+        */
+
     }
 
     /**

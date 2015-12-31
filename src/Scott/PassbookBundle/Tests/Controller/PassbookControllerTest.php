@@ -370,7 +370,7 @@ class PassbookControllerTest extends WebTestCase
             'id' => 6,
             'accountId' => 4,
             'create_time' => get_object_vars($expectedTime),
-            'balance' => 0,
+            'balance' => 81000,
             'amount' => 81000,
             'memo' => 'First Bill'
         ];

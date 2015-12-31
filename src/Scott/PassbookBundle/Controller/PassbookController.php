@@ -134,13 +134,15 @@ class PassbookController extends Controller
 
             $time = new \DateTime('now');
             $balance = $account->getBalance();
-            $record = new Record($account, $time, $balance, $amount);
-            $record->setMemo($memo);
-            $account->setBalance($balance + $amount);
+            $newBalance = $balance + $amount;
 
-            if ($balance + $amount < 0) {
+            if ($newBalance < 0) {
                 throw new \Exception("The number you are withdrawing is too big!");
             }
+
+            $record = new Record($account, $time, $newBalance, $amount);
+            $record->setMemo($memo);
+            $account->setBalance($newBalance);
 
             $entityManager->persist($account);
             $entityManager->flush();

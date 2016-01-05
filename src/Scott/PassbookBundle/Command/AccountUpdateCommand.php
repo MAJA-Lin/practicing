@@ -31,53 +31,64 @@ class AccountUpdateCommand extends ContainerAwareCommand
             mkdir ($dir, 0744);
         }
 
-        while (1) {
-            $output->writeln(date('Y-m-d, H:i:s') . "\n");
+        $output->writeln(date('Y-m-d, H:i:s') . "\n");
 
-            try {
-                $allAccount = $redis->keys('account:*');
+        try {
+            $updateTable = $redis->hgetall('updateTable');
 
-                foreach ($allAccount as $value) {
-                    list($title, $accountId) = explode(":", $value);
+            foreach ($updateTable as $key => $value) {
+                if (preg_match('/^(version:)[1-9][0-9]*$/', $key)) {
+                    list($title, $accountId) = explode("version:", $key);
+
+                    if (!isset($updateTable['balance:' . $accountId])) {
+                        $redis->hdel('updateTable', $key);
+                        $message = "[Account] ID: " . $accountId . ", balance data missing.";
+                        $output->writeln($message);
+                        throw new \Exception($message);
+                    }
+
                     $account = $entityManager->find('ScottPassbookBundle:Account', $accountId);
 
-                    if (empty($account) || is_null($account)) {
-                        $redis->del('account:' . $accountId);
+                    if (is_null($account) || empty($account)) {
+                        $redis->hdel('updateTable', $key);
+                        $redis->hdel('updateTable', 'balance:' . $accountId);
+
+                        $message = "[Account] ID: " . $accountId . ", the account ID is invalid.";
+                        $output->writeln($message);
+                        throw new \Exception($message);
+                    }
+
+                    if ($account->getVersion() >= $updateTable[$key]) {
+                        $redis->hdel('updateTable', $key);
+                        $redis->hdel('updateTable', 'balance:' . $accountId);
                         continue;
                     }
 
-                    $redisAccount = $redis->hgetall($value);
+                    $account->setVersion($updateTable[$key]);
+                    $account->setBalance($updateTable['balance:' . $accountId]);
+                    $entityManager->persist($account);
+                    $entityManager->flush();
 
-                    if ($redisAccount['version'] > $account->getVersion()) {
-                        $account->setBalance($redisAccount['balance']);
-                        $account->setVersion($redisAccount['version']);
-                        $entityManager->persist($account);
-                        $entityManager->flush();
+                    $updateInfo = "[Account] ID: " . $accountId . ", Balance: " . $account->getBalance();
+                    $updateInfo .=  ", Version: " . $account->getVersion() . PHP_EOL;
+                    $output->writeln("Account data updating...");
+                    $output->writeln($updateInfo);
 
-                        $updateInfo = "[Account] ID: " . $accountId . ", Balance: " . $account->getBalance();
-                        $updateInfo .=  ", Version: " . $account->getVersion() . PHP_EOL;
-                        $output->writeln("Account data updating...");
-                        $output->writeln($updateInfo);
+                    $time = date('Y-m-d, H:i:s');
+                    $info = $time . " " . $updateInfo;
 
-                        $time = date('Y-m-d, H:i:s');
-                        $info = $time . " " . $updateInfo;
-
-                        $handle = fopen($logFile, "a+");
-                        fwrite($handle, $info);
-                        fclose($handle);
-                    }
+                    $handle = fopen($logFile, "a+");
+                    fwrite($handle, $info);
+                    fclose($handle);
                 }
-
-            } catch (Exception $e) {
-                $time = date('Y-m-d, H:i:s');
-                $info = $time . " [Error] " . $e->getMessage() . PHP_EOL;
-
-                $handle = fopen($errlogFile, "a+");
-                fwrite($handle, $info);
-                fclose($handle);
             }
+        } catch (\Exception $e) {
+            $time = date('Y-m-d, H:i:s');
+            $info = $time . " [Error] " . $e->getMessage() . PHP_EOL;
 
-            sleep(1);
+            $handle = fopen($errlogFile, "a+");
+            fwrite($handle, $info);
+            fclose($handle);
         }
     }
 

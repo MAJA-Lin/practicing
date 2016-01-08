@@ -35,8 +35,9 @@ class Account
     private $customer;
 
     /**
-     * @ORM\OneToMany(targetEntity="Record", mappedBy="account")
-     * @ORM\JoinColumn(name="record_id", referencedColumnName="id")
+     * @var integer
+     *
+     * @ORM\Column(name="record", type="integer")
      */
     private $record;
 
@@ -72,7 +73,7 @@ class Account
         $customer->setAccount($this);
 
         $this->currency = $currency;
-        $this->record = new ArrayCollection();
+        //$this->record = new ArrayCollection();
         $this->balance = 0;
     }
 

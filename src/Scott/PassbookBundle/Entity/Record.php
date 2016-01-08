@@ -21,15 +21,9 @@ class Record
     private $id;
 
     /**
-     * @var Account
+     * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="Account", inversedBy="record")
-     * @ORM\JoinColumn(
-     *      name="account_id",
-     *      referencedColumnName="id",
-     *      onDelete="CASCADE",
-     *      nullable=false
-     *      )
+     * @ORM\Column(name="account", type="integer", nullable=false)
      */
     private $account;
 
@@ -62,12 +56,12 @@ class Record
     private $memo;
 
     /**
-     * @param Account $account
+     * @param int $account
      * @param \DateTime $create_time
      * @param float $balance
      * @param float $amount
      */
-    public function __construct(Account $account, \DateTime $create_time, $balance, $amount)
+    public function __construct($account, \DateTime $create_time, $balance, $amount)
     {
         $this->account = $account;
         $this->create_time = $create_time;

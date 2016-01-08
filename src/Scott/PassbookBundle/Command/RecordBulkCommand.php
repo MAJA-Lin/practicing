@@ -91,20 +91,22 @@ class RecordBulkCommand extends ContainerAwareCommand
 
             for ($i=0; $i < $max; $i++) {
                 $entityManager = $this->getContainer()->get('doctrine')->getManager();
-                $account = $entityManager->find('ScottPassbookBundle:Account', $accountId);
+                //$account = $entityManager->find('ScottPassbookBundle:Account', $accountId);
+                $account = $accountId;
 
                 $int = mt_rand(1262055681, 1462055681);
                 $time = new \Datetime('@' . $int);
 
                 $amount = (mt_rand(0,1) * 2 - 1) * mt_rand(0, 100);
-                $newBalance = $account->getBalance() + $amount;
+                //$newBalance = $account->getBalance() + $amount;
+                $newBalance = 0;
 
                 $record = new Record($account, $time, $newBalance, $amount);
                 $record->setMemo("Mew");
-                $account->setBalance($newBalance);
+                //$account->setBalance($newBalance);
 
                 $entityManager->persist($record);
-                $entityManager->persist($account);
+                //$entityManager->persist($account);
                 $entityManager->flush();
 
                 if ($i % 50 === 0) {
@@ -128,20 +130,22 @@ class RecordBulkCommand extends ContainerAwareCommand
 
             for ($i=0; $i < $max; $i++) {
                 $entityManager = $this->getContainer()->get('doctrine')->getManager();
-                $account = $entityManager->find('ScottPassbookBundle:Account', $accountId);
+                //$account = $entityManager->find('ScottPassbookBundle:Account', $accountId);
+                $account = $accountId;
 
                 $int = mt_rand(1262055681, 1462055681);
                 $time = new \Datetime('@' . $int);
 
                 $amount = (mt_rand(0,1) * 2 - 1) * mt_rand(0, 100);
-                $newBalance = $account->getBalance() + $amount;
+                //$newBalance = $account->getBalance() + $amount;
+                $newBalance = 0;
 
                 $record = new Record($account, $time, $newBalance, $amount);
                 $record->setMemo("Mew");
-                $account->setBalance($newBalance);
+                //$account->setBalance($newBalance);
 
                 $entityManager->persist($record);
-                $entityManager->persist($account);
+                //$entityManager->persist($account);
                 if (($i % $batchSize) === 0) {
                     $entityManager->flush();
                     $entityManager->clear();
@@ -176,20 +180,25 @@ class RecordBulkCommand extends ContainerAwareCommand
                     var_dump(get_class_methods($conn));
                 }
 
+                /*
                 $sql = "SELECT * FROM account WHERE id = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bindValue(1, $accountId);
                 $stmt->execute();
                 $account = $stmt->fetch(0);
+                */
+                $account = $accountId;
 
                 $int = mt_rand(1262055681, 1462055681);
                 $time = date('Y-m-d H:i:s', $int);
 
                 $amount = (mt_rand(0,1) * 2 - 1) * mt_rand(0, 100);
-                $newBalance = $account['balance'] + $amount;
+                //$newBalance = $account['balance'] + $amount;
+                $newBalance = 0;
 
                 $recordArray = [
-                    'account_id' => $account['id'],
+                    //'account_id' => $account['id'],
+                    'account_id' => $accountId,
                     'create_time' => $time,
                     'balance' => $newBalance,
                     'amount' => $amount,
@@ -206,7 +215,7 @@ class RecordBulkCommand extends ContainerAwareCommand
                 ];
 
                 $conn->insert('record', $recordArray);
-                $conn->update('account', $valueClause, $whereClause);
+                //$conn->update('account', $valueClause, $whereClause);
 
                 if (($size != 0) && ($i % $size === 0 && $i !== 0)) {
                     $conn->commit();

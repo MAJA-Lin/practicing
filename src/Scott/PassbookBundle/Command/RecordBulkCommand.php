@@ -56,6 +56,7 @@ class RecordBulkCommand extends ContainerAwareCommand
     {
         ini_set("memory_limit","8G");
         set_time_limit(6000);
+        $unit = ['b', 'kb', 'mb', 'gb', 'tb', 'pb'];
 
         $max = $input->getArgument('data');
         $accountId = $input->getArgument('accountId');
@@ -79,6 +80,8 @@ class RecordBulkCommand extends ContainerAwareCommand
         $logFile = $dir . date('Y-m-d') . ".log";
         $digitFile = $dir . date('Y-m-d') . "_digit.log";
         $speedFile = $dir . date('Y-m-d') . "_speed.log";
+        $memoryFile = $dir . date('Y-m-d') . "_memory.log";
+        $avgMemoryFile = $dir . date('Y-m-d') . "_avgMemory.log";
 
         if (!file_exists($dir)) {
             $oldmask = umask(0);
@@ -87,6 +90,7 @@ class RecordBulkCommand extends ContainerAwareCommand
 
         if ($input->getOption('orm')) {
             $time_start = microtime(true);
+            $mem_start = memory_get_usage(true);
 
             for ($i=0; $i < $max; $i++) {
                 $entityManager = $this->getContainer()->get('doctrine')->getManager();
@@ -102,6 +106,13 @@ class RecordBulkCommand extends ContainerAwareCommand
                 }
             }
 
+            $mem_end = memory_get_usage(true);
+            $mem_total_old = $mem_end - $mem_start;
+            $mem_total = round($mem_total_old/pow(1024,($j=floor(log($mem_total_old,1024)))),2).' '.$unit[$j];
+
+            $mem_avg = $mem_total_old / $max;
+            $mem_avg = round($mem_avg/pow(1024,($j=floor(log($mem_avg,1024)))),2).' '.$unit[$j];
+
             $time_end = microtime(true);
             $time_executed = $time_end - $time_start;
             $time_ran = $time_executed / $max;
@@ -116,6 +127,7 @@ class RecordBulkCommand extends ContainerAwareCommand
         if ($input->getOption('batch')) {
             $time_start = microtime(true);
             $batchSize = $size;
+            $mem_start = memory_get_usage(true);
 
             for ($i=0; $i < $max; $i++) {
                 $entityManager = $this->getContainer()->get('doctrine')->getManager();
@@ -135,6 +147,13 @@ class RecordBulkCommand extends ContainerAwareCommand
                 }
             }
 
+            $mem_end = memory_get_usage(true);
+            $mem_total_old = $mem_end - $mem_start;
+            $mem_total = round($mem_total_old/pow(1024,($j=floor(log($mem_total_old,1024)))),2).' '.$unit[$j];
+
+            $mem_avg = $mem_total_old / $max;
+            $mem_avg = round($mem_avg/pow(1024,($j=floor(log($mem_avg,1024)))),2).' '.$unit[$j];
+
             $time_end = microtime(true);
             $time_executed = $time_end - $time_start;
             $time_ran = $time_executed / $max;
@@ -150,6 +169,7 @@ class RecordBulkCommand extends ContainerAwareCommand
         if ($input->getOption('dbal')) {
             $time_start = microtime(true);
             $time = date('Y-m-d H:i:s', $int);
+            $mem_start = memory_get_usage(true);
 
             for ($i=0; $i < $max; $i++) {
                 $entityManager = $this->getContainer()->get('doctrine')->getManager();
@@ -187,6 +207,13 @@ class RecordBulkCommand extends ContainerAwareCommand
                 }
             }
 
+            $mem_end = memory_get_usage(true);
+            $mem_total = $mem_end - $mem_start;
+            $mem_total = round($mem_total/pow(1024,($i=floor(log($mem_total,1024)))),2).' '.$unit[$i];
+
+            $mem_avg = $mem_total / $size;
+            $mem_avg = round($mem_avg/pow(1024,($i=floor(log($mem_avg,1024)))),2).' '.$unit[$i];
+
             $time_end = microtime(true);
             $time_executed = $time_end - $time_start;
             $time_ran = $time_executed / $max;
@@ -210,6 +237,14 @@ class RecordBulkCommand extends ContainerAwareCommand
 
         $handle = fopen($speedFile, "a+");
         fwrite($handle, $time_ran . PHP_EOL);
+        fclose($handle);
+
+        $handle = fopen($memoryFile, "a+");
+        fwrite($handle, $mem_total . PHP_EOL);
+        fclose($handle);
+
+        $handle = fopen($avgMemoryFile, "a+");
+        fwrite($handle, $mem_avg . PHP_EOL);
         fclose($handle);
     }
 }
